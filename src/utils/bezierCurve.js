@@ -1,4 +1,4 @@
-
+// import
 export default class BezierCurve {
   constructor(options) {
     this.points = options.points
@@ -8,14 +8,19 @@ export default class BezierCurve {
     this.end = options.points.end
     this.index = options.index || 0
     this.isSelected = true
+    this.isClose = false
   }
   draw (ctx) {
     // 画曲线
     this.drawCurve(ctx)
-    //画控制线2
-    this._drawCtrl2(ctx)
-    //画控制线1
-    this._drawCtrl1(ctx)
+
+    if (!this.isClose) {
+      //画控制线2
+      this._drawCtrl2(ctx)
+      //画控制线1
+      this._drawCtrl1(ctx)
+    }
+
     
   }
   update () {
