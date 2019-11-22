@@ -10,6 +10,11 @@ const routes = [{
     component: bezier
   },
   {
+    path: '/input',
+    name: 'input',
+    component: Index
+  },
+  {
     path: '/*',
     name: '404',
     // route level code-splitting

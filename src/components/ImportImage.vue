@@ -5,11 +5,13 @@
     <div class="file-input">
       <bezier-button :title="`选择图片`" @handleImport="handleImport"></bezier-button>
       <bezier-button :title="`清除画图`" :type="`button`" @handleClick="handleClear"></bezier-button>
+      <bezier-button :title="`画一条线`" :type="`button`" @handleClick="drawBazierCurve"></bezier-button>
     </div>
   </div>
 </template>
 <script>
 import BezierButton from '@/components/BezierButton.vue'
+import BazierCurve from '../utils/bezierCurve.js'
 let canvasObj, ctx
 export default {
   data() {
@@ -26,11 +28,35 @@ export default {
     ctx = canvasObj.getContext('2d')
     this.canvasWidth = canvasObj.offsetWidth
     this.canvasHeight = canvasObj.offsetHeight
+    ctx.clearRect(0, 0, canvasObj.width, canvasObj.height)
+    let imageSrc = localStorage.getItem('imageurl') || ''
+    this.getImage(imageSrc)
   },
   methods: {
+    drawBazierCurve () {
+      this.handleClear()
+      const options = {
+        points: {
+          start: { x: 50, y: 20 },
+          cp1: { x: 230, y: 30 },
+          cp2: { x: 150, y: 80 },
+          end: { x: 250, y: 100 }
+        },
+        color: '#0F0',
+        size: 10
+      }
+      let bezierCurveTest = new BazierCurve(options)
+      bezierCurveTest.draw(ctx)
+    },
     handleImport (fileList) {
       ctx.clearRect(0, 0, canvasObj.width, canvasObj.height)  
       const imgSrc = this.getObjectURL(fileList[0])
+      this.getImage(imgSrc)
+    },
+    handleClear () {
+      ctx.clearRect(0, 0, canvasObj.width, canvasObj.height)
+    },
+    getImage (imgSrc) {
       const imageObj = new Image()
       const vm = this
       imageObj.src = imgSrc
@@ -40,9 +66,6 @@ export default {
         const imageSize = vm.getImageSize(this.width, this.height)
         ctx.drawImage(this, imageSize.left, imageSize.top, imageSize.width, imageSize.height)
       }
-    },
-    handleClear () {
-      ctx.clearRect(0, 0, canvasObj.width, canvasObj.height)
     },
     getImageSize (oldWidth, oldHeight) {
       let imageSize = {}
