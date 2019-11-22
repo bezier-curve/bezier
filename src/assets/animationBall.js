@@ -24,7 +24,7 @@ class animationBall {
                 this.drawBall(ctx)
         }
     }
-    drawImg(){
+    drawImg(ctx){
         if (!this.visible) { return }  // 不可见
         //画一个实心圆
         ctx.save()

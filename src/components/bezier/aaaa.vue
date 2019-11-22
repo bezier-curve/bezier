@@ -11,8 +11,8 @@
   </div>
 </template>
 <script>
-import basicObj from "../../assets/prop_ball";
-import { _isNextPoint, _isLastPoint, _getMoveXY } from "../../assets/baseTool";
+// import basicObj from "../../assets/prop_ball";
+import { _isLastPoint, _getMoveXY} from "../../assets/baseTool";
 import animationBall from "../../assets/animationBall";
 let oCanvas;
 let ctx;
@@ -23,13 +23,11 @@ export default {
       motionState: false, //动画状态
       mousePositionX: 0, //鼠标坐标x
       mousePositionY: 0, //鼠标坐标y
-      loopIndex: 0, //动画循环当前路径index
-      loopIndex1: 0,
       pointsArr: [
         [
           { x: 0, y: 0 },
           { x: 100, y: 100 },
-          { x: 200, y: 200 },
+          { x: 200, y: 500 },
           { x: 400, y: 400 }
         ],
         [
@@ -41,7 +39,7 @@ export default {
       ], //路径数组
       positionXDown: 0,
       positionYDown: 0,
-      tSpeed: 0.01,
+      tSpeed: 0.005,
       beginText: "开始",
       balls: [],
       bezierPoint: []
@@ -60,13 +58,14 @@ export default {
       y: 0,
       radius: 10
     };
-    for (let i = 0; i < 20; i++) {
+    //初始化运动小球对象
+    for (let i = 0; i < 100; i++) {
       let ball = new animationBall(option);
-      if(i>10){
+      if(i > 50){
       ball.loopIndex = 1;
       ball.oldLoopIndex = 1
       }
-      ball.t = 0.05 * i;
+      ball.t = 0.02 * i;
       this.balls.push(ball);
     }
     let _self = this;
@@ -154,8 +153,6 @@ export default {
       ];
       this.loopIndex = 0;
       this.pointsArr = [];
-      this.t = 0;
-      this.t1 = 0;
       this.motionState = false;
     },
     joinPath() {
@@ -180,8 +177,6 @@ export default {
         { x: 0, y: 0 },
         { x: 0, y: 0 }
       ];
-      this.t = 0;
-      this.t1 = 0;
     },
     draw() {
       ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
@@ -204,10 +199,10 @@ export default {
         ctx.fillText("start", x + 10, y + 10);
         ctx.fill();
         //画结束点
-        var { x, y } = pointsArr[pointsArr.length - 1][3];
+        var { x3, y3 } = pointsArr[pointsArr.length - 1][3];
         ctx.beginPath();
-        ctx.arc(x, y, 4, 0, 2 * Math.PI, false);
-        ctx.fillText("end", x + 10, y + 10);
+        ctx.arc(x3, y3, 4, 0, 2 * Math.PI, false);
+        ctx.fillText("end", x3 + 10, y3 + 10);
         ctx.fill();
       }
       //画当前路径操作点
@@ -264,78 +259,37 @@ export default {
     drawAnimation(pointsArr) {
       ctx.beginPath();
       //计算下一帧小球的x,y坐标
-      // debugger
-
+      let img = new Image();
+      img.src = '../../../static/lst.jpg';
       this.balls.forEach(item => {
         [item.x, item.y] = _getMoveXY(pointsArr, item.loopIndex, item.t);
-        if (_isNextPoint(item.x, item.y, this.pointsArr, item.loopIndex)) {
-          // this.motionState = true;
+        // [item.x, item.y] = _getRotoXY(pointsArr, item.loopIndex, item.t);
+        item.angle =1-Math.atan2(item.x, item.y)
+        if (_isLastPoint(item.t,item.loopIndex,this.pointsArr.length)) {
           item.t = 0;
-          item.loopIndex = item.oldLoopIndex;
-          // item.loopIndex++;
+          // item.loopIndex = item.oldLoopIndex;
+          item.loopIndex = 0;
         }
-        //这个地方的判断逻辑有问题,但我尽力了求大神简化
-        // if (_isLastPoint(item.x, item.y, this.pointsArr)) {
+        if(Math.floor(item.t) == 1){
+            item.t = 0;
+          item.loopIndex++;
+        }
+        // if (_isNextPoint(item.x, item.y, this.pointsArr, item.loopIndex)) {
         //   item.t = 0;
         //   // item.loopIndex = item.oldLoopIndex;
-        //   item.loopIndex = 0;
+        //   item.loopIndex++;
         // }
-        item.drawBall(ctx);
+        // //这个地方的判断逻辑有问题,但我尽力了求大神简化
+        
+        item.drawBall(ctx,img);
         item.t += this.tSpeed;
       });
-
-      // [this.ball.x,this.ball.y] = _getMoveXY(pointsArr,loopIndex,this.t);
-      // [this.ball2.x,this.ball2.y] = _getMoveXY(pointsArr,loopIndex1,this.t1);
-      //   //这个地方的判断逻辑有问题,但我尽力了求大神简化
-      //   if (_isNextPoint(this.ball.x,this.ball.y,this.pointsArr,this.loopIndex)) {
-      //     // this.motionState = true;
-      // this.t = 0;
-      //     this.loopIndex++;
-      //   }
-      // //这个地方的判断逻辑有问题,但我尽力了求大神简化
-      //   if (_isLastPoint(this.ball.x,this.ball.y,this.pointsArr)) {
-      // this.t = 0;
-      //     this.loopIndex = 0;
-      // }
-      // if (_isNextPoint(this.ball2.x,this.ball2.y,this.pointsArr,this.loopIndex1)) {
-      // this.t1 = 0;
-      //     this.loopIndex1++;
-      //   }
-      // //这个地方的判断逻辑有问题,但我尽力了求大神简化
-      //   if (_isLastPoint(this.ball2.x,this.ball2.y,this.pointsArr)) {
-      // this.t1 = 0;
-      //     this.loopIndex1 = 0;
-      //   }
-      // this.ball.drawTo(ctx);
-      //   this.ball2.drawTo(ctx);
       ctx.fill();
-      // this.t += this.tSpeed;
-      // this.t1 += this.tSpeed;
-    },
-    getBezierCoord(p1, p2, p3, p4, t) {
-      // B(t) = P0(1-t)³ + 3P1t(1-t)² + 3P2t²(1-t) + P3t³
-      return (
-        p1 * Math.pow(1 - t, 3) +
-        3 * p2 * t * Math.pow(1 - t, 2) +
-        3 * p3 * Math.pow(t, 2) * (1 - t) +
-        p4 * Math.pow(t, 3)
-      );
     },
     render() {
       this.draw();
-      var x = window.requestAnimationFrame(this.render.bind(this));
+      window.requestAnimationFrame(this.render.bind(this));
     }
-    // update() {
-    //   canvass.clearRect(0, 0, w, h);
-    //   mouse.update();
-    //   for (let d of bubbleArry) {
-    //     if (!d.text) {
-    //       d.update();
-    //     } else {
-    //       d.updateText();
-    //     }
-    //   }
-    // }
   }
 };
 </script>
