@@ -27,13 +27,41 @@ class animationBall {
     drawImg(ctx){
         if (!this.visible) { return }  // 不可见
         //画一个实心圆
-        ctx.save()
-        ctx.beginPath()
-        ctx.translate(this.x, this.y);
-        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false) // 顺时针
-        ctx.fillStyle = this.color;//填充颜色,默认是黑色
-        ctx.fill()//画实心圆
-        ctx.restore()
+ctx.save();
+ctx.translate(this.x+24, this.y-25);
+ctx.fillStyle="#00AD97";
+ctx.beginPath();
+ctx.rotate(-1.6+this.angle)
+ctx.moveTo(48.242,35.122);
+ctx.lineTo(45.414,37.95);
+ctx.lineTo(24.828,17.364);
+ctx.lineTo(4.242,37.95);
+ctx.lineTo(1.414,35.122);
+ctx.lineTo(24.828,11.707);
+ctx.lineTo(48.242,35.122);
+ctx.closePath();
+ctx.fillStyle="#00AD97";
+ctx.beginPath();
+ctx.moveTo(45.414,39.363);
+ctx.lineTo(24.828,18.778);
+ctx.lineTo(4.242,39.363);
+ctx.lineTo(0,35.121);
+ctx.lineTo(24.828,10);
+ctx.lineTo(49.656,35.121);
+ctx.lineTo(45.414,39.363);
+ctx.closePath();
+ctx.moveTo(24.828,15.95);
+ctx.lineTo(45.414,36.535);
+ctx.lineTo(46.828,35.1);
+ctx.lineTo(24.8,13.1);
+ctx.lineTo(2.8,35.1);
+ctx.lineTo(4.2,36.5);
+ctx.lineTo(24.828,15.95);
+ctx.translate(-this.x-24, -this.y+25);
+ctx.closePath();
+ctx.fill();
+// ctx.stroke();
+ctx.restore();
     }
     drawBall(ctx,img) {
         if (!this.visible) { return }  // 不可见
@@ -46,7 +74,7 @@ class animationBall {
         ctx.drawImage(img, this.x - 20, this.y - 20, 39, 38);
         // ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false) // 顺时针
         // ctx.fillStyle = this.color;//填充颜色,默认是黑色
-        ctx.fill()//画实心圆
+        // ctx.fill()//画实心圆
         ctx.restore()
         
         

@@ -11,6 +11,39 @@
 //         return false;
 //     }
 // }
+const Dclone = (obj) => {
+    var o;
+    // 如果  他是对象object的话  , 因为null,object,array  也是'object';
+    if (typeof obj === 'object') {
+      
+      // 如果  他是空的话
+      if (obj === null) {
+        o = null;
+      }
+      else {
+    
+        // 如果  他是数组arr的话
+        if (obj instanceof Array) {
+          o = [];
+          for (var i = 0, len = obj.length; i < len; i++) {
+            o.push(Dclone(obj[ i ]));
+          }
+        }
+        // 如果  他是对象object的话
+        else {
+          o = {};
+          for (var j in obj) {
+            o[ j ] = Dclone(obj[ j ]);
+          }
+        }
+        
+      }
+    }
+    else {
+      o = obj;
+    }
+    return o;
+  };
 //判断是否达到终点
 function _isLastPoint(t, loopIndex, length) {
     if(Math.floor(t) == 1&&loopIndex == length-1){
@@ -40,17 +73,17 @@ function _isLastPoint(t, loopIndex, length) {
 //获取贝塞尔运动球的x,y值
 function _getMoveXY(pointsArr, loopIndex, t) {
     let x = getBezierCoord(
-        pointsArr[loopIndex][0].x,
-        pointsArr[loopIndex][1].x,
-        pointsArr[loopIndex][2].x,
-        pointsArr[loopIndex][3].x,
+        pointsArr[loopIndex].points[0].x,
+        pointsArr[loopIndex].points[1].x,
+        pointsArr[loopIndex].points[2].x,
+        pointsArr[loopIndex].points[3].x,
         t
     );
     let y = getBezierCoord(
-        pointsArr[loopIndex][0].y,
-        pointsArr[loopIndex][1].y,
-        pointsArr[loopIndex][2].y,
-        pointsArr[loopIndex][3].y,
+        pointsArr[loopIndex].points[0].y,
+        pointsArr[loopIndex].points[1].y,
+        pointsArr[loopIndex].points[2].y,
+        pointsArr[loopIndex].points[3].y,
         t
     );
     return [x,y]
@@ -102,4 +135,5 @@ export {
     _getMoveXY,
     _getrotate,
     _getRotateXY,
+    Dclone
 } 
