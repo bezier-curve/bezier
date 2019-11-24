@@ -43,9 +43,10 @@ export default {
           end: { x: 250, y: 100 }
         },
         color: '#0F0',
-        size: 10
+        size: 10,
       }
       let bezierCurveTest = new BazierCurve(options)
+      bezierCurveTest.isClose = true
       bezierCurveTest.draw(ctx)
     },
     handleImport (fileList) {

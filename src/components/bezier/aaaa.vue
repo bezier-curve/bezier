@@ -11,8 +11,8 @@
   </div>
 </template>
 <script>
-import basicObj from "../../assets/prop_ball";
-import { _isNextPoint, _isLastPoint, _getMoveXY } from "../../assets/baseTool";
+// import basicObj from "../../assets/prop_ball";
+import { _isNextPoint, _getMoveXY } from "../../assets/baseTool";
 import animationBall from "../../assets/animationBall";
 let oCanvas;
 let ctx;
@@ -204,10 +204,10 @@ export default {
         ctx.fillText("start", x + 10, y + 10);
         ctx.fill();
         //画结束点
-        var { x, y } = pointsArr[pointsArr.length - 1][3];
+        var { x3, y3 } = pointsArr[pointsArr.length - 1][3];
         ctx.beginPath();
-        ctx.arc(x, y, 4, 0, 2 * Math.PI, false);
-        ctx.fillText("end", x + 10, y + 10);
+        ctx.arc(x3, y3, 4, 0, 2 * Math.PI, false);
+        ctx.fillText("end", x3 + 10, y3 + 10);
         ctx.fill();
       }
       //画当前路径操作点
@@ -323,7 +323,7 @@ export default {
     },
     render() {
       this.draw();
-      var x = window.requestAnimationFrame(this.render.bind(this));
+      window.requestAnimationFrame(this.render.bind(this));
     }
     // update() {
     //   canvass.clearRect(0, 0, w, h);
