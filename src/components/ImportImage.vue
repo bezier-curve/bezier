@@ -101,7 +101,7 @@ export default {
 </script>
 <style lang="sass">
 .import-image 
-  height: 100vh
+  height: 100%
   display: flex
   justify-content: center
   align-items: center
