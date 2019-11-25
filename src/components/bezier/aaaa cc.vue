@@ -11,9 +11,11 @@
   </div>
 </template>
 <script>
-import basicObj from "../../assets/prop_ball";
-import { _isLastPoint, _getMoveXY, _getrotate } from "../../assets/baseTool";
+// import basicObj from "../../assets/prop_ball";
+import { _isLastPoint, _getMoveXY, Dclone} from "../../assets/baseTool";
 import animationBall from "../../assets/animationBall";
+import BezierBall from "../../assets/bezierBall";
+import BezierCurve from "../../assets/bezierCurve";
 let oCanvas;
 let ctx;
 
@@ -23,23 +25,25 @@ export default {
       motionState: false, //动画状态
       mousePositionX: 0, //鼠标坐标x
       mousePositionY: 0, //鼠标坐标y
-      pointsArr: [
-        [
-          { x: 0, y: 0 },
-          { x: 100, y: 100 },
-          { x: 200, y: 500 },
-          { x: 400, y: 400 }
-        ],
-        [
-          { x: 400, y: 400 },
-          { x: 100, y: 300 },
-          { x: 200, y: 100 },
-          { x: 600, y: 300 }
-        ]
-      ], //路径数组
+      points:[],
+      // pointsArr: [
+      //   [
+      //     { x: 0, y: 0 },
+      //     { x: 100, y: 100 },
+      //     { x: 200, y: 500 },
+      //     { x: 400, y: 400 }
+      //   ],
+      //   [
+      //     { x: 400, y: 400 },
+      //     { x: 100, y: 300 },
+      //     { x: 200, y: 100 },
+      //     { x: 600, y: 300 }
+      //   ]
+      // ], //路径数组
+      pointsArr:[],
       positionXDown: 0,
       positionYDown: 0,
-      tSpeed: 0.005,
+      tSpeed: 0.01,
       beginText: "开始",
       balls: [],
       bezierPoint: []
@@ -53,21 +57,7 @@ export default {
     window.onresize = () => {
       this.initCanvas();
     };
-    let option = {
-      x: 0,
-      y: 0,
-      radius: 10
-    };
-    //初始化运动小球对象
-    for (let i = 0; i < 100; i++) {
-      let ball = new animationBall(option);
-      if(i > 50){
-      ball.loopIndex = 1;
-      ball.oldLoopIndex = 1
-      }
-      ball.t = 0.02 * i;
-      this.balls.push(ball);
-    }
+    
     let _self = this;
     //鼠标移动坐标
     document.onmousemove = function() {
@@ -101,30 +91,47 @@ export default {
   methods: {
     //数据初始化
     initData() {
-      if (this.pointsArr.length != 0) {
-        this.points = [
-          {
-            x: this.pointsArr[this.pointsArr.length - 1][3].x,
-            y: this.pointsArr[this.pointsArr.length - 1][3].y
-          },
-          { x: 0, y: 0 },
-          { x: 0, y: 0 },
-          { x: 0, y: 0 }
-        ];
-      } else {
-        this.points = [
-          { x: 0, y: 0 },
-          { x: 0, y: 0 },
-          { x: 0, y: 0 },
-          { x: 0, y: 0 }
-        ];
+      // if (this.pointsArr.length != 0) {
+      //   this.points = [
+      //     {
+      //       x: this.pointsArr[this.pointsArr.length - 1][3].x,
+      //       y: this.pointsArr[this.pointsArr.length - 1][3].y
+      //     },
+      //     { x: 0, y: 0 },
+      //     { x: 0, y: 0 },
+      //     { x: 0, y: 0 }
+      //   ];
+      // } else {
+        
+      // }
+      let option = {
+      x: 0,
+      y: 0,
+      radius: 10
+    };
+    //初始化运动小球对象
+    for (let i = 0; i < 200; i++) {
+      let ball = new animationBall(option);
+      if(i > 100){
+      ball.loopIndex = 1;
+      ball.oldLoopIndex = 1
+      ball.t = 0.01 * (i-100);
       }
+      ball.t = 0.01 * i;
+      this.balls.push(ball);
+    }
+    let points = [new BezierBall(option), new BezierBall(option), new BezierBall(option), new BezierBall(option)];
+    this.points = new BezierCurve({points:points});
     },
     initCanvas() {
       oCanvas = document.querySelector("canvas");
+      canvasBuffer = document.createElement("canvas");  
       oCanvas.width = window.innerWidth;
       oCanvas.height = window.innerHeight;
+      canvasBuffer.width = oCanvas.width;  
+      canvasBuffer.height = oCanvas.height; 
       ctx = oCanvas.getContext("2d");
+      contextBuffer = canvasBuffer.getContext("2d");  
       ctx.font = "14px Courier";
       oCanvas.onmousedown = function() {
         let ev = ev || window.event;
@@ -137,8 +144,8 @@ export default {
       window.requestAnimationFrame(this.render.bind(this));
     },
     delKeyDown(index) {
-      this.points[index].x = Math.floor(this.mousePositionX);
-      this.points[index].y = Math.floor(this.mousePositionY);
+      this.points.points[index].x = Math.floor(this.mousePositionX);
+      this.points.points[index].y = Math.floor(this.mousePositionY);
     },
     beginMotion() {
       this.motionState = !this.motionState;
@@ -156,27 +163,25 @@ export default {
       this.motionState = false;
     },
     joinPath() {
-      if (
-        this.points[0].x != 0 &&
-        this.points[1].x != 0 &&
-        this.points[2].x != 0 &&
-        this.points[3].x != 0
-      ) {
-        this.pointsArr.push(this.points);
-      } else {
-        return;
-      }
+      // if (
+      //   this.points.points[0].x != 0 &&
+      //   this.points.points[1].x != 0 &&
+      //   this.points.points[2].x != 0 &&
+      //   this.points.points[3].x != 0
+      // ) {
+        this.pointsArr.push(Dclone(this.points))
+      // } else {
+      //   return;
+      // }
       this.motionState = false;
       this.beginText = this.motionState ? "停下" : "开始动画";
-      this.points = [
-        {
-          x: this.pointsArr[this.pointsArr.length - 1][3].x,
-          y: this.pointsArr[this.pointsArr.length - 1][3].y
-        },
-        { x: 0, y: 0 },
-        { x: 0, y: 0 },
-        { x: 0, y: 0 }
-      ];
+      this.points.points[0] = this.pointsArr[this.pointsArr.length - 1].points[3]
+      this.points.points[1].x = 0
+      this.points.points[1].y = 0
+      this.points.points[2].x = 0
+      this.points.points[2].y = 0
+      this.points.points[3].x = 0
+      this.points.points[3].y = 0
     },
     draw() {
       ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
@@ -193,20 +198,20 @@ export default {
     drawPoints(pointsArr, points) {
       if (pointsArr.length !== 0) {
         //画开始点
-        var { x, y } = pointsArr[0][0];
+        var { x, y } = pointsArr[0].points[0];
         ctx.beginPath();
         ctx.arc(x, y, 4, 0, 2 * Math.PI, false);
         ctx.fillText("start", x + 10, y + 10);
         ctx.fill();
         //画结束点
-        var { x, y } = pointsArr[pointsArr.length - 1][3];
+        var { x3, y3 } = pointsArr[pointsArr.length - 1].points[3];
         ctx.beginPath();
-        ctx.arc(x, y, 4, 0, 2 * Math.PI, false);
-        ctx.fillText("end", x + 10, y + 10);
+        ctx.arc(x3, y3, 4, 0, 2 * Math.PI, false);
+        ctx.fillText("end", x3 + 10, y3 + 10);
         ctx.fill();
       }
       //画当前路径操作点
-      points.forEach(function(point, index) {
+      points.points.forEach(function(point, index) {
         var { x, y } = point;
         ctx.beginPath();
         ctx.arc(x, y, 4, 0, 2 * Math.PI, false);
@@ -221,35 +226,35 @@ export default {
       if (pointsArr.length !== 0) {
         for (let item of pointsArr) {
           ctx.beginPath();
-          ctx.moveTo(item[0].x, item[0].y);
+          ctx.moveTo(item.points[0].x, item.points[0].y);
           ctx.bezierCurveTo(
-            item[1].x,
-            item[1].y,
-            item[2].x,
-            item[2].y,
-            item[3].x,
-            item[3].y
+            item.points[1].x,
+            item.points[1].y,
+            item.points[2].x,
+            item.points[2].y,
+            item.points[3].x,
+            item.points[3].y
           );
           ctx.strokeStyle = "#50E3C2";
           ctx.stroke();
         }
       }
       if (
-        points[0].x != 0 &&
-        points[1].x != 0 &&
-        points[2].x != 0 &&
-        points[3].x != 0
+        points.points[0].x != 0 &&
+        points.points[1].x != 0 &&
+        points.points[2].x != 0 &&
+        points.points[3].x != 0
       ) {
         //如果画的路径需求的4个点都存在
         ctx.beginPath();
-        ctx.moveTo(points[0].x, points[0].y);
+        ctx.moveTo(points.points[0].x, points.points[0].y);
         ctx.bezierCurveTo(
-          points[1].x,
-          points[1].y,
-          points[2].x,
-          points[2].y,
-          points[3].x,
-          points[3].y
+          points.points[1].x,
+          points.points[1].y,
+          points.points[2].x,
+          points.points[2].y,
+          points.points[3].x,
+          points.points[3].y
         );
         ctx.strokeStyle = "#50E3C2";
         ctx.stroke();
@@ -262,6 +267,7 @@ export default {
       let img = new Image();
       img.src = '../../../static/lst.jpg';
       this.balls.forEach(item => {
+        // console.log(pointsArr);
         [item.x, item.y] = _getMoveXY(pointsArr, item.loopIndex, item.t);
         // [item.x, item.y] = _getRotoXY(pointsArr, item.loopIndex, item.t);
         item.angle =1-Math.atan2(item.x, item.y)
@@ -274,13 +280,6 @@ export default {
             item.t = 0;
           item.loopIndex++;
         }
-        // if (_isNextPoint(item.x, item.y, this.pointsArr, item.loopIndex)) {
-        //   item.t = 0;
-        //   // item.loopIndex = item.oldLoopIndex;
-        //   item.loopIndex++;
-        // }
-        // //这个地方的判断逻辑有问题,但我尽力了求大神简化
-        
         item.drawBall(ctx,img);
         item.t += this.tSpeed;
       });
@@ -288,7 +287,7 @@ export default {
     },
     render() {
       this.draw();
-      var x = window.requestAnimationFrame(this.render.bind(this));
+      window.requestAnimationFrame(this.render.bind(this));
     }
   }
 };
