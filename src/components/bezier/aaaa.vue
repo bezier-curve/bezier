@@ -16,7 +16,7 @@
 </template>
 <script>
 // import basicObj from "../../assets/prop_ball";
-import { _isLastPoint, _getMoveXY, _getRotateXY,Dclone } from "../../assets/baseTool";
+import { _isLastPoint, _getMoveXY,Dclone,_getRotateXY } from "../../assets/baseTool";
 import animationBall from "../../assets/animationBall";
 import BezierBall from "../../assets/bezierBall";
 import BezierCurve from "../../assets/bezierCurve";
@@ -187,8 +187,7 @@ export default {
       this.motionState = false;
       this.beginText = this.motionState ? "停下" : "开始动画";
       this.bezierCurve.points[0] = this.pointsArr.bezierCurve[
-        this.pointsArr.bezierCurve.length - 1
-      ].points[3];
+      this.pointsArr.bezierCurve.length - 1].points[3];
       this.bezierCurve.points[1].x = 0;
       this.bezierCurve.points[1].y = 0;
       this.bezierCurve.points[2].x = 0;
@@ -278,8 +277,9 @@ export default {
       this.allBalls[index].forEach(item => {
         // console.log(pointsArr);
         [item.x, item.y] = _getMoveXY(pointsArr, item.loopIndex, item.t);
-        // let [xRoto, yRoto] = _getRotateXY(pointsArr, item.loopIndex, item.t);
-        // item.angle = Math.atan2(xRoto, yRoto);
+        let [xRoto, yRoto] = _getRotateXY(pointsArr, item.loopIndex, item.t);
+        console.log(xRoto, yRoto);
+        item.angle = Math.atan2(xRoto, yRoto);
         if (_isLastPoint(item.t, item.loopIndex, pointsArr.length)) {
           item.t = 0;
           // item.loopIndex = item.oldLoopIndex;
@@ -368,10 +368,11 @@ export default {
       let img = new Image();
       img.src = "../../../static/lst.jpg";
       this.balls.forEach(item => {
-        // console.log(pointsArr);
         [item.x, item.y] = _getMoveXY(pointsArr, item.loopIndex, item.t);
-        // [item.x, item.y] = _getRotoXY(pointsArr, item.loopIndex, item.t);
-        item.angle = 1 - Math.atan2(item.x, item.y);
+        let [xRoto, yRoto] = _getRotateXY(pointsArr, item.loopIndex, item.t);
+        console.log(xRoto, yRoto);
+        item.angle = Math.atan2(xRoto, yRoto)-Math.atan2(item.x, 0);
+        // item.angle = 1 - Math.atan2(item.x, item.y);
         if (
           _isLastPoint(
             item.t,

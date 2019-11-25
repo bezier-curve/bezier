@@ -99,10 +99,10 @@ function getBezierCoord(p1, p2, p3, p4, t) {
 
 function _getRotateXY(pointsArr, loopIndex, t) {
     let x = getBezierRotate(
-      pointsArr[loopIndex].points[0].y,
-      pointsArr[loopIndex].points[1].y,
-      pointsArr[loopIndex].points[2].y,
-      pointsArr[loopIndex].points[3].y,
+      pointsArr[loopIndex].points[0].x,
+      pointsArr[loopIndex].points[1].x,
+      pointsArr[loopIndex].points[2].x,
+      pointsArr[loopIndex].points[3].x,
       t
     );
     let y = getBezierRotate(

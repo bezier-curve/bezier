@@ -31,8 +31,7 @@ class animationBall {
         ctx.translate(this.x, this.y);
         ctx.fillStyle = "#00AD97";
         // ctx.beginPath();
-        console.log(this.angle)
-        ctx.rotate(this.angle+0.5)
+        ctx.rotate(-this.angle)
         ctx.beginPath();
         ctx.moveTo(-20, 0);
         ctx.lineTo(0, 0);
