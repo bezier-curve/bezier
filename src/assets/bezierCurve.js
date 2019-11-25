@@ -1,5 +1,5 @@
 // import
-export default class BezierCurve {
+class BezierCurve {
   constructor(options) {
     this.points = options.points||[]
     this.color = options.color || '#0F0'
@@ -13,15 +13,12 @@ export default class BezierCurve {
   draw (ctx) {
     // 画曲线
     this.drawCurve(ctx)
-
     if (!this.isClose) {
       //画控制线2
       this._drawCtrl2(ctx)
       //画控制线1
       this._drawCtrl1(ctx)
     }
-
-    
   }
   update () {
     this.color = this.isSelected ? this.color : '#111'
@@ -52,3 +49,4 @@ export default class BezierCurve {
     ctx.stroke()
   }
 }
+export default BezierCurve

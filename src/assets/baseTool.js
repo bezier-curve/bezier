@@ -15,13 +15,11 @@ const Dclone = (obj) => {
     var o;
     // 如果  他是对象object的话  , 因为null,object,array  也是'object';
     if (typeof obj === 'object') {
-      
       // 如果  他是空的话
       if (obj === null) {
         o = null;
       }
       else {
-    
         // 如果  他是数组arr的话
         if (obj instanceof Array) {
           o = [];
@@ -101,18 +99,18 @@ function getBezierCoord(p1, p2, p3, p4, t) {
 
 function _getRotateXY(pointsArr, loopIndex, t) {
     let x = getBezierRotate(
-        pointsArr[loopIndex][0].x,
-        pointsArr[loopIndex][1].x,
-        pointsArr[loopIndex][2].x,
-        pointsArr[loopIndex][3].x,
-        t
+      pointsArr[loopIndex].points[0].x,
+      pointsArr[loopIndex].points[1].x,
+      pointsArr[loopIndex].points[2].x,
+      pointsArr[loopIndex].points[3].x,
+      t
     );
     let y = getBezierRotate(
-        pointsArr[loopIndex][0].y,
-        pointsArr[loopIndex][1].y,
-        pointsArr[loopIndex][2].y,
-        pointsArr[loopIndex][3].y,
-        t
+      pointsArr[loopIndex].points[0].y,
+      pointsArr[loopIndex].points[1].y,
+      pointsArr[loopIndex].points[2].y,
+      pointsArr[loopIndex].points[3].y,
+      t
     );
     return [x,y]
 }
@@ -120,10 +118,10 @@ function _getRotateXY(pointsArr, loopIndex, t) {
 function getBezierRotate(p1, p2, p3, p4, t) {
     // B(t) = P0(1-t)³ + 3P1t(1-t)² + 3P2t²(1-t) + P3t³
     return (
-        p1 * Math.pow(1 - t, 3) +
-        3 * p2 * t * Math.pow(1 - t, 2) +
-        3 * p3 * Math.pow(t, 2) * (1 - t) +
-        p4 * Math.pow(t, 3)
+        p1 * Math.pow(1 - t, 2)*(-3) +
+        3 * p2 * (Math.pow(1 - t, 2)+t*2*(t-1)) +
+        3 * p3 *(2*t*(1-t)-Math.pow(t, 2)) +
+        3*p4 * Math.pow(t, 2)
     );
 }
 function _getrotate(x,y){
