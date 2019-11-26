@@ -1,19 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Index from '../views/Index.vue'
-import bezier from '@/components/bezier/aaaa'
+// import bezier from '@/components/bezier/BezierCanvas.vue'
 Vue.use(VueRouter)
 
 const routes = [{
     path: '/',
-    name: 'bezier',
-    component: bezier
-  },
-  {
-    path: '/input',
-    name: 'input',
+    name: 'index',
     component: Index
   },
+  // {
+  //   path: '/input',
+  //   name: 'input',
+  //   component: Index
+  // },
   {
     path: '/*',
     name: '404',
