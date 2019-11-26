@@ -71,17 +71,17 @@ function _isLastPoint(t, loopIndex, length) {
 //获取贝塞尔运动球的x,y值
 function _getMoveXY(pointsArr, loopIndex, t) {
     let x = getBezierCoord(
-        pointsArr[loopIndex].points[0].x,
-        pointsArr[loopIndex].points[1].x,
-        pointsArr[loopIndex].points[2].x,
-        pointsArr[loopIndex].points[3].x,
+        pointsArr[loopIndex].points.start.x,
+        pointsArr[loopIndex].points.c1.x,
+        pointsArr[loopIndex].points.c2.x,
+        pointsArr[loopIndex].points.end.x,
         t
     );
     let y = getBezierCoord(
-        pointsArr[loopIndex].points[0].y,
-        pointsArr[loopIndex].points[1].y,
-        pointsArr[loopIndex].points[2].y,
-        pointsArr[loopIndex].points[3].y,
+        pointsArr[loopIndex].points.start.y,
+        pointsArr[loopIndex].points.c1.y,
+        pointsArr[loopIndex].points.c2.y,
+        pointsArr[loopIndex].points.end.y,
         t
     );
     return [x,y]
@@ -99,17 +99,17 @@ function getBezierCoord(p1, p2, p3, p4, t) {
 
 function _getRotateXY(pointsArr, loopIndex, t) {
     let x = getBezierRotate(
-      pointsArr[loopIndex].points[0].x,
-      pointsArr[loopIndex].points[1].x,
-      pointsArr[loopIndex].points[2].x,
-      pointsArr[loopIndex].points[3].x,
+      pointsArr[loopIndex].points.start.x,
+      pointsArr[loopIndex].points.c1.x,
+      pointsArr[loopIndex].points.c2.x,
+      pointsArr[loopIndex].points.end.x,
       t
     );
     let y = getBezierRotate(
-      pointsArr[loopIndex].points[0].y,
-      pointsArr[loopIndex].points[1].y,
-      pointsArr[loopIndex].points[2].y,
-      pointsArr[loopIndex].points[3].y,
+      pointsArr[loopIndex].points.start.x,
+      pointsArr[loopIndex].points.c1.x,
+      pointsArr[loopIndex].points.c2.x,
+      pointsArr[loopIndex].points.end.x,
       t
     );
     return [x,y]
