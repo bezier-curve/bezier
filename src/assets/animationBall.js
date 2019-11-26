@@ -50,7 +50,7 @@ class animationBall {
         ctx.save()
         ctx.beginPath()
         ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle + 1)
+        ctx.rotate(this.angle)
         ctx.translate(-this.x, -this.y);
         ctx.drawImage(img, this.x - 20, this.y - 20, 39, 38);
         // ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false) // 顺时针

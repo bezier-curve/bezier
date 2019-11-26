@@ -16,7 +16,8 @@
 </template>
 <script>
 // import basicObj from "../../assets/prop_ball";
-import { _isLastPoint, _getMoveXY,Dclone,_getRotateXY } from "../../assets/baseTool";
+import { _isLastPoint, _getMoveXY, _getRotateXY } from "../../assets/baseTool";
+import {cloneDeep} from 'lodash'
 import animationBall from "../../assets/animationBall";
 import BezierBall from "../../assets/bezierBall";
 import BezierCurve from "../../assets/bezierCurve";
@@ -187,9 +188,7 @@ export default {
         this.bezierCurve.points.c2.x != 0 &&
         this.bezierCurve.points.end.x != 0
       ) {
-        // console.log('?????',this.bezierCurve)  //可以获取到对象内方法
-        this.pointsArr.bezierCurve.push(Dclone(this.bezierCurve));
-        // console.log('!!!', this.pointsArr.bezierCurve)  //获取不到对象内方法
+        this.pointsArr.bezierCurve.push(cloneDeep(this.bezierCurve));
       } else {
         return;
       }
@@ -207,7 +206,7 @@ export default {
     },
     anotherPath() {
       if (this.pointsArr.bezierCurve.length > 0) {
-        this.allBezierData.push(Dclone(this.pointsArr));
+        this.allBezierData.push(cloneDeep(this.pointsArr));
         this.initData();
       } else {
         alert("不能加入空路径");
@@ -216,22 +215,22 @@ export default {
     },
     draw() {
       contextBuffer.clearRect(0, 0, oCanvas.width, oCanvas.height);
-      if (this.allMotionState) {
+      if(this.allBezierData.length>0){
         this.allBezierData.forEach((item, index) => {
-          this.drawPointsA(item.bezierCurve);
-          this.drawCurveA(item.bezierCurve);
+        this.drawPointsA(item.bezierCurve);
+        this.drawCurveA(item.bezierCurve);
+        if (this.allMotionState) {
           this.drawAnimationA(item.bezierCurve, index);
-        });
-      } else {
-        // console.log(this.pointsArr.bezierCurve)
-        this.drawPoints(this.pointsArr.bezierCurve, this.bezierCurve);
-        //画曲线函数(路径数组，当前画的未加入路径的路径点)
-        this.drawCurve(this.pointsArr.bezierCurve, this.bezierCurve);
-        //画路径中点的动画
-        if (this.motionState && this.pointsArr.bezierCurve.length != 0) {
-          //运动状态为true,路径点数组长度不为0
-          this.drawAnimation(this.pointsArr.bezierCurve);
         }
+      });
+      }
+      this.drawPoints(this.pointsArr.bezierCurve, this.bezierCurve);
+      //画曲线函数(路径数组，当前画的未加入路径的路径点)
+      this.drawCurve(this.pointsArr.bezierCurve, this.bezierCurve);
+      //画路径中点的动画
+      if (this.motionState && this.pointsArr.bezierCurve.length != 0) {
+        //运动状态为true,路径点数组长度不为0
+        this.drawAnimation(this.pointsArr.bezierCurve);
       }
       //描点函数(路径数组，当前画的未加入路径的路径点)
       ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
@@ -242,7 +241,7 @@ export default {
       if (pointsArr.length !== 0) {
         //画开始点
         // let { x, y } = pointsArr[0].points[0];
-        let x= pointsArr[0].points.start.x;
+        /* let x= pointsArr[0].points.start.x;
         let y= pointsArr[0].points.start.y;
         contextBuffer.beginPath();
         contextBuffer.arc(x, y, 4, 0, 2 * Math.PI, false);
@@ -255,10 +254,9 @@ export default {
         contextBuffer.beginPath();
         contextBuffer.arc(x3, y3, 4, 0, 2 * Math.PI, false);
         contextBuffer.fillText("end", x3 + 10, y3 + 10);
-        contextBuffer.fill();
-        /* TODO:调用不到方法
+        contextBuffer.fill(); */
         pointsArr[0].points.start.draw(contextBuffer);
-        pointsArr[pointsArr.length - 1].points.end.draw(contextBuffer); */
+        pointsArr[pointsArr.length - 1].points.end.draw(contextBuffer); 
       }
     },
     //画曲线函数
@@ -293,7 +291,7 @@ export default {
         [item.x, item.y] = _getMoveXY(pointsArr, item.loopIndex, item.t);
         let [xRoto, yRoto] = _getRotateXY(pointsArr, item.loopIndex, item.t);
         // console.log(xRoto, yRoto);
-        item.angle = Math.atan2(xRoto, yRoto);
+        item.angle = Math.atan2(xRoto, yRoto)-Math.atan2(item.x, 0);
         if (_isLastPoint(item.t, item.loopIndex, pointsArr.length)) {
           item.t = 0;
           // item.loopIndex = item.oldLoopIndex;
@@ -314,21 +312,21 @@ export default {
       if (pointsArr.length !== 0) {
         //画开始点
         // console.log(pointsArr[0].points)
-        // pointsArr[0].points.start.draw(contextBuffer);
-        let { x, y } = pointsArr[0].points.start;
+        pointsArr[0].points.start.draw(contextBuffer);
+        /* let { x, y } = pointsArr[0].points.start;
         contextBuffer.beginPath();
         contextBuffer.arc(x, y, 4, 0, 2 * Math.PI, false);
         contextBuffer.fillText("start", x + 10, y + 10);
-        contextBuffer.fill();
+        contextBuffer.fill(); */
         //画结束点
-        // pointsArr[pointsArr.length - 1].points.end.draw(contextBuffer);
+        pointsArr[pointsArr.length - 1].points.end.draw(contextBuffer);
         // let { x, y } = pointsArr[pointsArr.length - 1].points.end;
-        let x3 = pointsArr[pointsArr.length - 1].points.end.x;
+        /* let x3 = pointsArr[pointsArr.length - 1].points.end.x;
         let y3 = pointsArr[pointsArr.length - 1].points.end.y;
         contextBuffer.beginPath();
         contextBuffer.arc(x3, y3, 4, 0, 2 * Math.PI, false);
         contextBuffer.fillText("end", x3 + 10, y3 + 10);
-        contextBuffer.fill();
+        contextBuffer.fill(); */
       }
       //画当前路径操作点
       for(var type in bezierCurve.points) {
