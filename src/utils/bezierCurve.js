@@ -13,7 +13,6 @@ export default class BezierCurve {
   draw (ctx) {
     // 画曲线
     this.drawCurve(ctx)
-
     if (!this.isClose) {
       //画控制线2
       this._drawCtrl2(ctx)

@@ -1,6 +1,12 @@
 <template>
-  <div>
-    <canvas id="bubble" ref="bubble"></canvas>
+  <div v-show=isVisible>
+    <canvas 
+    id="bubble" 
+    ref="bubble" 
+    class="bezier-curve"
+    :style="{ 'width': bezierStyle.width + 'px', 'height': bezierStyle.height + 'px', 
+    'top': bezierStyle.top + 'px', 'left': bezierStyle.left + 'px'}"
+    ></canvas>
     <br />
     <button id="begin" @click="beginMotion">{{beginText}}</button>
     <br />
@@ -16,8 +22,13 @@
 </template>
 <script>
 // import basicObj from "../../assets/prop_ball";
+<<<<<<< HEAD:src/components/bezier/aaaa.vue
 import { _isLastPoint, _getMoveXY, _getRotateXY,_getSpeed} from "../../assets/baseTool";
 import {cloneDeep} from 'lodash'
+=======
+import { _isLastPoint, _getMoveXY, _getRotateXY } from "../../assets/baseTool";
+import { cloneDeep } from 'lodash'
+>>>>>>> 085dd1bf4cbd8da1d3693ff5fe88003ae7068dce:src/components/bezier/BezierCanvas.vue
 import animationBall from "../../assets/animationBall";
 import BezierBall from "../../assets/bezierBall";
 import BezierCurve from "../../assets/bezierCurve";
@@ -27,6 +38,23 @@ let ctx;
 let canvasBuffer;
 let contextBuffer;
 export default {
+  props: {
+    bezierStyle: {
+      type: Object,
+      default: function () {
+        return {
+          width: 0,
+          height: 0,
+          top: 0,
+          left: 0
+        }
+      }
+    },
+    isVisible: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       motionState: false, //动画状态
@@ -46,10 +74,52 @@ export default {
       allBezierData: []
     };
   },
+  watch: {
+    isVisible (newVal, oldVal) {
+      console.log(oldVal, newVal)
+      if (newVal) {
+        this.initData();
+        this.initCanvas();
+        // // 当调整窗口大小时重绘canvas
+        // // window.onresize = () => {
+        // //   this.initCanvas();
+        // // };
+        // let _self = this;
+        // //鼠标移动坐标
+        // document.onmousemove = function() {
+        //   let ev = ev || window.event;
+        //   _self.mousePositionX =
+        //     ev.clientX - _self.$refs["bubble"].getBoundingClientRect().x;
+        //   _self.mousePositionY =
+        //     ev.clientY - _self.$refs["bubble"].getBoundingClientRect().y;
+        // };
+        // //键盘事件
+        // document.onkeydown = function() {
+        //   let e = event || window.event || arguments.callee.caller.arguments[0];
+        //   if (e && e.keyCode == 81 && _self.pointsArr.bezierCurve.length == 0) {
+        //     // 按 q
+        //     _self.delKeyDown(0);
+        //   }
+        //   if (e && e.keyCode == 87) {
+        //     // 按 w
+        //     _self.delKeyDown(1);
+        //   }
+        //   if (e && e.keyCode == 69) {
+        //     // 按 e
+        //     _self.delKeyDown(2);
+        //   }
+        //   if (e && e.keyCode == 82) {
+        //     // 按 r
+        //     _self.delKeyDown(3);
+        //   }
+        // };
+      }
+    }
+  },
   created() {},
   mounted() {
-    this.initData();
-    this.initCanvas();
+    // this.initData();
+    // this.initCanvas();
     // 当调整窗口大小时重绘canvas
     // window.onresize = () => {
     //   this.initCanvas();
@@ -136,10 +206,14 @@ export default {
       this.pointsArr = new JointBezier({});
     },
     initCanvas() {
-      oCanvas = document.querySelector("canvas");
+      // oCanvas = document.querySelector("canvas");
+      oCanvas = document.getElementsByClassName('bezier-curve')[0];
       canvasBuffer = document.createElement("canvas");
-      oCanvas.width = window.innerWidth;
-      oCanvas.height = window.innerHeight;
+      debugger
+      // oCanvas.width = window.innerWidth;
+      // oCanvas.height = window.innerHeight;
+      oCanvas.width = this.bezierStyle.width || window.innerWidth;
+      oCanvas.height = this.bezierStyle.height || window.innerHeight;
       canvasBuffer.width = oCanvas.width;
       canvasBuffer.height = oCanvas.height;
       ctx = oCanvas.getContext("2d");
@@ -153,8 +227,8 @@ export default {
         this.positionYDown = ev.clientY;
       };
       //   oCanvas.addEventListener("keydown", this.doKeyDown, true);
-      oCanvas.width = window.innerWidth;
-      oCanvas.height = window.innerHeight;
+      oCanvas.width = this.bezierStyle.width || window.innerWidth;
+      oCanvas.height = this.bezierStyle.height || window.innerHeight;
       window.requestAnimationFrame(this.render.bind(this));
     },
     delKeyDown(type) {

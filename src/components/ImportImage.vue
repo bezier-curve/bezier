@@ -1,6 +1,7 @@
 <template>
   <div class="import-image">
     <canvas class="canvas-image" :width=canvasWidth :height=canvasHeight></canvas>
+    <bezier-cancas :bezierStyle=bezierStyle :isVisible=isVisible style="position: absolute"></bezier-cancas>
     <!-- <button>添加文件</button> -->
     <div class="file-input">
       <bezier-button :title="`选择图片`" @handleImport="handleImport"></bezier-button>
@@ -12,16 +13,20 @@
 <script>
 import BezierButton from '@/components/BezierButton.vue'
 import BazierCurve from '../utils/bezierCurve.js'
+import BezierCancas from './bezier/BezierCanvas.vue'
 let canvasObj, ctx
 export default {
   data() {
     return {
       canvasWidth: 0,
-      canvasHeight: 0
+      canvasHeight: 0,
+      bezierStyle: {},
+      isVisible: false
     }
   },
   components: {
-    BezierButton
+    BezierButton,
+    BezierCancas
   },
   mounted () {
     canvasObj = document.getElementsByClassName('canvas-image')[0]
@@ -43,9 +48,10 @@ export default {
           end: { x: 250, y: 100 }
         },
         color: '#0F0',
-        size: 10
+        size: 10,
       }
       let bezierCurveTest = new BazierCurve(options)
+      bezierCurveTest.isClose = true
       bezierCurveTest.draw(ctx)
     },
     handleImport (fileList) {
@@ -55,6 +61,7 @@ export default {
     },
     handleClear () {
       ctx.clearRect(0, 0, canvasObj.width, canvasObj.height)
+      this.isVisible = false
     },
     getImage (imgSrc) {
       const imageObj = new Image()
@@ -82,6 +89,8 @@ export default {
         imageSize.top = (this.canvasHeight - imageSize.height) / 2
         imageSize.left = 0
       }
+      this.bezierStyle = imageSize
+      this.isVisible = true
       return imageSize
     },
     getObjectURL (file) {
@@ -100,13 +109,13 @@ export default {
 </script>
 <style lang="sass">
 .import-image 
-  height: 100vh
+  height: 100%
   display: flex
   justify-content: center
   align-items: center
   flex-direction: column
   .canvas-image
-    background-color: #eeeeee
+    background-color: #000000
     height: 80vh
     width: 80vw
   .file-input
