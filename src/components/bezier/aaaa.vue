@@ -16,7 +16,7 @@
 </template>
 <script>
 // import basicObj from "../../assets/prop_ball";
-import { _isLastPoint, _getMoveXY, _getRotateXY } from "../../assets/baseTool";
+import { _isLastPoint, _getMoveXY, _getRotateXY,_getSpeed} from "../../assets/baseTool";
 import {cloneDeep} from 'lodash'
 import animationBall from "../../assets/animationBall";
 import BezierBall from "../../assets/bezierBall";
@@ -188,6 +188,8 @@ export default {
         this.bezierCurve.points.c2.x != 0 &&
         this.bezierCurve.points.end.x != 0
       ) {
+        this.bezierCurve.tSpeed = _getSpeed(this.bezierCurve,oCanvas.width,oCanvas.height);
+        console.log(this.bezierCurve.tSpeed);
         this.pointsArr.bezierCurve.push(cloneDeep(this.bezierCurve));
       } else {
         return;
@@ -241,20 +243,6 @@ export default {
       if (pointsArr.length !== 0) {
         //画开始点
         // let { x, y } = pointsArr[0].points[0];
-        /* let x= pointsArr[0].points.start.x;
-        let y= pointsArr[0].points.start.y;
-        contextBuffer.beginPath();
-        contextBuffer.arc(x, y, 4, 0, 2 * Math.PI, false);
-        contextBuffer.fillText("start", x + 10, y + 10);
-        contextBuffer.fill();
-        //画结束点
-        let x3= pointsArr[pointsArr.length - 1].points.end.x;
-        let y3= pointsArr[pointsArr.length - 1].points.end.y;
-        // console.log(x3,y3)
-        contextBuffer.beginPath();
-        contextBuffer.arc(x3, y3, 4, 0, 2 * Math.PI, false);
-        contextBuffer.fillText("end", x3 + 10, y3 + 10);
-        contextBuffer.fill(); */
         pointsArr[0].points.start.draw(contextBuffer);
         pointsArr[pointsArr.length - 1].points.end.draw(contextBuffer); 
       }
@@ -263,8 +251,6 @@ export default {
     drawCurveA(pointsArr) {
       if (pointsArr.length !== 0) {
         for (let item of pointsArr) {
-          // console.log(item)
-          // item.draw(contextBuffer);
           contextBuffer.beginPath();
           contextBuffer.moveTo(item.points.start.x, item.points.start.y);
           contextBuffer.bezierCurveTo(
@@ -290,7 +276,6 @@ export default {
         // console.log(pointsArr);
         [item.x, item.y] = _getMoveXY(pointsArr, item.loopIndex, item.t);
         let [xRoto, yRoto] = _getRotateXY(pointsArr, item.loopIndex, item.t);
-        // console.log(xRoto, yRoto);
         item.angle = Math.atan2(xRoto, yRoto)-Math.atan2(item.x, 0);
         if (_isLastPoint(item.t, item.loopIndex, pointsArr.length)) {
           item.t = 0;
@@ -311,44 +296,16 @@ export default {
     drawPoints(pointsArr, bezierCurve) {
       if (pointsArr.length !== 0) {
         //画开始点
-        // console.log(pointsArr[0].points)
         pointsArr[0].points.start.draw(contextBuffer);
-        /* let { x, y } = pointsArr[0].points.start;
-        contextBuffer.beginPath();
-        contextBuffer.arc(x, y, 4, 0, 2 * Math.PI, false);
-        contextBuffer.fillText("start", x + 10, y + 10);
-        contextBuffer.fill(); */
         //画结束点
         pointsArr[pointsArr.length - 1].points.end.draw(contextBuffer);
-        // let { x, y } = pointsArr[pointsArr.length - 1].points.end;
-        /* let x3 = pointsArr[pointsArr.length - 1].points.end.x;
-        let y3 = pointsArr[pointsArr.length - 1].points.end.y;
-        contextBuffer.beginPath();
-        contextBuffer.arc(x3, y3, 4, 0, 2 * Math.PI, false);
-        contextBuffer.fillText("end", x3 + 10, y3 + 10);
-        contextBuffer.fill(); */
       }
       //画当前路径操作点
       for(var type in bezierCurve.points) {
-        /* console.log(bezierCurve.points, bezierCurve.points[type])
-        let { x, y } = bezierCurve.points[type];
-        contextBuffer.beginPath();
-        contextBuffer.arc(x, y, 4, 0, 2 * Math.PI, false);
-        contextBuffer.fillText(type, x + 10, y + 10);
-        contextBuffer.fill(); */
         if(type != 'start' || pointsArr.length == 0) {
           bezierCurve.points[type].draw(contextBuffer);
         } 
       }
-      /* bezierCurve.points.forEach(function(point, index) {
-        let { x, y } = point;
-        contextBuffer.beginPath();
-        contextBuffer.arc(x, y, 4, 0, 2 * Math.PI, false);
-        if (index != 0) {
-          contextBuffer.fillText("P" + index, x + 10, y + 10);
-        }
-        contextBuffer.fill();
-      }); */
     },
     //画曲线函数
     drawCurve(pointsArr, bezierCurve) {

@@ -7,10 +7,11 @@ class animationBall {
             this.visible = o.visible || true,
             this.t = o.t || 0,
             this.loopIndex = o.loopIndex || 0
-        this.oldLoopIndex = o.oldLoopIndex || 0
-        this.type = type || 'ball',
+            this.oldLoopIndex = o.oldLoopIndex || 0
+            this.type = type || 'ball',
             this.img = o.img || null,
-            this.angle = 0
+            this.angle = 0,
+            this.Tspeed = 0.01
     }
     drawTo(ctx) {
         switch (this.type) {
