@@ -159,16 +159,11 @@ export default {
       // oCanvas = document.querySelector("canvas");
       oCanvas = document.getElementsByClassName('bezier-curve')[0];
       canvasBuffer = document.createElement("canvas");
-<<<<<<< HEAD
-      debugger
+      // debugger
       // oCanvas.width = window.innerWidth;
       // oCanvas.height = window.innerHeight;
       oCanvas.width = parseFloat(this.bezierStyle.width) || window.innerWidth;
       oCanvas.height = parseFloat(this.bezierStyle.width) || window.innerHeight;
-=======
-      oCanvas.width = this.bezierStyle.width || window.innerWidth;
-      oCanvas.height = this.bezierStyle.height || window.innerHeight;
->>>>>>> c1bf399de5e600a6e7d72c0a7ec8e327d79f9c74
       canvasBuffer.width = oCanvas.width;
       canvasBuffer.height = oCanvas.height;
       ctx = oCanvas.getContext("2d");
@@ -181,14 +176,9 @@ export default {
         this.positionXDown = ev.clientX;
         this.positionYDown = ev.clientY;
       };
-<<<<<<< HEAD
       //   oCanvas.addEventListener("keydown", this.doKeyDown, true);
       oCanvas.width = parseFloat(this.bezierStyle.width) || window.innerWidth;
       oCanvas.height = parseFloat(this.bezierStyle.height) || window.innerHeight;
-=======
-      oCanvas.width = this.bezierStyle.width || window.innerWidth;
-      oCanvas.height = this.bezierStyle.height || window.innerHeight;
->>>>>>> c1bf399de5e600a6e7d72c0a7ec8e327d79f9c74
       window.requestAnimationFrame(this.render.bind(this));
     },
     delKeyDown(type) {
