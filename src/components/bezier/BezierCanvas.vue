@@ -66,7 +66,9 @@ export default {
       balls: [],
       allBalls: [],
       bezierPoint: [],
-      allBezierData: []
+      allBezierData: [],
+      clickPositionX: 0,
+      clickPositionY: 0
     };
   },
   watch: {
@@ -148,6 +150,43 @@ export default {
         _self.delKeyDown('end');
       }
     };
+    document.onmousedown = function(e) {
+      let ev = ev || window.event;
+      _self.clickPositionX =
+        e.clientX - _self.$refs["bubble"].getBoundingClientRect().x;
+      _self.clickPositionY =
+        e.clientY - _self.$refs["bubble"].getBoundingClientRect().y;
+
+      if(_self.bezierCurve.points && _self.bezierCurve.points.length != 0 ) {
+        for(var type in _self.bezierCurve.points) {
+          if(_self.bezierCurve.points[type].selectable && !_self.bezierCurve.points[type].isSelect){
+            var distance = Math.sqrt( 
+              (_self.bezierCurve.points[type].x-_self.clickPositionX)*
+              (_self.bezierCurve.points[type].x-_self.clickPositionX) + 
+              (_self.bezierCurve.points[type].y-_self.clickPositionY)*
+              (_self.bezierCurve.points[type].y-_self.clickPositionY)
+            )
+            if(distance < _self.bezierCurve.points[type].radius + 8) {
+              _self.bezierCurve.points[type].isSelect = true;
+              return
+            }
+          }
+        }
+      }
+
+    }
+    document.onmouseup = function() {
+      for(var type in _self.bezierCurve.points) {
+        if(_self.bezierCurve.points[type].isSelect){
+          _self.bezierCurve.points[type].isSelect = false;
+          _self.bezierCurve.points[type].x = _self.mousePositionX;
+          _self.bezierCurve.points[type].y = _self.mousePositionY;
+          contextBuffer.clearRect(0, 0, canvasBuffer.width, canvasBuffer.height);
+          ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
+          _self.bezierCurve.points[type].draw(contextBuffer);
+        }
+      }
+    }
   },
   methods: {
     //数据初始化
@@ -155,7 +194,7 @@ export default {
       let option = {
         x: 0,
         y: 0,
-        radius: 10
+        radius:20
       };
       //初始化运动小球对象
       for (let i = 0; i < this.allBezierData.length; i++) {
@@ -183,14 +222,6 @@ export default {
         this.balls.push(ball);
       }
       //初始化运动小球，初始化贝塞尔大曲线
-
-
-      /* let points = [
-        new BezierBall(option),
-        new BezierBall(option),
-        new BezierBall(option),
-        new BezierBall(option)
-      ]; */
       let points = {
         'start': new BezierBall(option),
         'c1': new BezierBall(option),
@@ -204,7 +235,6 @@ export default {
       // oCanvas = document.querySelector("canvas");
       oCanvas = document.getElementsByClassName('bezier-curve')[0];
       canvasBuffer = document.createElement("canvas");
-      debugger
       // oCanvas.width = window.innerWidth;
       // oCanvas.height = window.innerHeight;
       oCanvas.width = this.bezierStyle.width || window.innerWidth;
@@ -228,6 +258,7 @@ export default {
     },
     delKeyDown(type) {
       this.bezierCurve.points[type].type = type;
+      this.bezierCurve.points[type].selectable = true;
       this.bezierCurve.points[type].x = Math.floor(this.mousePositionX);
       this.bezierCurve.points[type].y = Math.floor(this.mousePositionY);
     },
@@ -284,6 +315,7 @@ export default {
     },
     draw() {
       contextBuffer.clearRect(0, 0, oCanvas.width, oCanvas.height);
+      this.movePoint();
       if(this.allBezierData.length>0){
         this.allBezierData.forEach((item, index) => {
         this.drawPointsA(item.bezierCurve);
@@ -378,9 +410,8 @@ export default {
       contextBuffer.fill();
     },
     drawPoints(pointsArr, bezierCurve) {
-      if (pointsArr.length !== 0) {
+      if (pointsArr && pointsArr.length !== 0) {
         //画开始点
-        // console.log(pointsArr[0].points)
         pointsArr[0].points.start.draw(contextBuffer);
         /* let { x, y } = pointsArr[0].points.start;
         contextBuffer.beginPath();
@@ -399,15 +430,19 @@ export default {
       }
       //画当前路径操作点
       for(var type in bezierCurve.points) {
-        /* console.log(bezierCurve.points, bezierCurve.points[type])
-        let { x, y } = bezierCurve.points[type];
+        /* let { x, y } = bezierCurve.points[type];
         contextBuffer.beginPath();
         contextBuffer.arc(x, y, 4, 0, 2 * Math.PI, false);
         contextBuffer.fillText(type, x + 10, y + 10);
         contextBuffer.fill(); */
         if(type != 'start' || pointsArr.length == 0) {
           bezierCurve.points[type].draw(contextBuffer);
-        } 
+        }
+       /*  if(bezierCurve.points[type].isSelect){
+            bezierCurve.points[type].x = this.clickPositionX;
+            bezierCurve.points[type].y = this.clickPositionY;
+            bezierCurve.points[type].draw(contextBuffer);
+        } */
       }
       /* bezierCurve.points.forEach(function(point, index) {
         let { x, y } = point;
@@ -491,6 +526,17 @@ export default {
         item.t += this.tSpeed;
       });
       contextBuffer.fill();
+    },
+    movePoint(){
+      for(var type in this.bezierCurve.points) {
+        if(this.bezierCurve.points[type].isSelect){
+          this.bezierCurve.points[type].x = this.mousePositionX;
+          this.bezierCurve.points[type].y = this.mousePositionY;
+          contextBuffer.clearRect(0, 0, canvasBuffer.width, canvasBuffer.height);
+          ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
+          this.bezierCurve.points[type].draw(contextBuffer);
+        }
+      }
     },
     render() {
       this.draw();
