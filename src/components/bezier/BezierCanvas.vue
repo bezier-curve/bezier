@@ -17,7 +17,7 @@
     <br />
     <button id="Path" @click="anotherPath">加入新路径</button>
     <br />
-    <button id="code" @click="generateCode">加入路径</button>
+    <button id="code" @click="generateCode">生成代码</button>
   </div>
 </template>
 <script>
@@ -242,7 +242,13 @@ export default {
       }
     },
     generateCode() {
-      console.log(this.bezierStyle)
+      let curve = JSON.parse(JSON.stringify(this.allBezierData))[0]
+      debugger
+      console.log(curve)
+      console.log(new JointBezier(curve))
+      console.log(new BezierCurve(curve.bezierCurve[0]))
+      console.log(new BezierBall(curve.bezierCurve[0].points.start))
+      // BezierCurve
       // this
     },
     draw() {
