@@ -76,7 +76,7 @@ export default {
     },
     getImageSize (oldWidth, oldHeight) {
       let imageSize = {}
-      debugger
+      // debugger
       const imageScale = oldWidth / oldHeight
       const canvasScale = this.canvasWidth / this.canvasHeight
       if ( canvasScale > imageScale ) {
