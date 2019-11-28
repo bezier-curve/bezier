@@ -138,9 +138,9 @@ function _beze_even(t, xa, xb, xc, xd, ya, yb, yc, yd) {
   return t2;
 }
 function MathSpeed(xa, xb, xc, xd, ya, yb, yc, yd, W, H) {
-  let max = 2*W+2*H;
+  let max = 4*W+4*H;
   // let variance = Math.abs(3 * xa - xb - xc - xd + 3 * ya - yb - yc - yd) + Math.abs(3 * xb - xa - xc - xd + 3 * yb - ya - yc - yd)/2 + Math.abs(3 * xc - xa - xb - xd + 3 * yc - ya - yb - yd)/2 + Math.abs(3 * xd - xa - xc - xb + 3 * yd - ya - yc - yb);
-  let variance = Math.abs(xa-xd)+Math.abs(xc-xb)+Math.abs(ya-yd)+Math.abs(yc-yb)
+  let variance = Math.abs(xa-xd)+Math.abs(xc-xb)/2+Math.abs(ya-yd)+Math.abs(yc-yb)/2+(Math.abs(ya-yb)+Math.abs(ya-yc)+Math.abs(yd-yc)+Math.abs(yd-yb)+Math.abs(xa-xb)+Math.abs(xa-xc)+Math.abs(xd-xc)+Math.abs(xd-xb))/2
   let proportionSpeed = variance / max;
   return proportionSpeed;
 }

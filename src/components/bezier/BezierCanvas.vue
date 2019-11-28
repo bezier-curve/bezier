@@ -22,13 +22,8 @@
 </template>
 <script>
 // import basicObj from "../../assets/prop_ball";
-<<<<<<< HEAD:src/components/bezier/aaaa.vue
 import { _isLastPoint, _getMoveXY, _getRotateXY,_getSpeed} from "../../assets/baseTool";
 import {cloneDeep} from 'lodash'
-=======
-import { _isLastPoint, _getMoveXY, _getRotateXY } from "../../assets/baseTool";
-import { cloneDeep } from 'lodash'
->>>>>>> 085dd1bf4cbd8da1d3693ff5fe88003ae7068dce:src/components/bezier/BezierCanvas.vue
 import animationBall from "../../assets/animationBall";
 import BezierBall from "../../assets/bezierBall";
 import BezierCurve from "../../assets/bezierCurve";
@@ -262,8 +257,8 @@ export default {
         this.bezierCurve.points.c2.x != 0 &&
         this.bezierCurve.points.end.x != 0
       ) {
-        this.bezierCurve.tSpeed = _getSpeed(this.bezierCurve,oCanvas.width,oCanvas.height);
-        console.log(this.bezierCurve.tSpeed);
+        this.bezierCurve.tSpeed = 1/_getSpeed(this.bezierCurve,oCanvas.width,oCanvas.height)/300;
+        console.log(this.bezierCurve.tSpeed)
         this.pointsArr.bezierCurve.push(cloneDeep(this.bezierCurve));
       } else {
         return;
@@ -450,7 +445,8 @@ export default {
         }
         item.drawImg(contextBuffer)
         // item.drawBall(contextBuffer, img);
-        item.t += this.tSpeed;
+        // console.log(item.loopIndex)
+        item.t += pointsArr[item.loopIndex].tSpeed;
       });
       contextBuffer.fill();
     },
