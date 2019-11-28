@@ -9,6 +9,7 @@ class BezierCurve {
     this.index = options.index || 0
     this.isSelected = true
     this.isClose = false
+    this.Tspeed = 0.01
   }
   draw (ctx) {
     // 画曲线

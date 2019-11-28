@@ -7,10 +7,11 @@ class animationBall {
             this.visible = o.visible || true,
             this.t = o.t || 0,
             this.loopIndex = o.loopIndex || 0
-        this.oldLoopIndex = o.oldLoopIndex || 0
-        this.type = type || 'ball',
+            this.oldLoopIndex = o.oldLoopIndex || 0
+            this.type = type || 'ball',
             this.img = o.img || null,
-            this.angle = 0
+            this.angle = 0,
+            this.Tspeed = 0.01
     }
     drawTo(ctx) {
         switch (this.type) {
@@ -30,7 +31,6 @@ class animationBall {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.fillStyle = "#00AD97";
-        // ctx.beginPath();
         ctx.rotate(-this.angle)
         ctx.beginPath();
         ctx.moveTo(-20, 0);
@@ -50,15 +50,10 @@ class animationBall {
         ctx.save()
         ctx.beginPath()
         ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle)
+        ctx.rotate(-this.angle)
         ctx.translate(-this.x, -this.y);
         ctx.drawImage(img, this.x - 20, this.y - 20, 39, 38);
-        // ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false) // 顺时针
-        // ctx.fillStyle = this.color;//填充颜色,默认是黑色
-        // ctx.fill()//画实心圆
-        ctx.restore()
-
-
+        ctx.restore();
     }
     update(m_x, m_y) {
         if (this.isSelect) {

@@ -76,6 +76,7 @@ export default {
     },
     getImageSize (oldWidth, oldHeight) {
       let imageSize = {}
+      // debugger
       const imageScale = oldWidth / oldHeight
       const canvasScale = this.canvasWidth / this.canvasHeight
       if ( canvasScale > imageScale ) {
@@ -89,7 +90,13 @@ export default {
         imageSize.top = (this.canvasHeight - imageSize.height) / 2
         imageSize.left = 0
       }
-      this.bezierStyle = imageSize
+      let {offsetTop, offsetLeft} = document.getElementsByClassName('canvas-image')[0]
+      this.bezierStyle = {
+        width: imageSize.width + 'px',
+        height: imageSize.height + 'px',
+        top: imageSize.top + offsetTop + 'px',
+        left: imageSize.left + offsetLeft + 'px'
+      }
       this.isVisible = true
       return imageSize
     },
