@@ -1,11 +1,10 @@
 <template>
-  <div v-show=isVisible>
+  <div v-show=isVisible :style=bezierStyle>
     <canvas 
     id="bubble" 
     ref="bubble" 
     class="bezier-curve"
-    :style="{ 'width': bezierStyle.width + 'px', 'height': bezierStyle.height + 'px', 
-    'top': bezierStyle.top + 'px', 'left': bezierStyle.left + 'px'}"
+
     ></canvas>
     <br />
     <button id="begin" @click="beginMotion">{{beginText}}</button>
@@ -16,8 +15,9 @@
     <br />
     <button id="joinPath" @click="joinPath">加入路径</button>
     <br />
-    <button id="Path" @click="anotherPath">加入路径</button>
+    <button id="Path" @click="anotherPath">加入新路径</button>
     <br />
+    <button id="code" @click="generateCode">加入路径</button>
   </div>
 </template>
 <script>
@@ -207,8 +207,8 @@ export default {
       debugger
       // oCanvas.width = window.innerWidth;
       // oCanvas.height = window.innerHeight;
-      oCanvas.width = this.bezierStyle.width || window.innerWidth;
-      oCanvas.height = this.bezierStyle.height || window.innerHeight;
+      oCanvas.width = parseFloat(this.bezierStyle.width) || window.innerWidth;
+      oCanvas.height = parseFloat(this.bezierStyle.width) || window.innerHeight;
       canvasBuffer.width = oCanvas.width;
       canvasBuffer.height = oCanvas.height;
       ctx = oCanvas.getContext("2d");
@@ -222,8 +222,8 @@ export default {
         this.positionYDown = ev.clientY;
       };
       //   oCanvas.addEventListener("keydown", this.doKeyDown, true);
-      oCanvas.width = this.bezierStyle.width || window.innerWidth;
-      oCanvas.height = this.bezierStyle.height || window.innerHeight;
+      oCanvas.width = parseFloat(this.bezierStyle.width) || window.innerWidth;
+      oCanvas.height = parseFloat(this.bezierStyle.height) || window.innerHeight;
       window.requestAnimationFrame(this.render.bind(this));
     },
     delKeyDown(type) {
@@ -283,6 +283,10 @@ export default {
         alert("不能加入空路径");
         return;
       }
+    },
+    generateCode() {
+      console.log(this.bezierStyle)
+      // this
     },
     draw() {
       contextBuffer.clearRect(0, 0, oCanvas.width, oCanvas.height);
