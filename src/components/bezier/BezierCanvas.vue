@@ -148,13 +148,6 @@ export default {
           _self.bezierCurve.points[type].isSelect = false;
           _self.bezierCurve.points[type].x = _self.mousePositionX;
           _self.bezierCurve.points[type].y = _self.mousePositionY;
-          contextBuffer.clearRect(
-            0,
-            0,
-            canvasBuffer.width,
-            canvasBuffer.height
-          );
-          ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
           _self.bezierCurve.points[type].draw(contextBuffer);
         }
       }
@@ -283,6 +276,7 @@ export default {
       this.bezierCurve.points.start.y = this.pointsArr.bezierCurve[
         this.pointsArr.bezierCurve.length - 1
       ].points.end.y;
+      this.bezierCurve.points.start.selectable = false;
       this.bezierCurve.points.c1.x = 0;
       this.bezierCurve.points.c1.y = 0;
       this.bezierCurve.points.c2.x = 0;
@@ -345,13 +339,6 @@ export default {
         if (this.bezierCurve.points[type].isSelect) {
           this.bezierCurve.points[type].x = this.mousePositionX;
           this.bezierCurve.points[type].y = this.mousePositionY;
-          contextBuffer.clearRect(
-            0,
-            0,
-            canvasBuffer.width,
-            canvasBuffer.height
-          );
-          ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
           this.bezierCurve.points[type].draw(contextBuffer);
         }
       }
