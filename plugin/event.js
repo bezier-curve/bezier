@@ -1,7 +1,3 @@
-/*
-*  Hover inspect extension for Chrome
-*  https://github.com/NV0/hover-inspect
-*/
 
 (function() {
 
