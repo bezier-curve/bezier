@@ -379,15 +379,15 @@ export default {
       }
       //画当前路径操作点
       for(var type in bezierCurve.points) {
-        /* let { x, y } = bezierCurve.points[type];
+         /* let { x, y } = bezierCurve.points[type];
         contextBuffer.beginPath();
         contextBuffer.arc(x, y, 4, 0, 2 * Math.PI, false);
         contextBuffer.fillText(type, x + 10, y + 10);
         contextBuffer.fill(); */
         if(type != 'start' || pointsArr.length == 0) {
           bezierCurve.points[type].draw(contextBuffer);
-        }
-       /*  if(bezierCurve.points[type].isSelect){
+        } 
+        /*  if(bezierCurve.points[type].isSelect){
             bezierCurve.points[type].x = this.clickPositionX;
             bezierCurve.points[type].y = this.clickPositionY;
             bezierCurve.points[type].draw(contextBuffer);
@@ -465,7 +465,7 @@ export default {
       });
       contextBuffer.fill();
     },
-    movePoint(){
+     movePoint(){
       for(var type in this.bezierCurve.points) {
         if(this.bezierCurve.points[type].isSelect){
           this.bezierCurve.points[type].x = this.mousePositionX;
