@@ -23,7 +23,7 @@
 			chrome.browserAction.setIcon({
 				tabId: this.id,
 				path: {
-					19: "icon_active.png"
+					19: "icon-active.png"
 				}
 			});
 		},
