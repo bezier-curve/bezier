@@ -28,17 +28,17 @@ class BezierCurve {
   drawCurve (ctx) {
     ctx.beginPath()
     ctx.moveTo(this.points.start.x, this.points.start.y)
-    ctx.bezierCurveTo(this.points.cp1.x, this.points.cp1.y, this.points.cp2.x, this.points.cp2.y, this.points.end.x, this.points.end.y)
+    ctx.bezierCurveTo(this.points.c1.x, this.points.c1.y, this.points.c2.x, this.points.c2.y, this.points.end.x, this.points.end.y)
     ctx.lineWidth = this.size
     ctx.strokeStyle = this.color
     ctx.stroke()
   } 
   _drawCtrl1 (ctx) {
     ctx.lineWidth = 2
-    ctx.strokeStyle = '#666'
+    ctx.strokeStyle = '#111'
     ctx.beginPath()
     ctx.moveTo(this.points.start.x, this.points.start.y)
-    ctx.lineTo(this.points.cp1.x, this.points.cp1.y)
+    ctx.lineTo(this.points.c1.x, this.points.c1.y)
     ctx.stroke()
   }
   _drawCtrl2 (ctx) {
@@ -46,7 +46,7 @@ class BezierCurve {
     ctx.strokeStyle = '#111'
     ctx.beginPath()
     ctx.moveTo(this.points.end.x, this.points.end.y)
-    ctx.lineTo(this.points.cp2.x, this.points.cp2.y)
+    ctx.lineTo(this.points.c2.x, this.points.c2.y)
     ctx.stroke()
   }
 }
