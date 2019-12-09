@@ -2,23 +2,25 @@
   <div v-show="isVisible" :style="bezierStyle">
     <canvas id="bubble" ref="bubble" class="bezier-curve"></canvas>
     <br />
-    <button id="begin" @click="beginMotion">{{beginText}}</button>
-    <br />
-    <button id="begin" @click="beginMotionA">{{allBeginText}}</button>
-    <br />
-    <button id="redraw" @click="redraw">重绘</button>
-    <br />
-    <button id="joinPath" @click="joinPath">加入路径</button>
-    <br />
-    <button id="Path" @click="anotherPath">加入新路径</button>
-    <br />
-    <button id="back" @click="back">回退</button>
-    <br />
-    <button id="forward" @click="forward">前进</button>
-    <br />
-    <button id="edit" @click="edit">修改</button>
-    <br />
-    <button id="code" @click="generateCode">加入路径</button>
+    <div style="position:fixed;right:0; top:300px">
+      <button id="begin" @click="beginMotion">{{beginText}}</button>
+      <br />
+      <button id="begin" @click="beginMotionA">{{allBeginText}}</button>
+      <br />
+      <button id="redraw" @click="redraw">重绘</button>
+      <br />
+      <button id="joinPath" @click="joinPath">加入路径</button>
+      <br />
+      <button id="Path" @click="anotherPath">加入新路径</button>
+      <br />
+      <button id="back" @click="back">回退</button>
+      <br />
+      <button id="forward" @click="forward">前进</button>
+      <br />
+      <button id="edit" @click="edit">修改</button>
+      <br />
+      <button id="code" @click="generateCode">加入路径</button>
+    </div>
   </div>
 </template>
 <script>
@@ -207,22 +209,23 @@ export default {
           _changCurveStyle(_self.allBezierData, "color", "#249193");
           _changCurveStyle(_self.allBezierData, "color", "#FF0", gIndex);
         }
-        if(_self.changingCurve.length>0){
-          for(let changingItem in _self.changingCurve[0].points){
-          let distanceChanging = _getDistance(
-                  _self.changingCurve[0].points[changingItem].x,
-                  _self.changingCurve[0].points[changingItem].y,
-                  _self.clickPositionX,
-                  _self.clickPositionY
-                );
-          if (distanceChanging <
-                  _self.changingCurve[0].points[changingItem].radius + 8
-                ){
-                  _self.changingCurve[0].points[changingItem].isSelect = true;
-                }else{
-                  _self.changingCurve[0].points[changingItem].isSelect = false;
-                }
-        }
+        if (_self.changingCurve.length > 0) {
+          for (let changingItem in _self.changingCurve[0].points) {
+            let distanceChanging = _getDistance(
+              _self.changingCurve[0].points[changingItem].x,
+              _self.changingCurve[0].points[changingItem].y,
+              _self.clickPositionX,
+              _self.clickPositionY
+            );
+            if (
+              distanceChanging <
+              _self.changingCurve[0].points[changingItem].radius + 8
+            ) {
+              _self.changingCurve[0].points[changingItem].isSelect = true;
+            } else {
+              _self.changingCurve[0].points[changingItem].isSelect = false;
+            }
+          }
         }
       }
     };
@@ -247,12 +250,12 @@ export default {
   methods: {
     //数据初始化
     initData() {
-      let option = {
-        x: 100,
-        y: 100,
-        color: "#FF24FF",
-        radius: 10
-      };
+      // let option = {
+      //   x: 100,
+      //   y: 100,
+      //   color: "#FF24FF",
+      //   radius: 10
+      // };
       let optionStart = {
         x: 100,
         y: 100,
@@ -277,35 +280,6 @@ export default {
         color: "#FE2400",
         radius: 14
       };
-      //初始化运动小球对象
-      // for (let i = 0; i < this.allBezierData.length; i++) {
-      //   let itemBall = [];
-      //   for (let j = 0; j < 50; i++) {
-      //     let ball = new animationBall(option);
-      //     if (i > 25) {
-      //       ball.loopIndex = 1;
-      //       ball.oldLoopIndex = 1;
-      //       ball.t = 0.01 * (j - 25);
-      //     }
-      //     ball.t = 0.04 * j;
-      //     itemBall.push(ball);
-      //   }
-      //   this.allBalls.push(itemBall);
-      // }
-      //当前路径小球动画
-      for (let i = 0; i <= 40; i++) {
-        let ball = new animationBall(option);
-        // debugger;
-        if (i > 20) {
-          ball.loopIndex = 1;
-          // ball.oldLoopIndex = 1;
-          ball.t = 0.05 * (i - 20);
-          this.balls.push(ball);
-        } else {
-          ball.t = 0.05 * i;
-          this.balls.push(ball);
-        }
-      }
       //初始化运动小球，初始化贝塞尔大曲线
       let points = {
         start: new BezierBall(optionStart),
@@ -375,6 +349,49 @@ export default {
         ].points.end.y;
       } else {
         alert("这是末尾了");
+      }
+    },
+    initMoveAllBall(allBezierData) {
+      this.allBalls = [];
+      let option = {
+        x: 100,
+        y: 100,
+        color: "#FF24FF",
+        radius: 10
+      };
+      //初始化运动小球对象
+      for (let i = 0; i < allBezierData.length; i++) {
+        let itemBall = [];
+        let bigLength = allBezierData[i].bezierCurve.length * 20;
+        for (let j = 0; j < bigLength; j++) {
+          let ball = new animationBall(option);
+          let index = Math.floor(j / 20);
+          let speedNum = j % 20+1;
+          ball.loopIndex = index;
+          // ball.oldLoopIndex = 1;
+          ball.t = 0.05 * speedNum;
+          itemBall.push(ball);
+        }
+        this.allBalls.push(itemBall);
+      }
+    },
+    //当前路径小球动画
+    initMoveBall(pointsArr) {
+      this.balls = [];
+      let option = {
+        x: 100,
+        y: 100,
+        color: "#FF24FF",
+        radius: 10
+      };
+      let smallLenght = pointsArr.bezierCurve.length*20;
+      for (let x = 0; x < smallLenght; x++) {
+        let sIndex = Math.floor(x / 20);
+        let sSpeedNum = x % 20+1;
+        let ball = new animationBall(option);
+        ball.loopIndex = sIndex;
+        ball.t = 0.05 * sSpeedNum;
+        this.balls.push(ball);
       }
     },
     forward() {
@@ -451,6 +468,7 @@ export default {
       } else {
         this.dataStack.data.push([[], cloneDeep(this.pointsArr)]);
       }
+      this.initMoveBall(this.pointsArr)
       this.dataStack.index++;
       this.motionState = false;
       this.allMotionState = false;
@@ -503,6 +521,7 @@ export default {
         ]);
         this.dataStack.index++;
         this.initData();
+        this.initMoveAllBall(this.allBezierData)
       } else {
         alert("不能加入空路径");
         return;
@@ -558,18 +577,19 @@ export default {
         for (let type in usingPoint) {
           if (usingPoint[type].isSelect) {
             usingPoint[type].MoveBall(this.mousePositionX, this.mousePositionY);
+            this.checkBorder(usingPoint[type]);
             // usingPoint[type].draw(contextBuffer);
           }
         }
       } else {
-        this.changingCurve[0].draw(contextBuffer)
+        this.changingCurve[0].draw(contextBuffer);
         for (let type in this.changingCurve[0].points) {
           if (this.changingCurve[0].points[type].isSelect) {
             this.changingCurve[0].points[type].MoveBall(
               this.mousePositionX,
               this.mousePositionY
             );
-            if (this.changingCurve.length == 2&&type == 'end') {
+            if (this.changingCurve.length == 2 && type == "end") {
               this.changingCurve[1].points.start.x = this.changingCurve[0].points[
                 type
               ].x;
@@ -577,8 +597,25 @@ export default {
                 type
               ].y;
             }
+            this.checkBorder(usingPoint[type]);
           }
         }
+      }
+    },
+    checkBorder(ball) {
+      if (ball.x < ball.radius) {
+        //碰到左边界
+        ball.x = ball.radius;
+      } else if (ball.x > oCanvas.width - ball.radius) {
+        //右边界
+        ball.x = oCanvas.width - ball.radius;
+      }
+      if (ball.y < ball.radius) {
+        //上边界
+        ball.y = ball.radius;
+      } else if (ball.y > oCanvas.height - ball.radius) {
+        //下边界
+        ball.y = oCanvas.height - ball.radius;
       }
     },
     render() {
