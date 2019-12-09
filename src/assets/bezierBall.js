@@ -9,6 +9,7 @@ class BezierBall {
         this.selectable = false,   //能否被选中
         // this.t = o.t || 0,
         this.parentIndex = o.parentIndex || 0,
+        this.grandParentIndex = o.grandParentIndex || 0,
         this.type = o.type || 'start',     //start, c1, c2, end
         this.img = o.img || '',
         this.opr = o.opr || 1,
@@ -19,9 +20,16 @@ class BezierBall {
         //画一个实心圆
         ctx.beginPath()
         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false) // 顺时针
+        
+        ctx.strokeStyle = this.color;//填充颜色,默认是黑色
+        // ctx.fillText(this.type, this.x + 10, this.y + 10);
+        ctx.stroke()//画实心圆
+        ctx.beginPath()
+        ctx.arc(this.x, this.y, 4, 0, 2 * Math.PI, false) // 顺时针
         ctx.fillStyle = this.color;//填充颜色,默认是黑色
-        ctx.fillText(this.type, this.x + 10, this.y + 10);
+        // ctx.fillText(this.type, this.x + 10, this.y + 10);
         ctx.fill()//画实心圆
+        
     }
     draw(ctx) {
         if(this.pointType == 'img') {
@@ -35,7 +43,7 @@ class BezierBall {
         ctx.globalAlpha = this.opr;
         ctx.drawImage(this.img, this.x - this.img.width/2, this.y - this.img.heigth/2, 40, 40);
     }
-    update(m_x, m_y) {
+    MoveBall(m_x, m_y) {
         if (this.selectable && this.isSelect) {
             this.x = m_x;
             this.y = m_y;
