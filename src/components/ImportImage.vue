@@ -1,17 +1,29 @@
 <template>
   <div class="import-image">
     <canvas class="canvas-image" :width=canvasWidth :height=canvasHeight></canvas>
-    <bezier-cancas :bezierStyle=bezierStyle :isVisible=isVisible style="position: absolute"></bezier-cancas>
+    <bezier-cancas 
+      :bezierStyle=bezierStyle
+      :isVisible=isVisible
+      @generateCode="handleDispaly"
+      style="position: absolute"
+    >
+    </bezier-cancas>
     <!-- <button>添加文件</button> -->
     <div class="file-input">
       <bezier-button :title="`选择图片`" @handleImport="handleImport"></bezier-button>
       <bezier-button :title="`清除画图`" :type="`button`" @handleClick="handleClear"></bezier-button>
       <bezier-button :title="`画一条线`" :type="`button`" @handleClick="drawBazierCurve"></bezier-button>
     </div>
+    <bezier-code
+     :isVisible="bezierCode.isVisible" 
+     :code="bezierCode.code"
+    >
+    </bezier-code>
   </div>
 </template>
 <script>
 import BezierButton from '@/components/BezierButton.vue'
+import BezierCode from '@/components/BezierCode.vue'
 import BazierCurve from '../utils/bezierCurve.js'
 import BezierCancas from './bezier/BezierCanvas.vue'
 let canvasObj, ctx
@@ -21,12 +33,17 @@ export default {
       canvasWidth: 0,
       canvasHeight: 0,
       bezierStyle: {},
-      isVisible: false
+      isVisible: false,
+      bezierCode: {
+        isVisible: false,
+        code: ''
+      }
     }
   },
   components: {
     BezierButton,
-    BezierCancas
+    BezierCancas,
+    BezierCode
   },
   mounted () {
     canvasObj = document.getElementsByClassName('canvas-image')[0]
@@ -62,6 +79,10 @@ export default {
     handleClear () {
       ctx.clearRect(0, 0, canvasObj.width, canvasObj.height)
       this.isVisible = false
+    },
+    handleDispaly (code) {
+      this.bezierCode.code = code
+      this.bezierCode.isVisible = true
     },
     getImage (imgSrc) {
       const imageObj = new Image()

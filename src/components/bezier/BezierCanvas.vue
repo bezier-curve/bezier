@@ -16,7 +16,7 @@
     <br />
     <button id="forward" @click="forward">前进</button>
     <br />
-    <button id="code" @click="generateCode">加入路径</button>
+    <button id="code" @click="generateCode">生成代码</button>
   </div>
 </template>
 <script>
@@ -214,7 +214,7 @@ export default {
         // debugger;
         if (i > 20) {
           ball.loopIndex = 1;
-          console.log(i);
+          // console.log(i);
           // ball.oldLoopIndex = 1;
           ball.t = 0.05 * (i - 20);
           this.balls.push(ball);
@@ -223,7 +223,7 @@ export default {
           this.balls.push(ball);
         }
       }
-      console.log(this.balls);
+      // console.log(this.balls);
       //初始化运动小球，初始化贝塞尔大曲线
       let points = {
         start: new BezierBall(optionStart),
@@ -406,7 +406,17 @@ export default {
       }
     },
     generateCode() {
-      console.log(this.bezierStyle);
+      // console.log(this.bezierStyle);
+      // const code = JSON.parse(JSON.stringify(this.pointsArr))
+      // const bezierCode = JSON.parse(JSON.stringify(this.allBezierData))
+      const bezierStr = JSON.stringify(this.allBezierData)
+      
+      // console.log(code)
+      // console.log(bezierCode)
+      // console.log(bezierStr)
+      // this.$emit('generateCode', bezierCode)
+      this.$emit('generateCode', bezierStr)
+      
       // this
     },
     draw() {
