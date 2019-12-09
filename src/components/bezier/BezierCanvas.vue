@@ -82,7 +82,9 @@ export default {
       clickPositionX: 0,
       clickPositionY: 0,
       img: "",
-      dataStack: { data: [], index: 0 }
+      dataStack: { data: [], index: 0 },
+      changingCurve: [],
+      editChange: false
     };
   },
   watch: {
@@ -155,8 +157,9 @@ export default {
       } else {
         if (_self.allBezierData && _self.allBezierData.length != 0) {
           let distance = 0;
-          // let pIndex = 0;
+          let pIndex = 0;
           let gIndex = 0;
+          let selectFlag = false;
           _self.allBezierData.forEach(bezierCurve => {
             for (let curve in bezierCurve.bezierCurve) {
               if (bezierCurve.bezierCurve[curve].points.end.selectable) {
@@ -166,29 +169,75 @@ export default {
                   _self.clickPositionX,
                   _self.clickPositionY
                 );
-                if (distance < bezierCurve.bezierCurve[curve].points.end.radius + 8) {
-                  bezierCurve.bezierCurve[curve].points.end.isSelect = true;
-                  bezierCurve.bezierCurve[curve].points.end.color = '#040090'
-                  // pIndex = bezierCurve.bezierCurve[curve].points.end.parentIndex
-                  gIndex = bezierCurve.bezierCurve[curve].points.end.grandParentIndex
-                  bezierCurve.bezierCurve[curve].isSelected = true;
-                }else{
+                if (
+                  distance <
+                  bezierCurve.bezierCurve[curve].points.end.radius + 8
+                ) {
+                  if (!selectFlag) {
+                    selectFlag = true;
+                    _self.editChange = true;
+                    _self.changingCurve = [];
+                    bezierCurve.bezierCurve[curve].points.end.isSelect = true;
+                    bezierCurve.bezierCurve[curve].points.end.color = "#040090";
+                    pIndex =
+                      bezierCurve.bezierCurve[curve].points.end.parentIndex;
+                    gIndex =
+                      bezierCurve.bezierCurve[curve].points.end
+                        .grandParentIndex;
+                    if (bezierCurve.bezierCurve[Number(curve) + 1]) {
+                      _self.changingCurve.push(bezierCurve.bezierCurve[curve]);
+                      _self.changingCurve.push(
+                        bezierCurve.bezierCurve[Number(curve) + 1]
+                      );
+                    } else {
+                      _self.changingCurve.push(bezierCurve.bezierCurve[curve]);
+                    }
+                    console.log(_self.changingCurve);
+                    console.log(pIndex);
+                    bezierCurve.bezierCurve[curve].isSelected = true;
+                  }
+                } else {
                   bezierCurve.bezierCurve[curve].points.end.isSelect = false;
                   bezierCurve.bezierCurve[curve].isSelected = false;
-                  bezierCurve.bezierCurve[curve].points.end.color = '#740090'
+                  bezierCurve.bezierCurve[curve].points.end.color = "#740090";
                 }
               }
             }
           });
-          _changCurveStyle(_self.allBezierData,'color','#249193')
-          _changCurveStyle(_self.allBezierData,'color','#FF0',gIndex)
+          _changCurveStyle(_self.allBezierData, "color", "#249193");
+          _changCurveStyle(_self.allBezierData, "color", "#FF0", gIndex);
+        }
+        if(_self.changingCurve.length>0){
+          for(let changingItem in _self.changingCurve[0].points){
+          let distanceChanging = _getDistance(
+                  _self.changingCurve[0].points[changingItem].x,
+                  _self.changingCurve[0].points[changingItem].y,
+                  _self.clickPositionX,
+                  _self.clickPositionY
+                );
+          if (distanceChanging <
+                  _self.changingCurve[0].points[changingItem].radius + 8
+                ){
+                  _self.changingCurve[0].points[changingItem].isSelect = true;
+                }else{
+                  _self.changingCurve[0].points[changingItem].isSelect = false;
+                }
+        }
         }
       }
     };
     document.onmouseup = function() {
-      for (let type in _self.bezierCurve.points) {
-        if (_self.bezierCurve.points[type].isSelect) {
-          _self.bezierCurve.points[type].isSelect = false;
+      if (!_self.editChange) {
+        for (let type in _self.bezierCurve.points) {
+          if (_self.bezierCurve.points[type].isSelect) {
+            _self.bezierCurve.points[type].isSelect = false;
+          }
+        }
+      } else {
+        for (let type in _self.changingCurve[0].points) {
+          if (_self.changingCurve[0].points[type].isSelect) {
+            _self.changingCurve[0].points[type].isSelect = false;
+          }
         }
       }
     };
@@ -341,13 +390,16 @@ export default {
         ].points.end.y;
       } else {
         alert("这已是最新修改");
-         _changPointsStyle(this.allBezierData,'color','#00F',1);
+        _changPointsStyle(this.allBezierData, "color", "#00F", 1);
       }
     },
     edit() {
       this.editState = !this.editState;
+      if (!this.editState) {
+        this.editChange = false;
+      }
       // console.log(this.allBezierData);
-      _changCurveStyle(this.allBezierData,'color','#F00',1);
+      _changCurveStyle(this.allBezierData, "color", "#F00", 1);
       this.allBezierData.forEach(bezierItem => {
         bezierItem.bezierCurve.forEach(curveItem => {
           curveItem.points.end.selectable = true;
@@ -374,7 +426,8 @@ export default {
       //   this.bezierCurve.points.end.x != 0
       // ) {
       // 计算当前小球速度
-      this.bezierCurve.tSpeed = 1 / _getSpeed(this.bezierCurve, oCanvas.width, oCanvas.height) / 400;
+      this.bezierCurve.tSpeed =
+        1 / _getSpeed(this.bezierCurve, oCanvas.width, oCanvas.height) / 400;
       //end小球存入当前的父曲线索引
       this.bezierCurve.points.end.parentIndex = this.pointsArr.bezierCurve.length;
       //当前曲线加入数组
@@ -442,7 +495,7 @@ export default {
       if (this.pointsArr.bezierCurve.length > 0) {
         this.pointsArr.bezierCurve.forEach(item => {
           item.points.end.grandParentIndex = this.allBezierData.length;
-        })
+        });
         this.allBezierData.push(cloneDeep(this.pointsArr));
         this.dataStack.data.push([
           cloneDeep(this.allBezierData),
@@ -476,6 +529,11 @@ export default {
           }
         });
       }
+      if (this.editChange && this.changingCurve.length > 0) {
+        for (let changingItem in this.changingCurve[0].points) {
+          this.changingCurve[0].points[changingItem].drawBall(contextBuffer);
+        }
+      }
       _drawPoints(this.pointsArr.bezierCurve, this.bezierCurve, contextBuffer);
       //画曲线函数(路径数组，当前画的未加入路径的路径点)
       _drawCurve(this.pointsArr.bezierCurve, this.bezierCurve, contextBuffer);
@@ -496,10 +554,30 @@ export default {
     },
 
     movePoint(usingPoint) {
-      for (let type in usingPoint) {
-        if (usingPoint[type].isSelect) {
-          usingPoint[type].MoveBall(this.mousePositionX, this.mousePositionY);
-          // usingPoint[type].draw(contextBuffer);
+      if (!this.editChange) {
+        for (let type in usingPoint) {
+          if (usingPoint[type].isSelect) {
+            usingPoint[type].MoveBall(this.mousePositionX, this.mousePositionY);
+            // usingPoint[type].draw(contextBuffer);
+          }
+        }
+      } else {
+        this.changingCurve[0].draw(contextBuffer)
+        for (let type in this.changingCurve[0].points) {
+          if (this.changingCurve[0].points[type].isSelect) {
+            this.changingCurve[0].points[type].MoveBall(
+              this.mousePositionX,
+              this.mousePositionY
+            );
+            if (this.changingCurve.length == 2&&type == 'end') {
+              this.changingCurve[1].points.start.x = this.changingCurve[0].points[
+                type
+              ].x;
+              this.changingCurve[1].points.start.y = this.changingCurve[0].points[
+                type
+              ].y;
+            }
+          }
         }
       }
     },
