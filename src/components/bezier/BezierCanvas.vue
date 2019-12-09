@@ -2,23 +2,26 @@
   <div v-show="isVisible" :style="bezierStyle">
     <canvas id="bubble" ref="bubble" class="bezier-curve"></canvas>
     <br />
-    <button id="begin" @click="beginMotion">{{beginText}}</button>
-    <br />
-    <button id="begin" @click="beginMotionA">{{allBeginText}}</button>
-    <br />
-    <button id="redraw" @click="redraw">重绘</button>
-    <br />
-    <button id="joinPath" @click="joinPath">加入路径</button>
-    <br />
-    <button id="Path" @click="anotherPath">加入新路径</button>
-    <br />
-    <button id="back" @click="back">回退</button>
-    <br />
-    <button id="forward" @click="forward">前进</button>
-    <br />
-    <button id="edit" @click="edit">修改</button>
-    <br />
-    <button id="code" @click="generateCode">加入路径</button>
+    <div style="position:fixed;right:0; top:300px">
+      <button id="begin" @click="beginMotion">{{beginText}}</button>
+      <br />
+      <button id="begin" @click="beginMotionA">{{allBeginText}}</button>
+      <br />
+      <button id="redraw" @click="redraw">重绘</button>
+      <br />
+      <button id="joinPath" @click="joinPath">加入路径</button>
+      <br />
+      <button id="Path" @click="anotherPath">加入新路径</button>
+      <br />
+      <button id="back" @click="back">回退</button>
+      <br />
+      <button id="forward" @click="forward">前进</button>
+      <br />
+      <button id="edit" @click="edit">修改</button>
+      <br />
+      <button id="code" @click="generateCode">加入路径</button>
+    </div>
+    
   </div>
 </template>
 <script>
@@ -499,8 +502,21 @@ export default {
       for (let type in usingPoint) {
         if (usingPoint[type].isSelect) {
           usingPoint[type].MoveBall(this.mousePositionX, this.mousePositionY);
+          this.checkBorder(usingPoint[type]);
           // usingPoint[type].draw(contextBuffer);
         }
+      }
+    },
+    checkBorder(ball){
+      if(ball.x < ball.radius) {  //碰到左边界
+        ball.x = ball.radius;
+      } else if(ball.x > (oCanvas.width - ball.radius)) {   //右边界
+        ball.x = oCanvas.width - ball.radius;
+      }
+      if(ball.y < ball.radius) {  //上边界
+        ball.y = ball.radius;
+      } else if(ball.y > (oCanvas.height - ball.radius)) {  //下边界
+        ball.y = oCanvas.height - ball.radius;
       }
     },
     render() {
