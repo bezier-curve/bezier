@@ -27,14 +27,14 @@ class BezierCurve {
     // this.drawCurve(ctx)
   }
   drawCurve (ctx) {
-    if(!this.isSelected){
+    // if(!this.isSelected){
       ctx.beginPath()
       ctx.moveTo(this.points.start.x, this.points.start.y)
       ctx.bezierCurveTo(this.points.c1.x, this.points.c1.y, this.points.c2.x, this.points.c2.y, this.points.end.x, this.points.end.y)
       ctx.lineWidth = this.size
       ctx.strokeStyle = this.isSelected?this.editColor:this.color
       ctx.stroke()
-    }
+    // }
   } 
   _drawCtrl1 (ctx) {
     ctx.lineWidth = 2
