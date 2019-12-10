@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Index from '../views/Index.vue'
-// import bezier from '@/components/bezier/BezierCanvas.vue'
+import ScreenShot from '@/components/ScreenShot.vue'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -9,11 +9,11 @@ const routes = [{
     name: 'index',
     component: Index
   },
-  // {
-  //   path: '/input',
-  //   name: 'input',
-  //   component: Index
-  // },
+  {
+    path: '/test',
+    name: 'test',
+    component: ScreenShot
+  },
   {
     path: '/*',
     name: '404',

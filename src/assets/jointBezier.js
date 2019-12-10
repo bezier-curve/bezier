@@ -4,9 +4,21 @@ class JointBezier {
             this.color = o.color || '#0F0',
             this.visible = o.visible || true,
             this.type = type || 'ball'
+            this.isSelect = false;
     }
-    drawBall() {
-        if (!this.visible) { return }  // 不可见
+    changCurveStyle(allData,type,value,index) {
+        console.log('aa')
+        for(let bezierIndex in allData[index].bezierCurve){
+            console.log(allData[index].bezierCurve)
+            console.log(allData[index].bezierCurve[bezierIndex][type])
+            allData[index].bezierCurve[bezierIndex][type] = value;
+            console.log(allData[index].bezierCurve[bezierIndex][type])
+            // for(let curveIndex in allData[index][bezierIndex]){
+            //     console.log(allData[index][bezierIndex].bezierCurve[curveIndex][type])
+            //     allData[index][bezierIndex].bezierCurve[curveIndex][type] = value
+            //     console.log(allData[index][bezierIndex].bezierCurve[curveIndex][type])
+            // }
+        }
     }
     update(m_x, m_y) {
         if (this.isSelect) {

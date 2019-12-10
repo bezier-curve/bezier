@@ -96,6 +96,14 @@ function getBezierRotate(p1, p2, p3, p4, t) {
 function _getrotate(x, y) {
   return Math.Atan2(x, y) * 180 / 3.14
 }
+function _getDistance(x, y, _x, _y) {
+  return Math.sqrt(
+    (x - _x) *
+    (x - _x) +
+    (y - _y) *
+    (y - _y)
+  );
+}
 function beze_speed_x(t, xa, xb, xc, xd) {
   let it = 1 - t;
   return -3 * xa * it * it + 3 * xb * it * it - 6 * xb * it * t + 6 * xc * it * t - 3 * xc * t * t + 3 * xd * t * t;
@@ -138,14 +146,13 @@ function _beze_even(t, xa, xb, xc, xd, ya, yb, yc, yd) {
   return t2;
 }
 function MathSpeed(xa, xb, xc, xd, ya, yb, yc, yd, W, H) {
-  let max = 4*W+4*H;
+  let max = 4 * W + 4 * H;
   // let variance = Math.abs(3 * xa - xb - xc - xd + 3 * ya - yb - yc - yd) + Math.abs(3 * xb - xa - xc - xd + 3 * yb - ya - yc - yd)/2 + Math.abs(3 * xc - xa - xb - xd + 3 * yc - ya - yb - yd)/2 + Math.abs(3 * xd - xa - xc - xb + 3 * yd - ya - yc - yb);
-  let variance = Math.abs(xa-xd)+Math.abs(xc-xb)/2+Math.abs(ya-yd)+Math.abs(yc-yb)/2+(Math.abs(ya-yb)+Math.abs(ya-yc)+Math.abs(yd-yc)+Math.abs(yd-yb)+Math.abs(xa-xb)+Math.abs(xa-xc)+Math.abs(xd-xc)+Math.abs(xd-xb))/2
+  let variance = Math.abs(xa - xd) + Math.abs(xc - xb) / 2 + Math.abs(ya - yd) + Math.abs(yc - yb) / 2 + (Math.abs(ya - yb) + Math.abs(ya - yc) + Math.abs(yd - yc) + Math.abs(yd - yb) + Math.abs(xa - xb) + Math.abs(xa - xc) + Math.abs(xd - xc) + Math.abs(xd - xb)) / 2
   let proportionSpeed = variance / max;
   return proportionSpeed;
 }
 function _getSpeed(bezierCurve, W, H) {
-  console.log(bezierCurve)
   let _t = MathSpeed(
     bezierCurve.points.start.x,
     bezierCurve.points.c1.x,
@@ -167,5 +174,6 @@ export {
   _getrotate,
   _getRotateXY,
   _getSpeed,
-  _beze_even
+  _beze_even,
+  _getDistance
 } 

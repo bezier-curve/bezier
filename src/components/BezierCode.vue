@@ -2,7 +2,7 @@
   <el-dialog title="生成代码" :visible.sync="isVisible">
     <el-input
       type="textarea"
-      :autosize="{ minRows: 2, maxRows: 4}"
+      :autosize="{ minRows: 2, maxRows: 10}"
       placeholder="请输入内容"
       v-model="code">
     </el-input>
