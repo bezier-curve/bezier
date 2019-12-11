@@ -112,6 +112,7 @@ export default {
     //键盘事件
     document.onkeydown = function() {
       let e = event || window.event || arguments.callee.caller.arguments[0];
+      console.log(_self.pointsArr.bezierCurve.length) 
       if (e && e.keyCode == 81 && _self.pointsArr.bezierCurve.length == 0) {
         // 按 q
         _self.delKeyDown("start", _self.bezierCurve.points);
@@ -329,6 +330,7 @@ export default {
       this.beginText = this.motionState ? "停下" : "开始当前操作路径动画";
     },
     beginMotionA() {
+      this.motionState = false;
       this.allMotionState = !this.allMotionState;
       this.allBeginText = this.allMotionState ? "停下" : "开始全路径动画";
     },
@@ -359,17 +361,19 @@ export default {
         color: "#FF24FF",
         radius: 10
       };
+      let NumBall = 5
+      let interval = 1/NumBall
       //初始化运动小球对象
       for (let i = 0; i < allBezierData.length; i++) {
         let itemBall = [];
-        let bigLength = allBezierData[i].bezierCurve.length * 20;
+        let bigLength = allBezierData[i].bezierCurve.length * NumBall;
         for (let j = 0; j < bigLength; j++) {
           let ball = new animationBall(option);
-          let index = Math.floor(j / 20);
-          let speedNum = j % 20+1;
+          let index = Math.floor(j / NumBall);
+          let speedNum = j % NumBall+1;
           ball.loopIndex = index;
           // ball.oldLoopIndex = 1;
-          ball.t = 0.05 * speedNum;
+          ball.t = interval * speedNum;
           itemBall.push(ball);
         }
         this.allBalls.push(itemBall);
@@ -384,13 +388,15 @@ export default {
         color: "#FF24FF",
         radius: 10
       };
-      let smallLenght = pointsArr.bezierCurve.length*20;
+      let NumBall = 5
+      let interval = 1/NumBall
+      let smallLenght = pointsArr.bezierCurve.length*NumBall;
       for (let x = 0; x < smallLenght; x++) {
-        let sIndex = Math.floor(x / 20);
-        let sSpeedNum = x % 20+1;
+        let sIndex = Math.floor(x / NumBall);
+        let sSpeedNum = x % NumBall+1;
         let ball = new animationBall(option);
         ball.loopIndex = sIndex;
-        ball.t = 0.05 * sSpeedNum;
+        ball.t = interval * sSpeedNum;
         this.balls.push(ball);
       }
     },
@@ -553,9 +559,10 @@ export default {
           this.changingCurve[0].points[changingItem].drawBall(contextBuffer);
         }
       }
-      _drawPoints(this.pointsArr.bezierCurve, this.bezierCurve, contextBuffer);
+      if(!this.editChange){
+      _drawPoints(this.pointsArr.bezierCurve, this.bezierCurve, contextBuffer,this.motionState,this.allMotionState);
       //画曲线函数(路径数组，当前画的未加入路径的路径点)
-      _drawCurve(this.pointsArr.bezierCurve, this.bezierCurve, contextBuffer);
+      _drawCurve(this.pointsArr.bezierCurve, this.bezierCurve, contextBuffer,this.motionState,this.allMotionState);
       //画路径中点的动画
       if (this.motionState && this.pointsArr.bezierCurve.length != 0) {
         //运动状态为true,路径点数组长度不为0
@@ -566,6 +573,8 @@ export default {
           this.img
         );
       }
+      }
+      
       //描点函数(路径数组，当前画的未加入路径的路径点)
       ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
       ctx.drawImage(canvasBuffer, 0, 0);
