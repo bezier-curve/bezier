@@ -60,7 +60,7 @@ function _drawAnimationALL(pointsArr, index, allBalls, contextBuffer, img) {
   contextBuffer.fill();
 }
 
-function _drawPoints(pointsArr, bezierCurve, contextBuffer) {
+function _drawPoints(pointsArr, bezierCurve, contextBuffer, motionState, allMotionState) {
   if (pointsArr.length !== 0) {
     //画开始点
     pointsArr[0].points.start.draw(contextBuffer);
@@ -68,14 +68,16 @@ function _drawPoints(pointsArr, bezierCurve, contextBuffer) {
     pointsArr[pointsArr.length - 1].points.end.draw(contextBuffer);
   }
   //画当前路径操作点
-  for (var type in bezierCurve.points) {
-    if (type != 'start' || pointsArr.length == 0) {
-      bezierCurve.points[type].draw(contextBuffer);
+  if (!motionState && !allMotionState) {
+    for (var type in bezierCurve.points) {
+      if (type != 'start' || pointsArr.length == 0) {
+        bezierCurve.points[type].draw(contextBuffer);
+      }
     }
   }
 }
 //画曲线函数
-function _drawCurve(pointsArr, bezierCurve, contextBuffer) {
+function _drawCurve(pointsArr, bezierCurve, contextBuffer, motionState, allMotionState) {
   if (pointsArr.length !== 0) {
     for (let item of pointsArr) {
       // console.log(item)
@@ -94,14 +96,10 @@ function _drawCurve(pointsArr, bezierCurve, contextBuffer) {
       // contextBuffer.stroke();
     }
   }
-  if (
-    bezierCurve.points.start.x != 0 &&
-    bezierCurve.points.c1.x != 0 &&
-    bezierCurve.points.c2.x != 0 &&
-    bezierCurve.points.end.x != 0
-  ) {
+  if (!motionState && !allMotionState) {
     //如果画的路径需求的4个点都存在
     bezierCurve.draw(contextBuffer);
+
     // contextBuffer.beginPath();
     // contextBuffer.moveTo(bezierCurve.points.start.x, bezierCurve.points.start.y);
     // contextBuffer.bezierCurveTo(
@@ -156,13 +154,13 @@ function _changCurveStyle(allBezierData, type, value, index) {
     allBezierData[index].bezierCurve.forEach(curveItem => {
       curveItem[type] = value;
     })
-  } else if(arguments.length == 3){
+  } else if (arguments.length == 3) {
     allBezierData.forEach(bezierItem => {
       bezierItem.bezierCurve.forEach(curveItem => {
         curveItem[type] = value;
       })
     });
-  }else{
+  } else {
     console.log('参数错误')
   }
 }
@@ -178,24 +176,24 @@ function _changPointsStyle(allBezierData, type, value, GIndex, PIndex, Ptype) {
     allBezierData[GIndex].bezierCurve[PIndex].points[Ptype][type] = value
   } else if (arguments.length == 5) {
     let points = allBezierData[GIndex].bezierCurve[PIndex].points;
-    for(let point in points){
+    for (let point in points) {
       points[point][type] = value
     }
-  }else if(arguments.length == 4){
-      allBezierData[GIndex].bezierCurve.forEach(curveItem => {
-        for(let point in curveItem.points){
-          curveItem.points[point][type] = value
-        }
-      })
-  }else if(arguments.length == 3){
+  } else if (arguments.length == 4) {
+    allBezierData[GIndex].bezierCurve.forEach(curveItem => {
+      for (let point in curveItem.points) {
+        curveItem.points[point][type] = value
+      }
+    })
+  } else if (arguments.length == 3) {
     allBezierData.forEach(bezierItem => {
       bezierItem.bezierCurve.forEach(curveItem => {
-        for(let point in curveItem.points){
+        for (let point in curveItem.points) {
           curveItem.points[point][type] = value
         }
       })
     });
-  }else{
+  } else {
     console.log('参数错误')
     return;
   }

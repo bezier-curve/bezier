@@ -20,8 +20,10 @@ let ctx;
 export default {
   props: {
     options: {
-      type: String,
-      default: ''
+      type: Array,
+      default: function() {
+        return []
+      }
     }
   },
   data() {
@@ -30,8 +32,9 @@ export default {
     }
   },
   created() {
-    let optionsArr = JSON.parse(this.options)
-    this.allBezierData = this.genJointBezier(optionsArr)
+    // let optionsArr = JSON.parse(this.options)
+    // this.allBezierData = this.genJointBezier(optionsArr)
+    this.allBezierData = this.genJointBezier(this.options)
     // debugger
   },
   mounted() {
