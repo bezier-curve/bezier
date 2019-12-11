@@ -6,7 +6,7 @@
 import {
   _drawCurveALL,
   _drawPointsALL,
-  _drawAnimationALL,
+  // _drawAnimationALL,
   // _drawAnimation,
   // _drawPoints,
   // _drawCurve
@@ -20,19 +20,23 @@ let ctx;
 export default {
   props: {
     options: {
-      type: Object,
-      default: () => {
-        return {}
-      }
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
-      allBezierData: {}
+      allBezierData: []
     }
   },
+  created() {
+    let optionsArr = JSON.parse(this.options)
+    this.allBezierData = this.genJointBezier(optionsArr)
+    // debugger
+  },
   mounted() {
-    this.allBezierData = this.genJointBezier(JSON.parse(this.options))
+    
+    this.initCanvas()
   },
   methods: {
     initCanvas() {
@@ -52,45 +56,54 @@ export default {
     },
     genJointBezier(options) {
       if (options) {
-        options.forEach(item => {
-          new JointBezier(item)
-          this.genBezierCurve(item.bezierCurve)
+        let jointBezierObj = options.map(item => {
+          item.bezierCurve = this.genBezierCurve(item.bezierCurve)
+          return new JointBezier(item)
         })
+        return jointBezierObj
       }
     },
     genBezierCurve (curves) {
       if (curves) {
-        curves.forEach(item => {
-          new BezierCurve(item)
-          this.genBezierBall(item)
+        let curveObjs = curves.map(item => {
+          item.points = this.genBezierBall(item.points)
+          return new BezierCurve(item)
         })
+        return curveObjs
       }
     },
     genBezierBall (balls) {
       if (balls) {
-        for (let item in balls) {
-          new BezierBall(item)
+        // for (let item in balls) {
+        //   new BezierBall(item)
+        // }
+        return {
+          'c1': new BezierBall(balls.c1),
+          'c2': new BezierBall(balls.c2),
+          'end': new BezierBall(balls.end),
+          'start': new BezierBall(balls.start),
         }
       }
     },
     draw() {
-      oCanvas.clearRect(0, 0, oCanvas.width, oCanvas.height);
+      ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
       // this.movePoint();
       if (this.allBezierData.length > 0) {
-        this.allBezierData.forEach((item, index) => {
+        // this.allBezierData.forEach((item, index) => {
+        this.allBezierData.forEach((item) => {
           // console.log(item.bezierCurve)
           // contextBuffer.clearRect(0, 0, oCanvas.width, oCanvas.height);
           _drawPointsALL(item.bezierCurve, ctx);
           _drawCurveALL(item.bezierCurve, ctx);
-          if (this.allMotionState) {
-            _drawAnimationALL(
-              item.bezierCurve,
-              index,
-              this.allBalls,
-              ctx,
-              this.img
-            );
-          }
+          // if (this.allMotionState) {
+          //   _drawAnimationALL(
+          //     item.bezierCurve,
+          //     index,
+          //     this.allBalls,
+          //     ctx,
+          //     this.img
+          //   );
+          // }
         });
       }
       // _drawPoints(this.pointsArr.bezierCurve, this.bezierCurve, ctx);
@@ -107,7 +120,7 @@ export default {
       //   );
       // }
       //描点函数(路径数组，当前画的未加入路径的路径点)
-      ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
+      // ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
       // ctx.drawImage(canvasBuffer, 0, 0);
       // ctx.fill();
     },

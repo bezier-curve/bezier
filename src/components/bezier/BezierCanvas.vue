@@ -19,7 +19,7 @@
       <br />
       <button id="edit" @click="edit">修改</button>
       <br />
-      <button id="code" @click="generateCode">加入路径</button>
+      <button id="code" @click="generateCode">生成代码</button>
     </div>
   </div>
 </template>
@@ -298,10 +298,8 @@ export default {
       // oCanvas = document.querySelector("canvas");
       oCanvas = document.getElementsByClassName("bezier-curve")[0];
       canvasBuffer = document.createElement("canvas");
-      // oCanvas.width = window.innerWidth;
-      // oCanvas.height = window.innerHeight;
       oCanvas.width = parseFloat(this.bezierStyle.width) || window.innerWidth;
-      oCanvas.height = parseFloat(this.bezierStyle.width) || window.innerHeight;
+      oCanvas.height = parseFloat(this.bezierStyle.height) || window.innerHeight;
       canvasBuffer.width = oCanvas.width;
       canvasBuffer.height = oCanvas.height;
       ctx = oCanvas.getContext("2d");

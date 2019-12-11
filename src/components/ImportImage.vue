@@ -50,7 +50,8 @@
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
     </el-upload>
     <canvas v-show="canvasShow" class="canvas-image" :width=canvasWidth :height=canvasHeight></canvas>
-    <bezier-cancas :bezierStyle=bezierStyle :isVisible=isVisible style="position: absolute"></bezier-cancas>
+    <bezier-cancas :bezierStyle=bezierStyle :isVisible=isVisible @generateCode="generateCode" style="position: absolute"></bezier-cancas>
+    <bezier-code :isCodeShow="isCodeShow" :code="code" @close="handleClose"></bezier-code>
     <!-- <button>添加文件</button> -->
     <!-- <div class="file-input">
       <bezier-button :title="`选择图片`" @handleImport="handleImport"></bezier-button>
@@ -62,7 +63,7 @@
 
 </template>
 <script>
-// import BezierButton from '@/components/BezierButton.vue'
+import BezierCode from '@/components/BezierCode.vue'
 import BazierCurve from '../utils/bezierCurve.js'
 import BezierCancas from './bezier/BezierCanvas.vue'
 let canvasObj, ctx
@@ -77,11 +78,13 @@ export default {
       file: {},
       uploadShow: true,
       speed: 20,
-      color: 'rgba(19, 206, 102, 0.8)'
+      color: 'rgba(19, 206, 102, 0.8)',
+      isCodeShow: false,
+      code: ''
     }
   },
   components: {
-    // BezierButton,
+    BezierCode,
     BezierCancas
   },
   mounted () {
@@ -128,6 +131,14 @@ export default {
     handleDispaly (code) {
       this.bezierCode.code = code
       this.bezierCode.isVisible = true
+    },
+    handleClose() {
+      this.isCodeShow = false
+      this.code = ''
+    },
+    generateCode(code) {
+      this.isCodeShow = true
+      this.code = code
     },
     getImage (imgSrc) {
       const imageObj = new Image()
