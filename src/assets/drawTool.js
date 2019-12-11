@@ -1,8 +1,8 @@
 import { _isLastPoint, _getMoveXY, _getRotateXY } from "./baseTool";
-function _drawCurveALL(pointsArr, contextBuffer) {
+function _drawCurveALL(pointsArr, contextBuffer,editState,pIndex,gIndex) {
   if (pointsArr.length !== 0) {
     for (let item of pointsArr) {
-      item.drawCurve(contextBuffer);
+      item.drawCurve(contextBuffer,editState,pIndex,gIndex);
       // contextBuffer.beginPath();
       // contextBuffer.moveTo(item.points.start.x, item.points.start.y);
       // contextBuffer.bezierCurveTo(
@@ -60,7 +60,7 @@ function _drawAnimationALL(pointsArr, index, allBalls, contextBuffer, img) {
   contextBuffer.fill();
 }
 
-function _drawPoints(pointsArr, bezierCurve, contextBuffer, motionState, allMotionState) {
+function _drawPoints(pointsArr, bezierCurve, contextBuffer, motionState, allMotionState,editState) {
   if (pointsArr.length !== 0) {
     //画开始点
     pointsArr[0].points.start.draw(contextBuffer);
@@ -68,7 +68,7 @@ function _drawPoints(pointsArr, bezierCurve, contextBuffer, motionState, allMoti
     pointsArr[pointsArr.length - 1].points.end.draw(contextBuffer);
   }
   //画当前路径操作点
-  if (!motionState && !allMotionState) {
+  if (!motionState && !allMotionState&&!editState) {
     for (var type in bezierCurve.points) {
       if (type != 'start' || pointsArr.length == 0) {
         bezierCurve.points[type].draw(contextBuffer);
@@ -77,7 +77,7 @@ function _drawPoints(pointsArr, bezierCurve, contextBuffer, motionState, allMoti
   }
 }
 //画曲线函数
-function _drawCurve(pointsArr, bezierCurve, contextBuffer, motionState, allMotionState) {
+function _drawCurve(pointsArr, bezierCurve, contextBuffer, motionState, allMotionState,editState) {
   if (pointsArr.length !== 0) {
     for (let item of pointsArr) {
       // console.log(item)
@@ -96,7 +96,7 @@ function _drawCurve(pointsArr, bezierCurve, contextBuffer, motionState, allMotio
       // contextBuffer.stroke();
     }
   }
-  if (!motionState && !allMotionState) {
+  if (!motionState && !allMotionState&&!editState) {
     //如果画的路径需求的4个点都存在
     bezierCurve.draw(contextBuffer);
 
