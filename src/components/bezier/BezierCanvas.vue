@@ -86,7 +86,10 @@ export default {
       img: "",
       dataStack: { data: [], index: 0 },
       changingCurve: [],
-      editChange: false
+      editChange: false,
+      movingBallNum:0,
+      movingBallSpeed:0,
+      movingBallType:'a'
     };
   },
   watch: {
@@ -606,7 +609,7 @@ export default {
                 type
               ].y;
             }
-            this.checkBorder(usingPoint[type]);
+            this.checkBorder(this.changingCurve[0].points[type]);
           }
         }
       }
