@@ -36,7 +36,7 @@
       <el-menu-item index="5">
         <template slot="title">
           <el-tooltip class="item" effect="dark" content="更改小球颜色" placement="bottom">
-            <el-color-picker v-model="ballColor" @active-change="btnOperation(5)" size="mini"></el-color-picker>
+            <el-color-picker v-model="ballColor" color-format='hex' @active-change='getBallColor'  size="mini"></el-color-picker>
           </el-tooltip>
         </template>
       </el-menu-item>
@@ -44,7 +44,7 @@
         <!-- @click="btnOperation(6)" -->
         <template slot="title">
           <el-tooltip class="item" effect="dark" content="更改曲线颜色" placement="bottom">
-            <el-color-picker v-model="curveColor" @active-change='btnOperation(6)' size="mini"></el-color-picker>
+            <el-color-picker v-model="curveColor" color-format='hex' @active-change='getCurveColor' size="mini"></el-color-picker>
           </el-tooltip>
         </template>
       </el-menu-item>
@@ -231,14 +231,16 @@ export default {
         case 4:    //速度选择
           this.$refs.buttonList.movingBallSpeed = this.speed;
           break;
-        case 5:    //更改小球颜色
-          _changPointsStyle(this.$refs.buttonList.allBezierData, 'color', this.ballColor);
+/*         case 5:    //更改小球颜色
           break;
         case 6:     //更改曲线颜色
-          _changCurveStyle(this.$refs.buttonList.allBezierData, 'color', this.curveColor);
-          break;
+          break; */
         case 7:     //调整曲线粗细
-          _changCurveStyle(this.$refs.buttonList.allBezierData, 'size', this.curveSize, this.$refs.buttonList.editCurveIndex);
+          if(this.$refs.buttonList.gIndex > 0) {
+            _changCurveStyle(this.$refs.buttonList.allBezierData, 'size', this.curveSize, this.$refs.buttonList.gIndex);
+          } else {
+            _changCurveStyle(this.$refs.buttonList.allBezierData, 'size', this.curveSize);
+          }
           break;
         case 8:     //重绘
           this.$refs.buttonList.redraw();
@@ -265,6 +267,16 @@ export default {
           this.$refs.buttonList.movingBallNum = this.animationNum;
           break;
       }
+    },
+    getCurveColor(color) {
+      if(this.$refs.buttonList.gIndex > 0) {
+        _changCurveStyle(this.$refs.buttonList.allBezierData, 'color', color, this.$refs.buttonList.gIndex);
+      } else {
+        _changCurveStyle(this.$refs.buttonList.allBezierData, 'color', color);
+      }
+    },
+    getBallColor(color) {
+      _changPointsStyle(this.$refs.buttonList.allBezierData, 'color', color);
     },
     drawBazierCurve () {
       this.handleClear()
