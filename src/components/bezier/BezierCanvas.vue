@@ -1,7 +1,7 @@
 <template>
   <div v-show="isVisible" :style="bezierStyle">
     <canvas id="bubble" ref="bubble" class="bezier-curve"></canvas>
-    <br />
+    <!-- <br />
     <div style="position:fixed;right:0; top:300px">
       <button id="begin" @click="beginMotion">{{beginText}}</button>
       <br />
@@ -19,8 +19,8 @@
       <br />
       <button id="edit" @click="edit">修改</button>
       <br />
-      <button id="code" @click="generateCode">加入路径</button>
-    </div>
+      <button id="code" @click="generateCode">生成代码</button>
+    </div> -->
   </div>
 </template>
 <script>
@@ -540,6 +540,23 @@ export default {
       }
     },
     generateCode() {
+      // console.log(this.bezierStyle);
+      // const code = JSON.parse(JSON.stringify(this.pointsArr))
+      // const bezierCode = JSON.parse(JSON.stringify(this.allBezierData))
+      const bezierOptions = {
+        bezierData: this.allBezierData,
+        width: document.getElementsByClassName("bezier-curve")[0].offsetWidth,
+        height: document.getElementsByClassName("bezier-curve")[0].offsetHeight
+      }
+      const bezierOptionsStr = JSON.stringify(bezierOptions)
+      // debugger
+      
+      // console.log(code)
+      // console.log(bezierCode)
+      // console.log(bezierStr)
+      // this.$emit('generateCode', bezierCode)
+      this.$emit('generateCode', bezierOptionsStr)
+      
       // this
     },
     draw() {

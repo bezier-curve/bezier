@@ -116,6 +116,12 @@
           <span>加入新路径</span> 
         </el-tooltip>
       </el-menu-item>
+      <el-menu-item index="10" @click="btnOperation(16)">
+        <el-tooltip class="item" effect="dark" content="生成代码" placement="bottom">
+          <!-- <i class="el-icon-menu"></i> -->
+          <span>生成代码</span> 
+        </el-tooltip>
+      </el-menu-item>
     </el-menu>
   </div>
   <div class="import-image">
@@ -166,7 +172,7 @@
 </template>
 <script>
 import BezierCode from '@/components/BezierCode.vue'
-import BazierCurve from '../utils/bezierCurve.js'
+import BazierCurve from '../assets/bezierCurve.js'
 import BezierCancas from './bezier/BezierCanvas.vue'
 import { _changPointsStyle, _changCurveStyle } from '../assets/drawTool.js'
 let canvasObj, ctx
@@ -265,6 +271,9 @@ export default {
           break;
         case 15:    //更改移动图标个数
           this.$refs.buttonList.movingBallNum = this.animationNum;
+          break;
+        case 16:    //更改移动图标个数
+          this.$refs.buttonList.generateCode();
           break;
       }
     },

@@ -1,11 +1,11 @@
 // import
 class BezierCurve {
-  constructor(options) {
+  constructor(options, scale) {
     this.points = options.points||[]
     this.color = options.color || '#0F0'
-    this.size = options.size || 2
+    // this.editColor =  '#764587'
+    this.size = options.size * (scale || 1) || 2
     this.parentIndex = options.parentIndex || 0
-    this.end = options.points.end
     this.index = options.index || 0
     this.isSelected = false
     this.isClose = false
