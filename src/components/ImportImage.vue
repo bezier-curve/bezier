@@ -172,7 +172,7 @@
 </template>
 <script>
 import BezierCode from '@/components/BezierCode.vue'
-import BazierCurve from '../utils/bezierCurve.js'
+import BazierCurve from '../assets/bezierCurve.js'
 import BezierCancas from './bezier/BezierCanvas.vue'
 import { _changPointsStyle, _changCurveStyle } from '../assets/drawTool.js'
 let canvasObj, ctx

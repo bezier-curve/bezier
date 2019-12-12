@@ -16,7 +16,8 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "c1": {
               "x": 100,
@@ -30,7 +31,8 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "c2": {
               "x": 200,
@@ -44,11 +46,12 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "end": {
-              "x": 349.015625,
-              "y": 146,
+              "x": 200,
+              "y": 200,
               "color": "#FE2400",
               "radius": 14,
               "visible": true,
@@ -58,38 +61,24 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             }
           },
           "color": "#0F0",
-          "editColor": "#764587",
           "size": 2,
-          "parent": 0,
-          "end": {
-            "x": 349.015625,
-            "y": 146,
-            "color": "#FE2400",
-            "radius": 14,
-            "visible": true,
-            "isSelect": false,
-            "selectable": true,
-            "parentIndex": 0,
-            "grandParentIndex": 0,
-            "type": "start",
-            "img": "",
-            "opr": 1
-          },
+          "parentIndex": 0,
           "index": 0,
           "isSelected": false,
           "isClose": false,
           "Tspeed": 0.01,
-          "tSpeed": 0.026289218362803977
+          "tSpeed": 0.048920000000000005
         },
         {
           "points": {
             "start": {
-              "x": 349.015625,
-              "y": 146,
+              "x": 200,
+              "y": 200,
               "color": "#FE2400",
               "radius": 14,
               "visible": true,
@@ -99,11 +88,12 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "c1": {
-              "x": 449.015625,
-              "y": 146,
+              "x": 300,
+              "y": 200,
               "color": "#236B8E",
               "radius": 20,
               "visible": true,
@@ -113,11 +103,12 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "c2": {
-              "x": 349.015625,
-              "y": 246,
+              "x": 200,
+              "y": 300,
               "color": "#236B8E",
               "radius": 20,
               "visible": true,
@@ -127,11 +118,12 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "end": {
-              "x": 449.015625,
-              "y": 246,
+              "x": 300,
+              "y": 300,
               "color": "#FE2400",
               "radius": 14,
               "visible": true,
@@ -141,38 +133,24 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             }
           },
           "color": "#0F0",
-          "editColor": "#764587",
           "size": 2,
-          "parent": 0,
-          "end": {
-            "x": 449.015625,
-            "y": 246,
-            "color": "#FE2400",
-            "radius": 14,
-            "visible": true,
-            "isSelect": false,
-            "selectable": true,
-            "parentIndex": 1,
-            "grandParentIndex": 0,
-            "type": "start",
-            "img": "",
-            "opr": 1
-          },
-          "index": 0,
+          "parentIndex": 0,
+          "index": 1,
           "isSelected": false,
           "isClose": false,
           "Tspeed": 0.01,
-          "tSpeed": 0.03912
+          "tSpeed": 0.048920000000000005
         },
         {
           "points": {
             "start": {
-              "x": 449.015625,
-              "y": 246,
+              "x": 300,
+              "y": 300,
               "color": "#FE2400",
               "radius": 14,
               "visible": true,
@@ -182,11 +160,12 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "c1": {
-              "x": 549.015625,
-              "y": 246,
+              "x": 400,
+              "y": 300,
               "color": "#236B8E",
               "radius": 20,
               "visible": true,
@@ -196,11 +175,12 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "c2": {
-              "x": 449.015625,
-              "y": 346,
+              "x": 300,
+              "y": 400,
               "color": "#236B8E",
               "radius": 20,
               "visible": true,
@@ -210,11 +190,12 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "end": {
-              "x": 549.015625,
-              "y": 346,
+              "x": 400,
+              "y": 400,
               "color": "#FE2400",
               "radius": 14,
               "visible": true,
@@ -224,32 +205,90 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             }
           },
           "color": "#0F0",
-          "editColor": "#764587",
           "size": 2,
-          "parent": 0,
-          "end": {
-            "x": 549.015625,
-            "y": 346,
-            "color": "#FE2400",
-            "radius": 14,
-            "visible": true,
-            "isSelect": false,
-            "selectable": true,
-            "parentIndex": 2,
-            "grandParentIndex": 0,
-            "type": "start",
-            "img": "",
-            "opr": 1
-          },
-          "index": 0,
+          "parentIndex": 0,
+          "index": 2,
           "isSelected": false,
           "isClose": false,
           "Tspeed": 0.01,
-          "tSpeed": 0.03912
+          "tSpeed": 0.048920000000000005
+        },
+        {
+          "points": {
+            "start": {
+              "x": 400,
+              "y": 400,
+              "color": "#FE2400",
+              "radius": 14,
+              "visible": true,
+              "isSelect": false,
+              "selectable": false,
+              "parentIndex": 0,
+              "grandParentIndex": 0,
+              "type": "start",
+              "img": "",
+              "opr": 1,
+              "scale": 1
+            },
+            "c1": {
+              "x": 500,
+              "y": 400,
+              "color": "#236B8E",
+              "radius": 20,
+              "visible": true,
+              "isSelect": false,
+              "selectable": true,
+              "parentIndex": 0,
+              "grandParentIndex": 0,
+              "type": "start",
+              "img": "",
+              "opr": 1,
+              "scale": 1
+            },
+            "c2": {
+              "x": 400,
+              "y": 500,
+              "color": "#236B8E",
+              "radius": 20,
+              "visible": true,
+              "isSelect": false,
+              "selectable": true,
+              "parentIndex": 0,
+              "grandParentIndex": 0,
+              "type": "start",
+              "img": "",
+              "opr": 1,
+              "scale": 1
+            },
+            "end": {
+              "x": 500,
+              "y": 500,
+              "color": "#FE2400",
+              "radius": 14,
+              "visible": true,
+              "isSelect": false,
+              "selectable": true,
+              "parentIndex": 3,
+              "grandParentIndex": 0,
+              "type": "start",
+              "img": "",
+              "opr": 1,
+              "scale": 1
+            }
+          },
+          "color": "#0F0",
+          "size": 2,
+          "parentIndex": 0,
+          "index": 3,
+          "isSelected": false,
+          "isClose": false,
+          "Tspeed": 0.01,
+          "tSpeed": 0.048920000000000005
         }
       ],
       "color": "#0F0",
@@ -273,7 +312,8 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "c1": {
               "x": 100,
@@ -287,7 +327,8 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "c2": {
               "x": 200,
@@ -301,11 +342,12 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "end": {
-              "x": 72.015625,
-              "y": 435,
+              "x": 200,
+              "y": 200,
               "color": "#FE2400",
               "radius": 14,
               "visible": true,
@@ -315,38 +357,24 @@
               "grandParentIndex": 1,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             }
           },
           "color": "#0F0",
-          "editColor": "#764587",
           "size": 2,
-          "parent": 0,
-          "end": {
-            "x": 72.015625,
-            "y": 435,
-            "color": "#FE2400",
-            "radius": 14,
-            "visible": true,
-            "isSelect": false,
-            "selectable": true,
-            "parentIndex": 0,
-            "grandParentIndex": 1,
-            "type": "start",
-            "img": "",
-            "opr": 1
-          },
+          "parentIndex": 1,
           "index": 0,
           "isSelected": false,
           "isClose": false,
           "Tspeed": 0.01,
-          "tSpeed": 0.021123823023185176
+          "tSpeed": 0.048920000000000005
         },
         {
           "points": {
             "start": {
-              "x": 72.015625,
-              "y": 435,
+              "x": 200,
+              "y": 200,
               "color": "#FE2400",
               "radius": 14,
               "visible": true,
@@ -356,101 +384,11 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "c1": {
-              "x": 172.015625,
-              "y": 435,
-              "color": "#236B8E",
-              "radius": 20,
-              "visible": true,
-              "isSelect": false,
-              "selectable": true,
-              "parentIndex": 0,
-              "grandParentIndex": 0,
-              "type": "start",
-              "img": "",
-              "opr": 1
-            },
-            "c2": {
-              "x": 72.015625,
-              "y": 535,
-              "color": "#236B8E",
-              "radius": 20,
-              "visible": true,
-              "isSelect": false,
-              "selectable": true,
-              "parentIndex": 0,
-              "grandParentIndex": 0,
-              "type": "start",
-              "img": "",
-              "opr": 1
-            },
-            "end": {
-              "x": 172.015625,
-              "y": 535,
-              "color": "#FE2400",
-              "radius": 14,
-              "visible": true,
-              "isSelect": false,
-              "selectable": true,
-              "parentIndex": 1,
-              "grandParentIndex": 1,
-              "type": "start",
-              "img": "",
-              "opr": 1
-            }
-          },
-          "color": "#0F0",
-          "editColor": "#764587",
-          "size": 2,
-          "parent": 0,
-          "end": {
-            "x": 172.015625,
-            "y": 535,
-            "color": "#FE2400",
-            "radius": 14,
-            "visible": true,
-            "isSelect": false,
-            "selectable": true,
-            "parentIndex": 1,
-            "grandParentIndex": 1,
-            "type": "start",
-            "img": "",
-            "opr": 1
-          },
-          "index": 0,
-          "isSelected": false,
-          "isClose": false,
-          "Tspeed": 0.01,
-          "tSpeed": 0.03912
-        }
-      ],
-      "color": "#0F0",
-      "visible": true,
-      "type": "ball",
-      "isSelect": false
-    },
-    {
-      "bezierCurve": [
-        {
-          "points": {
-            "start": {
-              "x": 100,
-              "y": 100,
-              "color": "#FE2400",
-              "radius": 14,
-              "visible": true,
-              "isSelect": false,
-              "selectable": true,
-              "parentIndex": 0,
-              "grandParentIndex": 0,
-              "type": "start",
-              "img": "",
-              "opr": 1
-            },
-            "c1": {
-              "x": 100,
+              "x": 300,
               "y": 200,
               "color": "#236B8E",
               "radius": 20,
@@ -461,11 +399,12 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "c2": {
-              "x": 361.015625,
-              "y": 485,
+              "x": 200,
+              "y": 300,
               "color": "#236B8E",
               "radius": 20,
               "visible": true,
@@ -475,52 +414,39 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "end": {
-              "x": 173.015625,
-              "y": 531,
+              "x": 300,
+              "y": 300,
               "color": "#FE2400",
               "radius": 14,
               "visible": true,
               "isSelect": false,
               "selectable": true,
-              "parentIndex": 0,
-              "grandParentIndex": 2,
+              "parentIndex": 1,
+              "grandParentIndex": 1,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             }
           },
           "color": "#0F0",
-          "editColor": "#764587",
           "size": 2,
-          "parent": 0,
-          "end": {
-            "x": 173.015625,
-            "y": 531,
-            "color": "#FE2400",
-            "radius": 14,
-            "visible": true,
-            "isSelect": false,
-            "selectable": true,
-            "parentIndex": 0,
-            "grandParentIndex": 2,
-            "type": "start",
-            "img": "",
-            "opr": 1
-          },
-          "index": 0,
+          "parentIndex": 1,
+          "index": 1,
           "isSelected": false,
           "isClose": false,
           "Tspeed": 0.01,
-          "tSpeed": 0.013314826337369771
+          "tSpeed": 0.048920000000000005
         },
         {
           "points": {
             "start": {
-              "x": 173.015625,
-              "y": 531,
+              "x": 300,
+              "y": 300,
               "color": "#FE2400",
               "radius": 14,
               "visible": true,
@@ -530,11 +456,12 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "c1": {
-              "x": 273.015625,
-              "y": 531,
+              "x": 400,
+              "y": 300,
               "color": "#236B8E",
               "radius": 20,
               "visible": true,
@@ -544,11 +471,12 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "c2": {
-              "x": 173.015625,
-              "y": 631,
+              "x": 300,
+              "y": 400,
               "color": "#236B8E",
               "radius": 20,
               "visible": true,
@@ -558,46 +486,177 @@
               "grandParentIndex": 0,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             },
             "end": {
-              "x": 548.015625,
-              "y": 347,
+              "x": 400,
+              "y": 400,
               "color": "#FE2400",
               "radius": 14,
               "visible": true,
               "isSelect": false,
               "selectable": true,
-              "parentIndex": 1,
-              "grandParentIndex": 2,
+              "parentIndex": 2,
+              "grandParentIndex": 1,
               "type": "start",
               "img": "",
-              "opr": 1
+              "opr": 1,
+              "scale": 1
             }
           },
           "color": "#0F0",
-          "editColor": "#764587",
           "size": 2,
-          "parent": 0,
-          "end": {
-            "x": 548.015625,
-            "y": 347,
-            "color": "#FE2400",
-            "radius": 14,
-            "visible": true,
-            "isSelect": false,
-            "selectable": true,
-            "parentIndex": 1,
-            "grandParentIndex": 2,
-            "type": "start",
-            "img": "",
-            "opr": 1
-          },
-          "index": 0,
+          "parentIndex": 1,
+          "index": 2,
           "isSelected": false,
           "isClose": false,
           "Tspeed": 0.01,
-          "tSpeed": 0.014840667678300456
+          "tSpeed": 0.048920000000000005
+        },
+        {
+          "points": {
+            "start": {
+              "x": 400,
+              "y": 400,
+              "color": "#FE2400",
+              "radius": 14,
+              "visible": true,
+              "isSelect": false,
+              "selectable": false,
+              "parentIndex": 0,
+              "grandParentIndex": 0,
+              "type": "start",
+              "img": "",
+              "opr": 1,
+              "scale": 1
+            },
+            "c1": {
+              "x": 500,
+              "y": 400,
+              "color": "#236B8E",
+              "radius": 20,
+              "visible": true,
+              "isSelect": false,
+              "selectable": true,
+              "parentIndex": 0,
+              "grandParentIndex": 0,
+              "type": "start",
+              "img": "",
+              "opr": 1,
+              "scale": 1
+            },
+            "c2": {
+              "x": 400,
+              "y": 500,
+              "color": "#236B8E",
+              "radius": 20,
+              "visible": true,
+              "isSelect": false,
+              "selectable": true,
+              "parentIndex": 0,
+              "grandParentIndex": 0,
+              "type": "start",
+              "img": "",
+              "opr": 1,
+              "scale": 1
+            },
+            "end": {
+              "x": 500,
+              "y": 500,
+              "color": "#FE2400",
+              "radius": 14,
+              "visible": true,
+              "isSelect": false,
+              "selectable": true,
+              "parentIndex": 3,
+              "grandParentIndex": 1,
+              "type": "start",
+              "img": "",
+              "opr": 1,
+              "scale": 1
+            }
+          },
+          "color": "#0F0",
+          "size": 2,
+          "parentIndex": 1,
+          "index": 3,
+          "isSelected": false,
+          "isClose": false,
+          "Tspeed": 0.01,
+          "tSpeed": 0.048920000000000005
+        },
+        {
+          "points": {
+            "start": {
+              "x": 500,
+              "y": 500,
+              "color": "#FE2400",
+              "radius": 14,
+              "visible": true,
+              "isSelect": false,
+              "selectable": false,
+              "parentIndex": 0,
+              "grandParentIndex": 0,
+              "type": "start",
+              "img": "",
+              "opr": 1,
+              "scale": 1
+            },
+            "c1": {
+              "x": 600,
+              "y": 500,
+              "color": "#236B8E",
+              "radius": 20,
+              "visible": true,
+              "isSelect": false,
+              "selectable": true,
+              "parentIndex": 0,
+              "grandParentIndex": 0,
+              "type": "start",
+              "img": "",
+              "opr": 1,
+              "scale": 1
+            },
+            "c2": {
+              "x": 500,
+              "y": 600,
+              "color": "#236B8E",
+              "radius": 20,
+              "visible": true,
+              "isSelect": false,
+              "selectable": true,
+              "parentIndex": 0,
+              "grandParentIndex": 0,
+              "type": "start",
+              "img": "",
+              "opr": 1,
+              "scale": 1
+            },
+            "end": {
+              "x": 600,
+              "y": 600,
+              "color": "#FE2400",
+              "radius": 14,
+              "visible": true,
+              "isSelect": false,
+              "selectable": true,
+              "parentIndex": 4,
+              "grandParentIndex": 1,
+              "type": "start",
+              "img": "",
+              "opr": 1,
+              "scale": 1
+            }
+          },
+          "color": "#0F0",
+          "size": 2,
+          "parentIndex": 1,
+          "index": 4,
+          "isSelected": false,
+          "isClose": false,
+          "Tspeed": 0.01,
+          "tSpeed": 0.048920000000000005
         }
       ],
       "color": "#0F0",
@@ -606,6 +665,6 @@
       "isSelect": false
     }
   ],
-  "width": 1048,
-  "height": 908
+  "width": 1626,
+  "height": 820
 }

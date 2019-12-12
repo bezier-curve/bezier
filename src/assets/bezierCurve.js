@@ -6,7 +6,6 @@ class BezierCurve {
     // this.editColor =  '#764587'
     this.size = options.size * (scale || 1) || 2
     this.parentIndex = options.parentIndex || 0
-    this.end = options.points.end
     this.index = options.index || 0
     this.isSelected = false
     this.isClose = false
