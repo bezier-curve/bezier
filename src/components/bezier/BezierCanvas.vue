@@ -1,7 +1,7 @@
 <template>
   <div v-show="isVisible" :style="bezierStyle">
     <canvas id="bubble" ref="bubble" class="bezier-curve"></canvas>
-    <br />
+    <!-- <br />
     <div style="position:fixed;right:0; top:300px">
       <button id="begin" @click="beginMotion">{{beginText}}</button>
       <br />
@@ -20,7 +20,7 @@
       <button id="edit" @click="edit">修改</button>
       <br />
       <button id="code" @click="generateCode">生成代码</button>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -89,7 +89,9 @@ export default {
       editChange: false,
       movingBallNum:0,
       movingBallSpeed:0,
-      movingBallType:'a'
+      movingBallType:'a',
+      pIndex:-1,
+      gIndex:-1
     };
   },
   watch: {
@@ -163,8 +165,6 @@ export default {
       } else {
         if (_self.allBezierData && _self.allBezierData.length != 0) {
           let distance = 0;
-          let pIndex = 0;
-          let gIndex = 0;
           let selectFlag = false;
           _self.allBezierData.forEach(bezierCurve => {
             for (let curve in bezierCurve.bezierCurve) {
@@ -185,9 +185,9 @@ export default {
                     _self.changingCurve = [];
                     bezierCurve.bezierCurve[curve].points.end.isSelect = true;
                     bezierCurve.bezierCurve[curve].points.end.color = "#040090";
-                    pIndex =
+                    _self.pIndex =
                       bezierCurve.bezierCurve[curve].points.end.parentIndex;
-                    gIndex =
+                    _self.gIndex =
                       bezierCurve.bezierCurve[curve].points.end
                         .grandParentIndex;
                     if (bezierCurve.bezierCurve[Number(curve) + 1]) {
@@ -199,7 +199,6 @@ export default {
                       _self.changingCurve.push(bezierCurve.bezierCurve[curve]);
                     }
                     console.log(_self.changingCurve);
-                    console.log(pIndex);
                     bezierCurve.bezierCurve[curve].isSelected = true;
                   }
                 } else {
@@ -210,8 +209,8 @@ export default {
               }
             }
           });
-          _changCurveStyle(_self.allBezierData, "color", "#249193");
-          _changCurveStyle(_self.allBezierData, "color", "#FF0", gIndex);
+          // _changCurveStyle(_self.allBezierData, "color", "#249193");
+          // _changCurveStyle(_self.allBezierData, "color", "#FF0", gIndex);
         }
         if (_self.changingCurve.length > 0) {
           for (let changingItem in _self.changingCurve[0].points) {
@@ -302,8 +301,10 @@ export default {
       // oCanvas = document.querySelector("canvas");
       oCanvas = document.getElementsByClassName("bezier-curve")[0];
       canvasBuffer = document.createElement("canvas");
+      // oCanvas.width = window.innerWidth;
+      // oCanvas.height = window.innerHeight;
       oCanvas.width = parseFloat(this.bezierStyle.width) || window.innerWidth;
-      oCanvas.height = parseFloat(this.bezierStyle.height) || window.innerHeight;
+      oCanvas.height = parseFloat(this.bezierStyle.width) || window.innerHeight;
       canvasBuffer.width = oCanvas.width;
       canvasBuffer.height = oCanvas.height;
       ctx = oCanvas.getContext("2d");
@@ -423,15 +424,15 @@ export default {
         this.editChange = false;
       }
       // console.log(this.allBezierData);
-      _changCurveStyle(this.allBezierData, "color", "#F00", 1);
+      // _changCurveStyle(this.allBezierData, "color", "#F00", 1);
       this.allBezierData.forEach(bezierItem => {
         bezierItem.bezierCurve.forEach(curveItem => {
           curveItem.points.end.selectable = true;
         });
       });
     },
-
     redraw() {
+      _changCurveStyle(this.allBezierData, "color", "#F00", 1);
       this.bezierCurve = [
         { x: 0, y: 0 },
         { x: 0, y: 0 },
@@ -454,6 +455,9 @@ export default {
         1 / _getSpeed(this.bezierCurve, oCanvas.width, oCanvas.height) / 400;
       //end小球存入当前的父曲线索引
       this.bezierCurve.points.end.parentIndex = this.pointsArr.bezierCurve.length;
+      this.bezierCurve.index = this.pointsArr.bezierCurve.length;
+      this.bezierCurve.parentIndex = this.allBezierData.length;
+      console.log(this.bezierCurve.index,this.bezierCurve.parentIndex)
       //当前曲线加入数组
       this.pointsArr.bezierCurve.push(cloneDeep(this.bezierCurve));
       // } else {
@@ -521,6 +525,7 @@ export default {
         this.pointsArr.bezierCurve.forEach(item => {
           item.points.end.grandParentIndex = this.allBezierData.length;
         });
+        // this.pointsArr.parentIndex = this.allBezierData.length;
         this.allBezierData.push(cloneDeep(this.pointsArr));
         this.dataStack.data.push([
           cloneDeep(this.allBezierData),
@@ -560,7 +565,7 @@ export default {
       if (this.allBezierData.length > 0) {
         this.allBezierData.forEach((item, index) => {
           _drawPointsALL(item.bezierCurve, contextBuffer, this.editState);
-          _drawCurveALL(item.bezierCurve, contextBuffer);
+          _drawCurveALL(item.bezierCurve, contextBuffer,this.editState,this.pIndex,this.gIndex);
           if (this.allMotionState) {
             _drawAnimationALL(
               item.bezierCurve,
@@ -578,9 +583,9 @@ export default {
         }
       }
       if(!this.editChange){
-      _drawPoints(this.pointsArr.bezierCurve, this.bezierCurve, contextBuffer,this.motionState,this.allMotionState);
+      _drawPoints(this.pointsArr.bezierCurve, this.bezierCurve, contextBuffer,this.motionState,this.allMotionState,this.editState);
       //画曲线函数(路径数组，当前画的未加入路径的路径点)
-      _drawCurve(this.pointsArr.bezierCurve, this.bezierCurve, contextBuffer,this.motionState,this.allMotionState);
+      _drawCurve(this.pointsArr.bezierCurve, this.bezierCurve, contextBuffer,this.motionState,this.allMotionState,this.editState);
       //画路径中点的动画
       if (this.motionState && this.pointsArr.bezierCurve.length != 0) {
         //运动状态为true,路径点数组长度不为0
@@ -592,7 +597,6 @@ export default {
         );
       }
       }
-      
       //描点函数(路径数组，当前画的未加入路径的路径点)
       ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
       ctx.drawImage(canvasBuffer, 0, 0);
