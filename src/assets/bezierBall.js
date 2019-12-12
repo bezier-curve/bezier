@@ -1,9 +1,9 @@
 class BezierBall {
-    constructor(o, material) {
-        this.x = o.x || 0,
-        this.y = o.y || 0,
+    constructor(o, scale) {
+        this.x = o.x * (scale || 1) || 0,
+        this.y = o.y * (scale || 1) || 0,
         this.color = o.color || '#0F0',
-        this.radius = o.radius || 4,
+        this.radius = o.radius * (scale || 1) || 4,
         this.visible = o.visible || true,
         this.isSelect = false,    //拖拽
         this.selectable = false,   //能否被选中
@@ -13,7 +13,8 @@ class BezierBall {
         this.type = o.type || 'start',     //start, c1, c2, end
         this.img = o.img || '',
         this.opr = o.opr || 1,
-        this.material = material || 'ball'
+        this.scale = scale || 1
+        // this.material = material || 'ball'
     }
     drawBall(ctx) {
         if (!this.visible) { return }  // 不可见
@@ -25,7 +26,7 @@ class BezierBall {
         // ctx.fillText(this.type, this.x + 10, this.y + 10);
         ctx.stroke()//画实心圆
         ctx.beginPath()
-        ctx.arc(this.x, this.y, 4, 0, 2 * Math.PI, false) // 顺时针
+        ctx.arc(this.x, this.y, 4 * this.scale, 0, 2 * Math.PI, false) // 顺时针
         ctx.fillStyle = this.color;//填充颜色,默认是黑色
         // ctx.fillText(this.type, this.x + 10, this.y + 10);
         ctx.fill()//画实心圆

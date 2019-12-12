@@ -20,35 +20,43 @@ let ctx;
 export default {
   props: {
     options: {
-      type: Array,
+      type: Object,
       default: function() {
-        return []
+        return {}
       }
-    }
+    },
   },
   data() {
     return {
-      allBezierData: []
+      allBezierData: [],
+      scale: 1
     }
   },
   created() {
     // let optionsArr = JSON.parse(this.options)
     // this.allBezierData = this.genJointBezier(optionsArr)
-    this.allBezierData = this.genJointBezier(this.options)
+    // this.allBezierData = this.genJointBezier(this.options)
     // debugger
   },
   mounted() {
     
     this.initCanvas()
+    this.allBezierData = this.genJointBezier(this.options.bezierData)
   },
   methods: {
     initCanvas() {
       // oCanvas = document.querySelector("canvas");
       oCanvas = document.getElementsByClassName("bezier-curve")[0];
+      // debugger
       // oCanvas.width = parseFloat(this.bezierStyle.width) || window.innerWidth;
       // oCanvas.height = parseFloat(this.bezierStyle.width) || window.innerHeight;
-      oCanvas.width = window.innerWidth;
-      oCanvas.height = window.innerHeight;
+      oCanvas.width = oCanvas.parentNode.offsetWidth
+      oCanvas.height = oCanvas.parentNode.offsetHeight
+
+      this.scale = oCanvas.width / this.options.width
+      // debugger
+      // oCanvas.width = window.innerWidth;
+      // oCanvas.height = window.innerHeight;
       ctx = oCanvas.getContext("2d");
       ctx.font = "14px Courier";
       ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
@@ -70,7 +78,7 @@ export default {
       if (curves) {
         let curveObjs = curves.map(item => {
           item.points = this.genBezierBall(item.points)
-          return new BezierCurve(item)
+          return new BezierCurve(item, this.scale)
         })
         return curveObjs
       }
@@ -81,10 +89,10 @@ export default {
         //   new BezierBall(item)
         // }
         return {
-          'c1': new BezierBall(balls.c1),
-          'c2': new BezierBall(balls.c2),
-          'end': new BezierBall(balls.end),
-          'start': new BezierBall(balls.start),
+          'c1': new BezierBall(balls.c1, this.scale),
+          'c2': new BezierBall(balls.c2, this.scale),
+          'end': new BezierBall(balls.end, this.scale),
+          'start': new BezierBall(balls.start, this.scale),
         }
       }
     },

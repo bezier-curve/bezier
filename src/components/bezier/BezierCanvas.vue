@@ -538,13 +538,19 @@ export default {
       // console.log(this.bezierStyle);
       // const code = JSON.parse(JSON.stringify(this.pointsArr))
       // const bezierCode = JSON.parse(JSON.stringify(this.allBezierData))
-      const bezierStr = JSON.stringify(this.allBezierData)
+      const bezierOptions = {
+        bezierData: this.allBezierData,
+        width: document.getElementsByClassName("bezier-curve")[0].offsetWidth,
+        height: document.getElementsByClassName("bezier-curve")[0].offsetHeight
+      }
+      const bezierOptionsStr = JSON.stringify(bezierOptions)
+      // debugger
       
       // console.log(code)
       // console.log(bezierCode)
       // console.log(bezierStr)
       // this.$emit('generateCode', bezierCode)
-      this.$emit('generateCode', bezierStr)
+      this.$emit('generateCode', bezierOptionsStr)
       
       // this
     },

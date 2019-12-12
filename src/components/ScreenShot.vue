@@ -6,8 +6,11 @@
       <!-- <bezier-button class="bezier-button" :title="`清除画图`" :type="`button`"></bezier-button> -->
     <!-- </div> -->
     <!-- <button @click="handleClick()">点击复制</button> -->
-    <bezier-curve :options="options"></bezier-curve>
-    <!-- <image src="../../static/test1.png"></image> -->
+    <div class="placehold">
+      <bezier-curve class="bazier-curve" :options="options"></bezier-curve>
+    </div>
+    
+    <!-- <div class="placehold"></div> -->
   </div>
 </template>
 <script>
@@ -21,7 +24,8 @@ export default {
   },
   data() {
     return {
-      options: ''
+      options: '',
+      // imageUrl: '../../../static/test1.png'
     }
   },
   created() {
@@ -39,6 +43,16 @@ export default {
 }
 </script>
 <style lang="sass" scoped>
+.placehold
+  height: 500px
+  width: 500px
+  background-color: #eee
+  
+  top: 0px
+  left: 0px
+.bazier-curve
+  // position: absolute
+  // z-index: 9999
 // .screen-shot
   // height: 300px
   // width: 300px
