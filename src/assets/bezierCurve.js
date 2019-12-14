@@ -35,7 +35,7 @@ class BezierCurve {
         // ctx.strokeStyle = this.isSelected?this.editColor:"#F00"
         if(this.parentIndex == gIndex){
           if(this.index == pIndex){
-            ctx.strokeStyle = "#F00"
+            ctx.strokeStyle = this.color
           }else{
             ctx.strokeStyle = "#FF0"
           }
@@ -56,6 +56,7 @@ class BezierCurve {
     ctx.moveTo(this.points.start.x, this.points.start.y)
     ctx.lineTo(this.points.c1.x, this.points.c1.y)
     ctx.stroke()
+    ctx.closePath()
   }
   _drawCtrl2 (ctx) {
     ctx.lineWidth = 2
@@ -64,6 +65,7 @@ class BezierCurve {
     ctx.moveTo(this.points.end.x, this.points.end.y)
     ctx.lineTo(this.points.c2.x, this.points.c2.y)
     ctx.stroke()
+    ctx.closePath()
   }
 }
 export default BezierCurve

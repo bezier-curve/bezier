@@ -1,5 +1,5 @@
 class animationBall {
-    constructor(o, type) {
+    constructor(o, scale, type) {
         this.x = o.x || 0,
             this.y = o.y || 0,
             this.color = o.color || '#0F0',
@@ -11,7 +11,8 @@ class animationBall {
             this.type = type || 'ball',
             this.img = o.img || null,
             this.angle = 0,
-            this.Tspeed = 0.01
+            this.Tspeed = 0.01,
+            this.scale = scale || 1
     }
     drawTo(ctx) {
         switch (this.type) {
@@ -33,10 +34,10 @@ class animationBall {
         ctx.fillStyle = "#00AD97";
         ctx.rotate(-this.angle)
         ctx.beginPath();
-        ctx.moveTo(-20, 0);
+        ctx.moveTo(-40 * this.scale, 0);
         ctx.lineTo(0, 0);
-        ctx.lineTo(-5, 5);
-        ctx.lineTo(-5, - 5);
+        ctx.lineTo(-10 * this.scale, 10 * this.scale);
+        ctx.lineTo(-10 * this.scale, - 10 * this.scale);
         ctx.lineTo(0, 0);
         ctx.translate(-this.x, -this.y);
         ctx.closePath();

@@ -33,8 +33,7 @@ import {
   _drawAnimation,
   _drawPoints,
   _drawCurve,
-  _changCurveStyle,
-  _changPointsStyle
+  _changCurveStyle
 } from "../../assets/drawTool";
 import { cloneDeep } from "lodash";
 import animationBall from "../../assets/animationBall";
@@ -87,8 +86,8 @@ export default {
       positionXDown: 0,
       positionYDown: 0,
       tSpeed: 0.001,
-      beginText: "开始当前操作路径动画",
-      allBeginText: "开始全路径动画",
+      // beginText: "开始当前操作路径动画",
+      // allBeginText: "开始全路径动画",
       balls: [],
       allBalls: [],
       bezierPoint: [],
@@ -170,7 +169,7 @@ export default {
       _self.clickPositionY =
         e.clientY - _self.$refs["bubble"].getBoundingClientRect().y;
       if (!_self.editState) {
-        if (_self.bezierCurve.points && _self.bezierCurve.points.length != 0) {
+        if (_self.bezierCurve.points && _self.bezierCurve.points.length != 0&& _self.bezierCurve.points.start.x > 0) {
           for (let type in _self.bezierCurve.points) {
             if (
               _self.bezierCurve.points[type].selectable &&
@@ -189,6 +188,8 @@ export default {
               }
             }
           }
+        }else{
+          _self.putPoints( _self.bezierCurve.points,_self.pointsArr.bezierCurve, _self.clickPositionX,_self.clickPositionY)
         }
       } else {
         if (_self.allBezierData && _self.allBezierData.length != 0) {
@@ -226,7 +227,7 @@ export default {
                     } else {
                       _self.changingCurve.push(bezierCurve.bezierCurve[curve]);
                     }
-                    console.log(_self.changingCurve);
+                    // console.log(_self.changingCurve);
                     bezierCurve.bezierCurve[curve].isSelected = true;
                   }
                 } else {
@@ -264,12 +265,17 @@ export default {
       if (!_self.editChange) {
         for (let type in _self.bezierCurve.points) {
           if (_self.bezierCurve.points[type].isSelect) {
+            _self.bezierCurve.points[type].x =  Math.round(_self.bezierCurve.points[type].x)
+            _self.bezierCurve.points[type].y =  Math.round(_self.bezierCurve.points[type].y)
             _self.bezierCurve.points[type].isSelect = false;
+            // console.log( _self.bezierCurve.points[type].y, _self.bezierCurve.points[type].x)
           }
         }
       } else {
         for (let type in _self.changingCurve[0].points) {
           if (_self.changingCurve[0].points[type].isSelect) {
+            _self.changingCurve[0].points[type].x = Math.round(_self.changingCurve[0].points[type].x)
+            _self.changingCurve[0].points[type].y = Math.round(_self.changingCurve[0].points[type].y)
             _self.changingCurve[0].points[type].isSelect = false;
           }
         }
@@ -367,8 +373,7 @@ export default {
       ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
       contextBuffer.clearRect(0, 0, canvasBuffer.width, canvasBuffer.height);
       oCanvas.width = parseFloat(this.bezierStyle.width) || window.innerWidth;
-      oCanvas.height =
-        parseFloat(this.bezierStyle.height) || window.innerHeight;
+      oCanvas.height = parseFloat(this.bezierStyle.height) || window.innerHeight;
       window.requestAnimationFrame(this.render.bind(this));
     },
     /* 
@@ -383,12 +388,12 @@ export default {
     beginMotion() {
       this.motionState = !this.motionState;
       if (this.motionState) this.allMotionState = false;
-      this.beginText = this.motionState ? "停下" : "开始当前操作路径动画";
+      // this.beginText = this.motionState ? "停下" : "开始当前操作路径动画";
     },
     beginMotionA() {
       this.motionState = false;
       this.allMotionState = !this.allMotionState;
-      this.allBeginText = this.allMotionState ? "停下" : "开始全路径动画";
+      // this.allBeginText = this.allMotionState ? "停下" : "开始全路径动画";
     },
     back() {
       if (this.dataStack.index > 1) {
@@ -469,7 +474,6 @@ export default {
         ].points.end.y;
       } else {
         alert("这已是最新修改");
-        _changPointsStyle(this.allBezierData, "color", "#00F", 1);
       }
     },
     edit() {
@@ -501,6 +505,10 @@ export default {
       this.motionState = false;
     },
     joinPath() {
+      if(this.bezierCurve.points.start.x<0){
+        alert('不能加入空路径')
+        return;
+      }
       // if (
       //   this.bezierCurve.points.start.x != 0 &&
       //   this.bezierCurve.points.c1.x != 0 &&
@@ -514,7 +522,7 @@ export default {
       this.bezierCurve.points.end.parentIndex = this.pointsArr.bezierCurve.length;
       this.bezierCurve.index = this.pointsArr.bezierCurve.length;
       this.bezierCurve.parentIndex = this.allBezierData.length;
-      console.log(this.bezierCurve.index,this.bezierCurve.parentIndex)
+      // console.log(this.bezierCurve.index,this.bezierCurve.parentIndex)
       //当前曲线加入数组
       this.pointsArr.bezierCurve.push(cloneDeep(this.bezierCurve));
       // } else {
@@ -540,35 +548,38 @@ export default {
       this.dataStack.index++;
       this.motionState = false;
       this.allMotionState = false;
-      this.beginText = this.motionState ? "停下" : "开始当前操作路径动画";
-      this.beginTextA = this.allMotionState ? "停下" : "开始全路径动画";
+      // this.beginText = this.motionState ? "停下" : "开始当前操作路径动画";
+      // this.beginTextA = this.allMotionState ? "停下" : "开始全路径动画";
       // this.bezierCurve.points.start = Object.assign({}, this.pointsArr.bezierCurve[this.pointsArr.bezierCurve.length - 1].points.end);
       //
-      this.bezierCurve.points.start.x = this.pointsArr.bezierCurve[
-        this.pointsArr.bezierCurve.length - 1
-      ].points.end.x;
-      this.bezierCurve.points.start.y = this.pointsArr.bezierCurve[
-        this.pointsArr.bezierCurve.length - 1
-      ].points.end.y;
+      this.bezierCurve.points.start.x = -10000;
+      this.bezierCurve.points.start.y = -10000
       this.bezierCurve.points.start.selectable = false;
-      this.bezierCurve.points.c1.x =
-        this.pointsArr.bezierCurve[this.pointsArr.bezierCurve.length - 1].points
-          .end.x + 100;
-      this.bezierCurve.points.c1.y = this.pointsArr.bezierCurve[
-        this.pointsArr.bezierCurve.length - 1
-      ].points.end.y;
-      this.bezierCurve.points.c2.x = this.pointsArr.bezierCurve[
-        this.pointsArr.bezierCurve.length - 1
+      this.bezierCurve.points.c1.x = -10000;
+      this.bezierCurve.points.c1.y = -10000;
+      this.bezierCurve.points.c2.x = -10000;
+      this.bezierCurve.points.c2.y = -10000;
+      this.bezierCurve.points.end.x = -10000;
+      this.bezierCurve.points.end.y = -10000;
+    },
+    putPoints(points,bezierCurve,m_x,m_y){
+      if (m_x < 0||m_x> oCanvas.width||m_y < 0||m_y> oCanvas.height) {
+        return
+      } 
+      points.start.x = bezierCurve[
+        bezierCurve.length - 1
       ].points.end.x;
-      this.bezierCurve.points.c2.y =
-        this.pointsArr.bezierCurve[this.pointsArr.bezierCurve.length - 1].points
-          .end.y + 100;
-      this.bezierCurve.points.end.x =
-        this.pointsArr.bezierCurve[this.pointsArr.bezierCurve.length - 1].points
-          .end.x + 100;
-      this.bezierCurve.points.end.y =
-        this.pointsArr.bezierCurve[this.pointsArr.bezierCurve.length - 1].points
-          .end.y + 100;
+      points.start.y = bezierCurve[
+        bezierCurve.length - 1
+      ].points.end.y;
+      points.start.selectable = false;
+      points.end.x = m_x;
+      points.end.y = m_y;
+      points.c1.x = points.start.x + 100;
+      points.c1.y = points.start.y
+      points.c2.x = m_x
+      points.c2.y = m_y + 100;
+      
     },
     anotherPath() {
       //判断加入时是否位于栈顶，否则移除当前index后的所有数据
@@ -647,6 +658,7 @@ export default {
       _drawCurve(this.pointsArr.bezierCurve, this.bezierCurve, contextBuffer,this.motionState,this.allMotionState,this.editState);
       //画路径中点的动画
       if (this.motionState && this.pointsArr.bezierCurve.length != 0) {
+        // console.log(this.balls)
         //运动状态为true,路径点数组长度不为0
         _drawAnimation(
           this.pointsArr.bezierCurve,

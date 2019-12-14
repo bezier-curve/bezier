@@ -28,8 +28,8 @@ export default {
 </script>
 <style lang="sass" scoped>
 .placehold
-  height: 500px
-  width: 500px
+  height: 800px
+  width:600px
   background-color: #eee
   
   top: 0px
