@@ -49,13 +49,16 @@ function _drawAnimationALL(pointsArr, index, allBalls, contextBuffer, img) {
       item.loopIndex = 0;
     }
     //判断是否到最后一个点
+    item.drawBall(contextBuffer, img);
     if (Math.floor(item.t) == 1) {
       item.t = 0;
       item.loopIndex++;
     }
+    item.t += 0.01;
+    // item.t += pointsArr[item.loopIndex].tSpeed;
+    
     // item.drawImg(contextBuffer)
-    item.drawBall(contextBuffer, img);
-    item.t += pointsArr[item.loopIndex].tSpeed;
+    
   });
   contextBuffer.fill();
 }
@@ -198,6 +201,9 @@ function _changPointsStyle(allBezierData, type, value, GIndex, PIndex, Ptype) {
     return;
   }
 }
+function delCurve(allBezierData,gIndex){
+allBezierData.splice(gIndex,1)
+}
 export {
   _drawCurveALL,
   _drawPointsALL,
@@ -206,6 +212,6 @@ export {
   _drawPoints,
   _drawCurve,
   _changCurveStyle,
-  _changPointsStyle
-
+  _changPointsStyle,
+  delCurve
 }
