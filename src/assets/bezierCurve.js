@@ -35,7 +35,7 @@ class BezierCurve {
         // ctx.strokeStyle = this.isSelected?this.editColor:"#F00"
         if(this.parentIndex == gIndex){
           if(this.index == pIndex){
-            ctx.strokeStyle = "#F00"
+            // ctx.strokeStyle = "#F00"
           }else{
             ctx.strokeStyle = "#FF0"
           }

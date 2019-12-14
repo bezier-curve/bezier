@@ -35,7 +35,8 @@ function _drawPointsALL(pointsArr, contextBuffer, editState) {
   }
 }
 //画路径点的动画函数
-function _drawAnimationALL(pointsArr, index, allBalls, contextBuffer, img) {
+// function _drawAnimationALL(pointsArr, index, allBalls, contextBuffer, img) {
+function _drawAnimationALL(pointsArr, index, allBalls, contextBuffer) { 
   contextBuffer.beginPath();
   //计算下一帧小球的x,y坐标
 
@@ -53,9 +54,10 @@ function _drawAnimationALL(pointsArr, index, allBalls, contextBuffer, img) {
       item.t = 0;
       item.loopIndex++;
     }
-    // item.drawImg(contextBuffer)
-    item.drawBall(contextBuffer, img);
-    item.t += pointsArr[item.loopIndex].tSpeed;
+    item.drawImg(contextBuffer)
+    // item.drawBall(contextBuffer, img);
+    // item.t += pointsArr[item.loopIndex].tSpeed;
+    item.t += 0.01;
   });
   contextBuffer.fill();
 }

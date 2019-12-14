@@ -6,12 +6,12 @@
 import {
   _drawCurveALL,
   _drawPointsALL,
-  // _drawAnimationALL,
+  _drawAnimationALL,
   // _drawAnimation,
   // _drawPoints,
   // _drawCurve
 } from "../assets/drawTool.js";
-// import animationBall from "../../assets/animationBall";
+import animationBall from "../assets/animationBall";
 import BezierBall from "../assets/bezierBall";
 import BezierCurve from "../assets/bezierCurve";
 import JointBezier from "../assets/jointBezier";
@@ -29,6 +29,7 @@ export default {
   data() {
     return {
       allBezierData: [],
+      allBalls: [],
       scale: 1
     }
   },
@@ -42,6 +43,7 @@ export default {
     
     this.initCanvas()
     this.allBezierData = this.genJointBezier(this.options.bezierData)
+    this.initMoveAllBall(this.allBezierData)
   },
   methods: {
     initCanvas() {
@@ -96,24 +98,49 @@ export default {
         }
       }
     },
+    initMoveAllBall(allBezierData) {
+      this.allBalls = [];
+      let option = {
+        x: 100,
+        y: 100,
+        color: "#FF24FF",
+        radius: 10
+      };
+      let NumBall = 5
+      let interval = 1/NumBall
+      //初始化运动小球对象
+      for (let i = 0; i < allBezierData.length; i++) {
+        let itemBall = [];
+        let bigLength = allBezierData[i].bezierCurve.length * NumBall;
+        for (let j = 0; j < bigLength; j++) {
+          let ball = new animationBall(option, this.scale);
+          let index = Math.floor(j / NumBall);
+          let speedNum = j % NumBall+1;
+          ball.loopIndex = index;
+          // ball.oldLoopIndex = 1;
+          ball.t = interval * speedNum;
+          itemBall.push(ball);
+        }
+        this.allBalls.push(itemBall);
+      }
+    },
     draw() {
       ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
       // this.movePoint();
       if (this.allBezierData.length > 0) {
         // this.allBezierData.forEach((item, index) => {
-        this.allBezierData.forEach((item) => {
+        this.allBezierData.forEach((item, index) => {
           // console.log(item.bezierCurve)
           // contextBuffer.clearRect(0, 0, oCanvas.width, oCanvas.height);
           _drawPointsALL(item.bezierCurve, ctx);
           _drawCurveALL(item.bezierCurve, ctx);
           // if (this.allMotionState) {
-          //   _drawAnimationALL(
-          //     item.bezierCurve,
-          //     index,
-          //     this.allBalls,
-          //     ctx,
-          //     this.img
-          //   );
+            _drawAnimationALL(
+              item.bezierCurve,
+              index,
+              this.allBalls,
+              ctx,
+            );
           // }
         });
       }
