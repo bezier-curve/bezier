@@ -25,7 +25,7 @@
 </template>
 <script>
 // import basicObj from "../../assets/prop_ball";
-import { _getSpeed, _getDistance } from "../../assets/baseTool";
+import { _getDistance } from "../../assets/baseTool";
 import {
   _drawCurveALL,
   _drawPointsALL,
@@ -268,13 +268,13 @@ export default {
       let optionC1 = {
         x: 100,
         y: 200,
-        color: "#236B8E",
+        color: "#FF6600",
         radius: 20
       };
       let optionC2 = {
         x: 200,
         y: 100,
-        color: "#236B8E",
+        color: "#FF6600",
         radius: 20
       };
       let optionEnd = {
@@ -422,6 +422,9 @@ export default {
       this.editState = !this.editState;
       if (!this.editState) {
         this.editChange = false;
+        this.initMoveAllBall(this.allBezierData)
+        this.gIndex = -1;
+        this.pIndex = -1;
       }
       // console.log(this.allBezierData);
       // _changCurveStyle(this.allBezierData, "color", "#F00", 1);
@@ -451,8 +454,8 @@ export default {
       //   this.bezierCurve.points.end.x != 0
       // ) {
       // 计算当前小球速度
-      this.bezierCurve.tSpeed =
-        1 / _getSpeed(this.bezierCurve, oCanvas.width, oCanvas.height) / 400;
+      // this.bezierCurve.tSpeed =
+      //   1 / _getSpeed(this.bezierCurve, oCanvas.width, oCanvas.height) / 400;
       //end小球存入当前的父曲线索引
       this.bezierCurve.points.end.parentIndex = this.pointsArr.bezierCurve.length;
       this.bezierCurve.index = this.pointsArr.bezierCurve.length;
@@ -564,7 +567,9 @@ export default {
       this.movePoint(this.bezierCurve.points);
       if (this.allBezierData.length > 0) {
         this.allBezierData.forEach((item, index) => {
-          _drawPointsALL(item.bezierCurve, contextBuffer, this.editState);
+          if(!this.allMotionState){
+            _drawPointsALL(item.bezierCurve, contextBuffer, this.editState);
+          }
           _drawCurveALL(item.bezierCurve, contextBuffer,this.editState,this.pIndex,this.gIndex);
           if (this.allMotionState) {
             _drawAnimationALL(
