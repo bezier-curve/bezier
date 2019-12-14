@@ -25,11 +25,13 @@ class BezierBall {
         ctx.strokeStyle = this.color;//填充颜色,默认是黑色
         // ctx.fillText(this.type, this.x + 10, this.y + 10);
         ctx.stroke()//画实心圆
+        ctx.closePath()
         ctx.beginPath()
         ctx.arc(this.x, this.y, 4 * this.scale, 0, 2 * Math.PI, false) // 顺时针
         ctx.fillStyle = this.color;//填充颜色,默认是黑色
         // ctx.fillText(this.type, this.x + 10, this.y + 10);
         ctx.fill()//画实心圆
+        ctx.closePath()
         
     }
     draw(ctx) {

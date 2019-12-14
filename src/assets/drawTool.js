@@ -1,4 +1,4 @@
-import { _isLastPoint, _getMoveXY, _getRotateXY } from "./baseTool";
+import { _getMoveXY, _getRotateXY } from "./baseTool";
 function _drawCurveALL(pointsArr, contextBuffer,editState,pIndex,gIndex) {
   if (pointsArr.length !== 0) {
     for (let item of pointsArr) {
@@ -43,18 +43,18 @@ function _drawAnimationALL(pointsArr, index, allBalls, contextBuffer, img) {
     [item.x, item.y] = _getMoveXY(pointsArr, item.loopIndex, item.t);
     let [xRoto, yRoto] = _getRotateXY(pointsArr, item.loopIndex, item.t);
     item.angle = Math.atan2(xRoto, yRoto) - Math.atan2(item.x, 0);
-    if (_isLastPoint(item.t, item.loopIndex, pointsArr.length)) {
-      item.t = 0;
-      // item.loopIndex = item.oldLoopIndex;
-      item.loopIndex = 0;
-    }
+    // if (_isLastPoint(item.t, item.loopIndex, pointsArr.length)) {
+    //   item.t = 0;
+    //   // item.loopIndex = item.oldLoopIndex;
+    //   item.loopIndex = 0;
+    // }
     //判断是否到最后一个点
     item.drawBall(contextBuffer, img);
     if (Math.floor(item.t) == 1) {
       item.t = 0;
-      item.loopIndex++;
+      // item.loopIndex++;
     }
-    item.t += 0.01;
+    item.t += 0.005;
     // item.t += pointsArr[item.loopIndex].tSpeed;
     
     // item.drawImg(contextBuffer)
@@ -118,34 +118,34 @@ function _drawCurve(pointsArr, bezierCurve, contextBuffer, motionState, allMotio
   }
 }
 //画路径点的动画函数
-function _drawAnimation(pointsArr, balls, contextBuffer) {
+function _drawAnimation(pointsArr, balls, contextBuffer,img) {
   contextBuffer.beginPath();
   //计算下一帧小球的x,y坐标
-  let img = new Image();
-  img.src = "../../../static/airplane.png";
+  // let img = new Image();
+  // img.src = "../../../static/airplane.png";
   balls.forEach(item => {
     [item.x, item.y] = _getMoveXY(pointsArr, item.loopIndex, item.t);
     let [xRoto, yRoto] = _getRotateXY(pointsArr, item.loopIndex, item.t);
     // 计算旋转角
     item.angle = Math.atan2(xRoto, yRoto) - Math.atan2(item.x, 0);
-    if (
-      _isLastPoint(
-        item.t,
-        item.loopIndex,
-        pointsArr.length
-      )
-    ) {
-      item.t = 0;
-      item.loopIndex = 0;
-    }
+    // if (
+    //   _isLastPoint(
+    //     item.t,
+    //     item.loopIndex,
+    //     pointsArr.length
+    //   )
+    // ) {
+    //   item.t = 0;
+    //   item.loopIndex = 0;
+    // }
     //判断是否到最后一个点
     if (Math.floor(item.t) == 1) {
       item.t = 0;
-      item.loopIndex++;
+      // item.loopIndex++;
     }
     // item.drawImg(contextBuffer)
     item.drawBall(contextBuffer, img);
-    item.t += pointsArr[item.loopIndex].tSpeed;
+    item.t += 0.005;
   });
   contextBuffer.fill();
 }
