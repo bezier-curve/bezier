@@ -213,14 +213,25 @@ export default {
     BezierCode,
     BezierCancas
   },
+  created () {
+    const vm = this
+    window.addEventListener('message', function(e) { 
+      if (e.origin !== 'http://localhost:8080') {
+        vm.uploadShow = false
+        vm.getImage(e.data)
+        vm.canvasShow = true
+      }
+    },false);
+  },
   mounted () {
     canvasObj = document.getElementsByClassName('canvas-image')[0]
     ctx = canvasObj.getContext('2d')
     this.canvasWidth = document.documentElement.clientWidth //  //canvasObj.offsetWidth
     this.canvasHeight = document.documentElement.clientHeight - 61  //  //canvasObj.offsetHeight
     ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
-    let imageSrc = localStorage.getItem('imageurl') || ''
-    this.getImage(imageSrc)
+    
+    // let imageSrc = localStorage.getItem('imageurl') || ''
+    // this.getImage(imageSrc)
   },
   methods: {
     btnOperation(index) {
@@ -333,16 +344,18 @@ export default {
     getImage (imgSrc) {
       const imageObj = new Image()
       const vm = this
-      imageObj.src = imgSrc
-      imageObj.onload = function() {
-        // debugger
-        const imageSize = vm.getImageSize(this.width, this.height)
-        ctx.drawImage(this, imageSize.left, imageSize.top, imageSize.width, imageSize.height)
+      if (imgSrc) {
+        imageObj.src = imgSrc
+        imageObj.setAttribute('crossOrigin', 'anonymous');
+        imageObj.crossOrigin = '*';
+        imageObj.onload = function() {
+          const imageSize = vm.getImageSize(this.width, this.height)
+          ctx.drawImage(this, imageSize.left, imageSize.top, imageSize.width, imageSize.height)
+        }
       }
     },
     getImageSize (oldWidth, oldHeight) {
       let imageSize = {}
-      // debugger
       const imageScale = oldWidth / oldHeight
       const canvasScale = this.canvasWidth / this.canvasHeight
       if ( canvasScale > imageScale ) {
