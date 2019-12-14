@@ -61,6 +61,14 @@ export default {
     isVisible: {
       type: Boolean,
       default: false
+    },
+    imgIcon: {
+      // type: HTMLElement,
+      default: function() {
+        // let img = new Image();
+        // img.src = "../../../static/airplane.png";
+        return '';
+      }
     }
   },
   data() {
@@ -103,7 +111,9 @@ export default {
       }
     }
   },
-  created() {},
+  created() {
+    
+  },
   mounted() {
     let _self = this;
     //鼠标移动坐标
@@ -248,7 +258,12 @@ export default {
       }
     };
     this.img = new Image();
-    this.img.src = "../../../static/airplane.png";
+    this.img.src = this.imgIcon == '' ? "../../../static/airplane.png" : this.imgIcon;
+  },
+  beforeUpdate(){
+    this.img = new Image();
+    this.img.src = this.imgIcon == '' ? "../../../static/airplane.png" : this.imgIcon;
+    console.log(234)
   },
   methods: {
     //数据初始化

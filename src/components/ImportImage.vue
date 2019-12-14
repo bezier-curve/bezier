@@ -138,7 +138,7 @@
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
     </el-upload>
     <canvas v-show="canvasShow" class="canvas-image" :width=canvasWidth :height=canvasHeight></canvas>
-    <bezier-cancas  ref="buttonList" :bezierStyle=bezierStyle :isVisible=isVisible style="position: absolute" @generateCode="generateCode"></bezier-cancas>
+    <bezier-cancas :imgIcon="imgIcon"  ref="buttonList" :bezierStyle=bezierStyle :isVisible=isVisible style="position: absolute" @generateCode="generateCode"></bezier-cancas>
     <bezier-code :isCodeShow="isCodeShow" :code="code" @close="handleClose"></bezier-code>
     <!-- <button>添加文件</button> -->
     <!-- <div class="file-input">
@@ -206,7 +206,9 @@ export default {
       uploadImgIcon: false,
       animationNum: 1,
       isCodeShow: false,
-      code: ''
+      code: '',
+      imgArrList: [],
+      imgIcon: ''
     }
   },
   components: {
@@ -221,6 +223,7 @@ export default {
     ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
     let imageSrc = localStorage.getItem('imageurl') || ''
     this.getImage(imageSrc)
+    this.imgArrList = [];
   },
   methods: {
     btnOperation(index) {
@@ -311,7 +314,7 @@ export default {
     },
     handleImport () {
       ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)  
-      const imgSrc = this.getObjectURL(this.file)
+      var imgSrc = this.getObjectURL(this.file)
       this.getImage(imgSrc)
     },
     handleClear () {
@@ -331,13 +334,16 @@ export default {
       this.code = code
     },
     getImage (imgSrc) {
-      const imageObj = new Image()
+      var imageObj = new Image()
       const vm = this
       imageObj.src = imgSrc
-      imageObj.onload = function() {
-        // debugger
+      this.imgArrList.push(imageObj)
+      this.imgArrList[0].onload = function() {
         const imageSize = vm.getImageSize(this.width, this.height)
-        ctx.drawImage(this, imageSize.left, imageSize.top, imageSize.width, imageSize.height)
+        ctx.drawImage(vm.imgArrList[0], imageSize.left, imageSize.top, imageSize.width, imageSize.height)
+      }
+      if (vm.imgArrList.length > 1) {
+        this.imgIcon = vm.imgArrList[vm.imgArrList.length - 1].src
       }
     },
     getImageSize (oldWidth, oldHeight) {
