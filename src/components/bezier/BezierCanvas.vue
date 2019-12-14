@@ -69,6 +69,10 @@ export default {
         // img.src = "../../../static/airplane.png";
         return '';
       }
+    },
+    theme: {
+      type: String,
+      default: 'dark'
     }
   },
   data() {
@@ -109,6 +113,20 @@ export default {
         this.initData();
         this.initCanvas();
       }
+    },
+    theme(newVal) {
+      this.setTheme(newVal, this.bezierCurve.points);
+      this.initOperation();
+      this.bezierCurve.color = newVal == 'dark' ? '#80E800' : '#1240AB'
+/*       改变整条曲线的颜色
+      this.pointsArr.bezierCurve.forEach(item => {
+        this.setTheme(newVal, item.points);
+        item.color = newVal == 'dark' ? '#80E800' : '#1240AB'
+      }) */
+    },
+    imgIcon(imgIcon) {
+      this.img = new Image();
+      this.img.src = imgIcon == '' ? "../../../static/airplane.png" : imgIcon;
     }
   },
   created() {
@@ -260,20 +278,15 @@ export default {
     this.img = new Image();
     this.img.src = this.imgIcon == '' ? "../../../static/airplane.png" : this.imgIcon;
   },
-  beforeUpdate(){
+/*   beforeUpdate(){
+    debugger
     this.img = new Image();
     this.img.src = this.imgIcon == '' ? "../../../static/airplane.png" : this.imgIcon;
-    console.log(234)
-  },
+  }, */
   methods: {
     //数据初始化
     initData() {
-      // let option = {
-      //   x: 100,
-      //   y: 100,
-      //   color: "#FF24FF",
-      //   radius: 10
-      // };
+      //初始化运动小球，初始化贝塞尔大曲线
       let optionStart = {
         x: 100,
         y: 100,
@@ -305,12 +318,38 @@ export default {
         c2: new BezierBall(optionC2),
         end: new BezierBall(optionEnd)
       };
+      // let color = this.theme == 'dark' ? '#80E800' : '#1240AB';
       this.bezierCurve = new BezierCurve({ points: points });
-      this.bezierCurve.points.start.selectable = true;
+      this.pointsArr = new JointBezier({});
+      this.initOperation()
+    },
+    initOperation(){
+      // let points = this.setTheme(this.theme,this.bezierCurve.points);
+      // this.bezierCurve = new BezierCurve({ points: points, color: color});
+      if(this.pointsArr&&this.pointsArr.bezierCurve.length>0){
+          this.bezierCurve.points.start.selectable = false;
+      }else{
+        this.bezierCurve.points.start.selectable = true;
+      }
       this.bezierCurve.points.c1.selectable = true;
       this.bezierCurve.points.c2.selectable = true;
       this.bezierCurve.points.end.selectable = true;
-      this.pointsArr = new JointBezier({});
+    },
+    setTheme(theme,points) {
+      switch(theme) {
+        case 'dark':
+          points.start.color = '#FF3900'
+          points.c1.color = '#F7FE40' 
+          points.c2.color = '#F7FE40'
+          points.end.color = '#FF3900'
+          break;
+        case 'light':
+          points.start.color = '#79008A'
+          points.c1.color = '#FFBF00' 
+          points.c2.color = '#FFBF00'
+          points.end.color = '#79008A'
+          break;
+      }
     },
     initCanvas() {
       // oCanvas = document.querySelector("canvas");
