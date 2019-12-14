@@ -33,8 +33,7 @@ import {
   _drawAnimation,
   _drawPoints,
   _drawCurve,
-  _changCurveStyle,
-  _changPointsStyle
+  _changCurveStyle
 } from "../../assets/drawTool";
 import { cloneDeep } from "lodash";
 import animationBall from "../../assets/animationBall";
@@ -142,7 +141,7 @@ export default {
       _self.clickPositionY =
         e.clientY - _self.$refs["bubble"].getBoundingClientRect().y;
       if (!_self.editState) {
-        if (_self.bezierCurve.points && _self.bezierCurve.points.length != 0) {
+        if (_self.bezierCurve.points && _self.bezierCurve.points.length != 0&& _self.bezierCurve.points.start.x > 0) {
           for (let type in _self.bezierCurve.points) {
             if (
               _self.bezierCurve.points[type].selectable &&
@@ -161,6 +160,8 @@ export default {
               }
             }
           }
+        }else{
+          _self.putPoints( _self.bezierCurve.points,_self.pointsArr.bezierCurve, _self.clickPositionX,_self.clickPositionY)
         }
       } else {
         if (_self.allBezierData && _self.allBezierData.length != 0) {
@@ -419,7 +420,6 @@ export default {
         ].points.end.y;
       } else {
         alert("这已是最新修改");
-        _changPointsStyle(this.allBezierData, "color", "#00F", 1);
       }
     },
     edit() {
@@ -451,6 +451,10 @@ export default {
       this.motionState = false;
     },
     joinPath() {
+      if(this.bezierCurve.points.start.x<0){
+        alert('不能加入空路径')
+        return;
+      }
       // if (
       //   this.bezierCurve.points.start.x != 0 &&
       //   this.bezierCurve.points.c1.x != 0 &&
@@ -494,31 +498,34 @@ export default {
       // this.beginTextA = this.allMotionState ? "停下" : "开始全路径动画";
       // this.bezierCurve.points.start = Object.assign({}, this.pointsArr.bezierCurve[this.pointsArr.bezierCurve.length - 1].points.end);
       //
-      this.bezierCurve.points.start.x = this.pointsArr.bezierCurve[
-        this.pointsArr.bezierCurve.length - 1
-      ].points.end.x;
-      this.bezierCurve.points.start.y = this.pointsArr.bezierCurve[
-        this.pointsArr.bezierCurve.length - 1
-      ].points.end.y;
+      this.bezierCurve.points.start.x = -10000;
+      this.bezierCurve.points.start.y = -10000
       this.bezierCurve.points.start.selectable = false;
-      this.bezierCurve.points.c1.x =
-        this.pointsArr.bezierCurve[this.pointsArr.bezierCurve.length - 1].points
-          .end.x + 100;
-      this.bezierCurve.points.c1.y = this.pointsArr.bezierCurve[
-        this.pointsArr.bezierCurve.length - 1
-      ].points.end.y;
-      this.bezierCurve.points.c2.x = this.pointsArr.bezierCurve[
-        this.pointsArr.bezierCurve.length - 1
+      this.bezierCurve.points.c1.x = -10000;
+      this.bezierCurve.points.c1.y = -10000;
+      this.bezierCurve.points.c2.x = -10000;
+      this.bezierCurve.points.c2.y = -10000;
+      this.bezierCurve.points.end.x = -10000;
+      this.bezierCurve.points.end.y = -10000;
+    },
+    putPoints(points,bezierCurve,m_x,m_y){
+      if (m_x < 0||m_x> oCanvas.width||m_y < 0||m_y> oCanvas.height) {
+        return
+      } 
+      points.start.x = bezierCurve[
+        bezierCurve.length - 1
       ].points.end.x;
-      this.bezierCurve.points.c2.y =
-        this.pointsArr.bezierCurve[this.pointsArr.bezierCurve.length - 1].points
-          .end.y + 100;
-      this.bezierCurve.points.end.x =
-        this.pointsArr.bezierCurve[this.pointsArr.bezierCurve.length - 1].points
-          .end.x + 100;
-      this.bezierCurve.points.end.y =
-        this.pointsArr.bezierCurve[this.pointsArr.bezierCurve.length - 1].points
-          .end.y + 100;
+      points.start.y = bezierCurve[
+        bezierCurve.length - 1
+      ].points.end.y;
+      points.start.selectable = false;
+      points.end.x = m_x;
+      points.end.y = m_y;
+      points.c1.x = points.start.x + 100;
+      points.c1.y = points.start.y
+      points.c2.x = m_x
+      points.c2.y = m_y + 100;
+      
     },
     anotherPath() {
       //判断加入时是否位于栈顶，否则移除当前index后的所有数据
