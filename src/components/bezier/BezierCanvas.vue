@@ -27,19 +27,19 @@
 // import basicObj from "../../assets/prop_ball";
 import { _getDistance } from "../../assets/baseTool";
 import {
-  _drawCurveALL,
-  _drawPointsALL,
-  _drawAnimationALL,
-  _drawAnimation,
-  _drawPoints,
-  _drawCurve,
-  _changCurveStyle
+  _drawCurveALL, //画已加入的长曲线函数
+  _drawPointsALL,//画已加入的长曲线的小球函数
+  _drawAnimationALL,//画已加入的长曲线动画函数
+  _drawAnimation,//画正在操作的长曲线动画函数
+  _drawPoints,//画正在操作的长曲线的小球
+  _drawCurve,//画正在操作的长曲线函数
+  _changCurveStyle//改变曲线属性函数
 } from "../../assets/drawTool";
 import { cloneDeep } from "lodash";
-import animationBall from "../../assets/animationBall";
-import BezierBall from "../../assets/bezierBall";
-import BezierCurve from "../../assets/bezierCurve";
-import JointBezier from "../../assets/jointBezier";
+import animationBall from "../../assets/animationBall";//动画小球对象
+import BezierBall from "../../assets/bezierBall";//贝塞尔小球对象
+import BezierCurve from "../../assets/bezierCurve";//贝塞尔曲线对象
+import JointBezier from "../../assets/jointBezier";//大贝塞尔曲线对象
 let oCanvas;
 let ctx;
 let canvasBuffer;
@@ -81,23 +81,20 @@ export default {
       editState: false, //编辑状态
       mousePositionX: 0, //鼠标坐标x
       mousePositionY: 0, //鼠标坐标y
-      bezierCurve: {},
-      pointsArr: {},
-      positionXDown: 0,
-      positionYDown: 0,
-      tSpeed: 0.001,
+      bezierCurve: {},//正在操作的小贝塞尔曲线对象
+      pointsArr: {},//正在操作的大贝塞尔曲线对象
+      tSpeed: 0.001,//曲线速度
       // beginText: "开始当前操作路径动画",
       // allBeginText: "开始全路径动画",
-      balls: [],
-      allBalls: [],
-      bezierPoint: [],
-      allBezierData: [],
-      clickPositionX: 0,
-      clickPositionY: 0,
-      img: "",
-      dataStack: { data: [], index: 0 },
-      changingCurve: [],
-      editChange: false,
+      balls: [],//正在操作的曲线的动画数组
+      allBalls: [],//已加入大路径的曲线的动画数组
+      allBezierData: [],//全路径贝塞尔对象（导出的数据值）
+      clickPositionX: 0,//鼠标点击x坐标
+      clickPositionY: 0,//鼠标点击Y坐标
+      img: "",//导入的运动图片
+      dataStack: { data: [], index: 0 },//贝塞尔路径栈（前进，后退）
+      changingCurve: [],//修改时的两个贝塞尔对象
+      editChange: false,//是否正在修改
       movingBallNum:0,
       movingBallSpeed:0,
       movingBallType:'a',
@@ -123,6 +120,7 @@ export default {
         item.color = newVal == 'dark' ? '#80E800' : '#1240AB'
       }) */
     },
+    //监听导入图片
     imgIcon(imgIcon) {
       this.img = new Image();
       this.img.src = imgIcon == '' ? "../../../static/airplane.png" : imgIcon;
@@ -147,7 +145,7 @@ export default {
         return
       }
       let e = event || window.event || arguments.callee.caller.arguments[0];
-      console.log(_self.pointsArr.bezierCurve.length) 
+      // console.log(_self.pointsArr.bezierCurve.length) 
       if (e && e.keyCode == 81 && _self.pointsArr.bezierCurve.length == 0) {
         // 按 q
         _self.delKeyDown("start", _self.bezierCurve.points);
@@ -171,7 +169,7 @@ export default {
         e.clientX - _self.$refs["bubble"].getBoundingClientRect().x;
       _self.clickPositionY =
         e.clientY - _self.$refs["bubble"].getBoundingClientRect().y;
-      if (!_self.editState) {
+      if (!_self.editState) {//不是修改状态时
         if (_self.bezierCurve.points && _self.bezierCurve.points.length != 0&& _self.bezierCurve.points.start.x > 0) {
           for (let type in _self.bezierCurve.points) {
             if (
@@ -185,22 +183,23 @@ export default {
                 _self.clickPositionX,
                 _self.clickPositionY
               );
+              //如果距离小于半径为选中状态
               if (distanceALL < _self.bezierCurve.points[type].radius + 8) {
                 _self.bezierCurve.points[type].isSelect = true;
                 return;
               }
             }
           }
-        }else{
+        }else{//加入路径后没操作线段时重新初始化正在操作的贝塞尔曲线对象
           _self.putPoints( _self.bezierCurve.points,_self.pointsArr.bezierCurve, _self.clickPositionX,_self.clickPositionY)
         }
-      } else {
+      } else {//如果是修改状态
         if (_self.allBezierData && _self.allBezierData.length != 0) {
           let distance = 0;
           let selectFlag = false;
-          _self.allBezierData.forEach(bezierCurve => {
+          _self.allBezierData.forEach(bezierCurve => {//循环遍历全路径贝塞尔曲线的贝塞尔终点小球
             for (let curve in bezierCurve.bezierCurve) {
-              if (bezierCurve.bezierCurve[curve].points.end.selectable) {
+              if (bezierCurve.bezierCurve[curve].points.end.selectable) {//判断当前小球是否可被选中
                 distance = _getDistance(
                   bezierCurve.bezierCurve[curve].points.end.x,
                   bezierCurve.bezierCurve[curve].points.end.y,
@@ -210,30 +209,30 @@ export default {
                 if (
                   distance <
                   bezierCurve.bezierCurve[curve].points.end.radius + 8
-                ) {
-                  if (!selectFlag) {
+                ) {//如果有一个小球满足这个条件
+                  if (!selectFlag) {//当前判断的第一个小球（保证了一次循环只能选中一个小球）
                     selectFlag = true;
                     _self.editChange = true;
-                    _self.changingCurve = [];
-                    bezierCurve.bezierCurve[curve].points.end.isSelect = true;
-                    bezierCurve.bezierCurve[curve].points.end.color = "#040090";
+                    _self.changingCurve = [];//置空ing修改的数组
+                    // bezierCurve.bezierCurve[curve].points.end.isSelect = true;//改变小球被选中的状态
+                    bezierCurve.bezierCurve[curve].points.end.color = "#040090";//改变其颜色
                     _self.pIndex =
-                      bezierCurve.bezierCurve[curve].points.end.parentIndex;
+                      bezierCurve.bezierCurve[curve].points.end.parentIndex;//全局中被选中的是那一条小曲线index
                     _self.gIndex =
                       bezierCurve.bezierCurve[curve].points.end
-                        .grandParentIndex;
-                    if (bezierCurve.bezierCurve[Number(curve) + 1]) {
-                      _self.changingCurve.push(bezierCurve.bezierCurve[curve]);
+                        .grandParentIndex;//全局中被选中的是那一条大曲线的index
+                    if (bezierCurve.bezierCurve[Number(curve) + 1]) {//是否有后一条曲线
+                      _self.changingCurve.push(bezierCurve.bezierCurve[curve]);//加入修改数组
                       _self.changingCurve.push(
                         bezierCurve.bezierCurve[Number(curve) + 1]
                       );
-                    } else {
-                      _self.changingCurve.push(bezierCurve.bezierCurve[curve]);
+                    } else {//没有后一条曲线
+                      _self.changingCurve.push(bezierCurve.bezierCurve[curve]);//加入修改数组
                     }
                     // console.log(_self.changingCurve);
-                    bezierCurve.bezierCurve[curve].isSelected = true;
+                    bezierCurve.bezierCurve[curve].isSelected = true;//当前曲线被选中的状态置为true
                   }
-                } else {
+                } else {//把其他的小球选中状态置空，置回原有的颜色
                   bezierCurve.bezierCurve[curve].points.end.isSelect = false;
                   bezierCurve.bezierCurve[curve].isSelected = false;
                   bezierCurve.bezierCurve[curve].points.end.color = "#740090";
@@ -696,7 +695,7 @@ export default {
           }
         });
       }
-      if (this.editChange && this.changingCurve.length > 0) {
+      if (this.editChange && this.changingCurve.length > 0) {//画正在操作的线段
         for (let changingItem in this.changingCurve[0].points) {
           this.changingCurve[0].points[changingItem].drawBall(contextBuffer);
         }
@@ -722,9 +721,9 @@ export default {
       ctx.drawImage(canvasBuffer, 0, 0);
       // ctx.fill();
     },
-
+    //移动小球
     movePoint(usingPoint) {
-      if (!this.editChange) {
+      if (!this.editChange) {//不是修改状态
         for (let type in usingPoint) {
           if (usingPoint[type].isSelect) {
             usingPoint[type].MoveBall(this.mousePositionX, this.mousePositionY);
@@ -732,7 +731,7 @@ export default {
             // usingPoint[type].draw(contextBuffer);
           }
         }
-      } else {
+      } else {//修改状态
         this.changingCurve[0].draw(contextBuffer);
         for (let type in this.changingCurve[0].points) {
           if (this.changingCurve[0].points[type].isSelect) {

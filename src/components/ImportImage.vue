@@ -309,7 +309,7 @@ export default {
         case 16:    //更改移动图标个数
           this.$refs.buttonList.generateCode();
           break;
-        case 17:
+        case 17:    //删除路径
           delCurve(this.$refs.buttonList.allBezierData, this.$refs.buttonList.gIndex);
       }
     },
