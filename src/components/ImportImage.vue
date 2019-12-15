@@ -30,7 +30,7 @@
           </el-tooltip>
         </template>
         <el-menu-item index="4-1">
-          <el-slider :max=0.1 :step=0.01 :min=0  v-model="speed" @change="btnOperation(4)"></el-slider>
+          <el-slider :max=0.02 :step=0.002 :min=0.001  v-model="speed" @change="btnOperation(4)"></el-slider>
         </el-menu-item>
       </el-submenu>
       <el-menu-item index="5">
@@ -116,10 +116,27 @@
           <span>加入新路径</span> 
         </el-tooltip>
       </el-menu-item>
-      <el-menu-item index="10" @click="btnOperation(16)">
+      <el-menu-item index="16" @click="btnOperation(16)">
         <el-tooltip class="item" effect="dark" content="生成代码" placement="bottom">
           <!-- <i class="el-icon-menu"></i> -->
           <span>生成代码</span> 
+        </el-tooltip>
+      </el-menu-item>
+      <el-menu-item index="17" @click="btnOperation(17)">
+        <el-tooltip class="item" effect="dark" content="删除曲线" placement="bottom">
+          <span>删除曲线</span> 
+        </el-tooltip>
+      </el-menu-item>
+      <el-menu-item index="18" @click="btnOperation(18)">
+        <el-tooltip class="item" effect="dark" content="删除曲线" placement="bottom">
+          <el-switch
+            v-model="selectTheme"
+            active-text="昏暗模式"
+            inactive-text="明亮模式"
+            active-color="#80E800"
+            inactive-color="#CD0074"
+            @change="changeTheme">
+          </el-switch>
         </el-tooltip>
       </el-menu-item>
     </el-menu>
@@ -138,7 +155,7 @@
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
     </el-upload>
     <canvas v-show="canvasShow" class="canvas-image" :width=canvasWidth :height=canvasHeight></canvas>
-    <bezier-cancas  ref="buttonList" :bezierStyle=bezierStyle :isVisible=isVisible style="position: absolute" @generateCode="generateCode"></bezier-cancas>
+    <bezier-cancas :imgIcon="imgIcon" :theme="theme"  ref="buttonList" :bezierStyle=bezierStyle :isVisible=isVisible style="position: absolute" @generateCode="generateCode"></bezier-cancas>
     <bezier-code :isCodeShow="isCodeShow" :code="code" @close="handleClose"></bezier-code>
     <!-- <button>添加文件</button> -->
     <!-- <div class="file-input">
@@ -158,6 +175,7 @@
         multiple
         :auto-upload=false
         :on-change="getFile"
+        ref="dialogUpload"
         @handleImport="handleImport">
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -174,7 +192,7 @@
 import BezierCode from '@/components/BezierCode.vue'
 import BazierCurve from '../assets/bezierCurve.js'
 import BezierCancas from './bezier/BezierCanvas.vue'
-import { _changPointsStyle, _changCurveStyle } from '../assets/drawTool.js'
+import { _changPointsStyle, _changCurveStyle, delCurve } from '../assets/drawTool.js'
 let canvasObj, ctx
 export default {
   data() {
@@ -206,12 +224,27 @@ export default {
       uploadImgIcon: false,
       animationNum: 1,
       isCodeShow: false,
-      code: ''
+      code: '',
+      imgArrList: [],
+      imgIcon: '',
+      theme: 'dark',
+      selectTheme: true,
+      imgSize: []
     }
   },
   components: {
     BezierCode,
     BezierCancas
+  },
+  created () {
+    const vm = this
+    window.addEventListener('message', function(e) { 
+      if (e.origin !== 'http://localhost:8080') {
+        vm.uploadShow = false
+        vm.getImage(e.data)
+        vm.canvasShow = true
+      }
+    },false);
   },
   mounted () {
     canvasObj = document.getElementsByClassName('canvas-image')[0]
@@ -219,8 +252,9 @@ export default {
     this.canvasWidth = document.documentElement.clientWidth //  //canvasObj.offsetWidth
     this.canvasHeight = document.documentElement.clientHeight - 61  //  //canvasObj.offsetHeight
     ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
-    let imageSrc = localStorage.getItem('imageurl') || ''
-    this.getImage(imageSrc)
+    // let imageSrc = localStorage.getItem('imageurl') || ''
+    // this.getImage(imageSrc)
+    this.imgArrList = [];
   },
   methods: {
     btnOperation(index) {
@@ -275,6 +309,8 @@ export default {
         case 16:    //更改移动图标个数
           this.$refs.buttonList.generateCode();
           break;
+        case 17:
+          delCurve(this.$refs.buttonList.allBezierData, this.$refs.buttonList.gIndex);
       }
     },
     getCurveColor(color) {
@@ -311,7 +347,7 @@ export default {
     },
     handleImport () {
       ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)  
-      const imgSrc = this.getObjectURL(this.file)
+      var imgSrc = this.getObjectURL(this.file)
       this.getImage(imgSrc)
     },
     handleClear () {
@@ -331,18 +367,30 @@ export default {
       this.code = code
     },
     getImage (imgSrc) {
-      const imageObj = new Image()
+      var imageObj = new Image()
       const vm = this
-      imageObj.src = imgSrc
-      imageObj.onload = function() {
-        // debugger
-        const imageSize = vm.getImageSize(this.width, this.height)
-        ctx.drawImage(this, imageSize.left, imageSize.top, imageSize.width, imageSize.height)
+      if (imgSrc) {
+        imageObj.src = imgSrc
+        imageObj.setAttribute('crossOrigin', 'anonymous');
+        imageObj.crossOrigin = '*';
+        this.imgArrList.push(imageObj)
+        imageObj.onload = function() {
+          if(vm.imgSize.length == 0) {
+            const imageSize = vm.getImageSize(this.width, this.height)
+            vm.imgSize.push(imageSize.left, imageSize.top, imageSize.width, imageSize.height)
+          }
+          ctx.drawImage(vm.imgArrList[0], vm.imgSize[0], vm.imgSize[1], vm.imgSize[2], vm.imgSize[3])
+        }
+        if (vm.imgArrList.length > 1) {
+          this.$refs.dialogUpload.clearFiles();
+          this.imgIcon = vm.imgArrList[vm.imgArrList.length - 1].src
+          this.uploadImgIcon = false;
+          // this.$Message.success('小图标已上传')
+        }
       }
     },
     getImageSize (oldWidth, oldHeight) {
       let imageSize = {}
-      // debugger
       const imageScale = oldWidth / oldHeight
       const canvasScale = this.canvasWidth / this.canvasHeight
       if ( canvasScale > imageScale ) {
@@ -387,6 +435,10 @@ export default {
     closeDialog () {
       this.uploadImgIcon = false;
       this.AnimationType = '';
+    },
+    changeTheme (val) {
+      // false 明亮   true 黑暗
+      this.theme = val ? 'dark' : 'light';
     }
   }
 }
