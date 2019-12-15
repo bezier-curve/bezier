@@ -2,7 +2,7 @@
 class BezierCurve {
   constructor(options, scale) {
     this.points = options.points||[]
-    this.color = options.color || '#0F0'
+    this.color = options.color || '#66FFFF'
     // this.editColor =  '#764587'
     this.size = options.size * (scale || 1) || 2
     this.parentIndex = options.parentIndex || 0
@@ -51,7 +51,7 @@ class BezierCurve {
   } 
   _drawCtrl1 (ctx) {
     ctx.lineWidth = 2
-    ctx.strokeStyle = '#111'
+    ctx.strokeStyle = '#333'
     ctx.beginPath()
     ctx.moveTo(this.points.start.x, this.points.start.y)
     ctx.lineTo(this.points.c1.x, this.points.c1.y)
@@ -60,7 +60,7 @@ class BezierCurve {
   }
   _drawCtrl2 (ctx) {
     ctx.lineWidth = 2
-    ctx.strokeStyle = '#111'
+    ctx.strokeStyle = '#333'
     ctx.beginPath()
     ctx.moveTo(this.points.end.x, this.points.end.y)
     ctx.lineTo(this.points.c2.x, this.points.c2.y)

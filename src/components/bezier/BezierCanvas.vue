@@ -115,6 +115,9 @@ export default {
     };
     //键盘事件
     document.onkeydown = function() {
+      if(!oCanvas){
+        return
+      }
       let e = event || window.event || arguments.callee.caller.arguments[0];
       console.log(_self.pointsArr.bezierCurve.length) 
       if (e && e.keyCode == 81 && _self.pointsArr.bezierCurve.length == 0) {
@@ -268,24 +271,28 @@ export default {
       let optionStart = {
         x: 100,
         y: 100,
+        type:'start',
         color: "#FE2400",
         radius: 14
       };
       let optionC1 = {
         x: 100,
         y: 200,
+        type:'c1',
         color: "#FF6600",
         radius: 20
       };
       let optionC2 = {
         x: 200,
         y: 100,
+        type:'c2',
         color: "#FF6600",
         radius: 20
       };
       let optionEnd = {
         x: 200,
         y: 200,
+        type:'end',
         color: "#FE2400",
         radius: 14
       };
@@ -509,7 +516,7 @@ export default {
       this.bezierCurve.points.end.y = -10000;
     },
     putPoints(points,bezierCurve,m_x,m_y){
-      if (m_x < 0||m_x> oCanvas.width||m_y < 0||m_y> oCanvas.height) {
+      if (!oCanvas||m_x < 0||m_x> oCanvas.width||m_y < 0||m_y> oCanvas.height) {
         return
       } 
       points.start.x = bezierCurve[
@@ -518,13 +525,55 @@ export default {
       points.start.y = bezierCurve[
         bezierCurve.length - 1
       ].points.end.y;
-      points.start.selectable = false;
       points.end.x = m_x;
       points.end.y = m_y;
-      points.c1.x = points.start.x + 100;
-      points.c1.y = points.start.y
-      points.c2.x = m_x
-      points.c2.y = m_y + 100;
+      if(points.start.x+100<oCanvas.width){
+        points.c1.x = points.start.x + 100;
+      }else{
+        points.c1.x = points.start.x - 100;
+      }
+      if(points.start.x-100>0){
+        points.c1.x = points.start.x - 100;
+      }else{
+        points.c1.x = points.start.x + 100;
+      }
+      if(points.start.y+100<oCanvas.height){
+        points.c1.y = points.start.y + 100;
+      }else{
+        points.c1.y = points.start.y - 100;
+      }
+      if(points.start.y-100>0){
+        points.c1.y = points.start.y - 100;
+      }else{
+        points.c1.y = points.start.y + 100;
+      }
+
+      if(points.end.x+100<oCanvas.width){
+        points.c2.x = points.end.x + 100;
+      }else{
+        points.c2.x = points.end.x - 100;
+      }
+      if(points.end.x-100>0){
+        points.c2.x = points.end.x - 100;
+      }else{
+        points.c2.x = points.end.x + 100;
+      }
+      if(points.end.y+100<oCanvas.height){
+        points.c2.y = points.end.y + 100;
+      }else{
+        points.c2.y = points.end.y - 100;
+      }
+      if(points.end.y-100>0){
+        points.c2.y = points.end.y - 100;
+      }else{
+        points.c2.y = points.end.y + 100;
+      }
+      points.start.selectable = false;
+      
+      // points.c1.x = points.start.x + 100;
+      // points.c1.y = points.start.y
+      // points.c2.x = m_x
+      // points.c2.y = m_y + 100;
       
     },
     anotherPath() {

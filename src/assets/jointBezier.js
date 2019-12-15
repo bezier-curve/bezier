@@ -7,7 +7,6 @@ class JointBezier {
             this.isSelect = false;
     }
     changCurveStyle(allData,type,value,index) {
-        console.log('aa')
         for(let bezierIndex in allData[index].bezierCurve){
             console.log(allData[index].bezierCurve)
             console.log(allData[index].bezierCurve[bezierIndex][type])
