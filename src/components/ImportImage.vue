@@ -193,6 +193,7 @@ import BezierCode from '@/components/BezierCode.vue'
 import BazierCurve from '../assets/bezierCurve.js'
 import BezierCancas from './bezier/BezierCanvas.vue'
 import { _changPointsStyle, _changCurveStyle, delCurve } from '../assets/drawTool.js'
+import { isString } from 'lodash'
 let canvasObj, ctx
 export default {
   data() {
@@ -239,7 +240,7 @@ export default {
   created () {
     const vm = this
     window.addEventListener('message', function(e) { 
-      if (e.origin !== 'http://localhost:8080') {
+      if (isString(e.data)) {
         vm.uploadShow = false
         vm.getImage(e.data)
         vm.canvasShow = true
