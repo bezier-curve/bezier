@@ -2,93 +2,21 @@
 <div>
   <div class="header">
     <el-menu default-active="1" mode="horizontal">
-      <el-menu-item index="1" @click="btnOperation(1)">
-        <el-tooltip v-if="!currentAnimationState" class="item" effect="dark" content="开始当前操作路径动画" placement="bottom">
-          <i class="el-icon-location"></i>
-        </el-tooltip>
-        <el-tooltip v-else class="item" effect="dark" content="停下" placement="bottom">
-          <i class="el-icon-video-pause"></i>
+      <el-menu-item index="9" @click="btnOperation(9)">
+        <el-tooltip class="item" effect="dark" content="加入路径" placement="bottom">
+          <i class="el-icon-plus"></i>
         </el-tooltip>
       </el-menu-item>
-      <el-menu-item index="2" @click="btnOperation(2)">
-        <el-tooltip v-if="!allAnimationState" class="item" effect="dark" content="开始全路径动画" placement="bottom">
-          <i class="el-icon-menu"></i>
-        </el-tooltip>
-        <el-tooltip v-else class="item" effect="dark" content="停下" placement="bottom">
-          <i class="el-icon-video-pause"></i>
+      <el-menu-item index="10" @click="btnOperation(10)">
+        <el-tooltip class="item" effect="dark" content="加入新路径" placement="bottom">
+          <i class="el-icon-document-add"></i>
         </el-tooltip>
       </el-menu-item>
-      <!-- <el-menu-item index="3" @click="btnOperation(3)">
-        <el-tooltip class="item" effect="dark" content="停下" placement="bottom">
-          <i class="el-icon-video-pause"></i>
-        </el-tooltip>
-      </el-menu-item> -->
-      <el-submenu index="4">
-        <template slot="title">
-          <el-tooltip class="item" effect="dark" content="速度选择" placement="bottom">
-            <i class="el-icon-setting"></i>
-          </el-tooltip>
-        </template>
-        <el-menu-item index="4-1">
-          <el-slider :max=0.02 :step=0.002 :min=0.001  v-model="speed" @change="btnOperation(4)"></el-slider>
-        </el-menu-item>
-      </el-submenu>
-      <el-menu-item index="5">
-        <template slot="title">
-          <el-tooltip class="item" effect="dark" content="更改小球颜色" placement="bottom">
-            <el-color-picker v-model="ballColor" color-format='hex' @active-change='getBallColor'  size="mini"></el-color-picker>
-          </el-tooltip>
-        </template>
-      </el-menu-item>
-      <el-menu-item index="6"> 
-        <!-- @click="btnOperation(6)" -->
-        <template slot="title">
-          <el-tooltip class="item" effect="dark" content="更改曲线颜色" placement="bottom">
-            <el-color-picker v-model="curveColor" color-format='hex' @active-change='getCurveColor' size="mini"></el-color-picker>
-          </el-tooltip>
-        </template>
-      </el-menu-item>
-      <el-submenu index="7">
-        <template slot="title">
-          <el-tooltip class="item" effect="dark" content="更改曲线粗细" placement="bottom">
-            <i class="el-icon-s-open"></i>
-          </el-tooltip>
-        </template>
-        <el-menu-item index="7-1">
-          <el-slider v-model="curveSize" @change="btnOperation(7)"></el-slider>
-        </el-menu-item>
-      </el-submenu>
-      <!-- <el-submenu index="15" @click="btnOperation(15)"> -->
-        
-        <el-menu-item index="15-1">
-          <!-- <template slot="title">
-            <el-tooltip class="item" effect="dark" content="" placement="bottom">
-              <i class="el-icon-s-open"></i>
-            </el-tooltip>
-          </template> -->
-          <el-input v-model="animationNum" size='mini' style="width:140px" placeholder="设置移动图标个数"></el-input>
-        </el-menu-item>
-      <!-- </el-submenu> -->
-      <el-menu-item index="14" @click="btnOperation(14)">
-        <template slot="title">
-          <!-- <el-tooltip class="item" effect="dark" content="更改动态图标" placement="bottom"> -->
-            <!-- <i class="el-icon-s-open"></i> -->
-            <el-select @change="getAnimationType" v-model="AnimationType" style="width:130px" size='mini' placeholder="更改移动图标">
-            <el-option
-              v-for="item in AnimationTypes"
-              :key="item.value"
-              :label="item.text"
-              :value="item.value">
-            </el-option>
-          </el-select>
-          <!-- </el-tooltip> -->
-        </template>
-      </el-menu-item>
-      <el-menu-item index="8" @click="btnOperation(8)">
+      <!-- <el-menu-item index="8" @click="btnOperation(8)">
         <el-tooltip class="item" effect="dark" content="重绘" placement="bottom">
           <i class="el-icon-refresh"></i>
         </el-tooltip>
-      </el-menu-item> 
+      </el-menu-item>  -->
       <el-menu-item index="11" @click="btnOperation(11)">
         <el-tooltip class="item" effect="dark" content="回退" placement="bottom">
           <i class="el-icon-arrow-left"></i>
@@ -104,40 +32,96 @@
           <i class="el-icon-edit"></i>
         </el-tooltip>
       </el-menu-item>
-      <el-menu-item index="9" @click="btnOperation(9)">
-        <el-tooltip class="item" effect="dark" content="加入路径" placement="bottom">
-          <!-- <i class="el-icon-menu"></i> -->
-          <span>加入路径</span> 
-        </el-tooltip>
-      </el-menu-item>
-      <el-menu-item index="10" @click="btnOperation(10)">
-        <el-tooltip class="item" effect="dark" content="加入新路径" placement="bottom">
-          <!-- <i class="el-icon-menu"></i> -->
-          <span>加入新路径</span> 
-        </el-tooltip>
-      </el-menu-item>
-      <el-menu-item index="16" @click="btnOperation(16)">
-        <el-tooltip class="item" effect="dark" content="生成代码" placement="bottom">
-          <!-- <i class="el-icon-menu"></i> -->
-          <span>生成代码</span> 
-        </el-tooltip>
-      </el-menu-item>
       <el-menu-item index="17" @click="btnOperation(17)">
         <el-tooltip class="item" effect="dark" content="删除曲线" placement="bottom">
-          <span>删除曲线</span> 
+          <i class="el-icon-delete"></i>
         </el-tooltip>
       </el-menu-item>
-      <el-menu-item index="18" @click="btnOperation(18)">
-        <el-tooltip class="item" effect="dark" content="删除曲线" placement="bottom">
-          <el-switch
-            v-model="selectTheme"
-            active-text="昏暗模式"
-            inactive-text="明亮模式"
-            active-color="#80E800"
-            inactive-color="#CD0074"
-            @change="changeTheme">
-          </el-switch>
+      <!-- <el-divider direction="vertical"></el-divider> -->
+      <el-menu-item index="1" @click="btnOperation(1)">
+        <el-tooltip v-if="!currentAnimationState" class="item" effect="dark" content="开始当前操作路径动画" placement="bottom">
+          <i class="el-icon-video-play"></i>
         </el-tooltip>
+        <el-tooltip v-else class="item" effect="dark" content="停下" placement="bottom">
+          <i class="el-icon-video-pause"></i>
+        </el-tooltip>
+      </el-menu-item>
+      <el-menu-item index="2" @click="btnOperation(2)">
+        <el-tooltip v-if="!allAnimationState" class="item" effect="dark" content="开始全路径动画" placement="bottom">
+          <i class="el-icon-caret-right"></i>
+        </el-tooltip>
+        <el-tooltip v-else class="item" effect="dark" content="停下" placement="bottom">
+          <i class="el-icon-video-pause"></i>
+        </el-tooltip>
+      </el-menu-item>
+      <!-- <el-submenu index="4">
+        <template slot="title">
+          <el-tooltip class="item" effect="dark" content="速度选择" placement="bottom">
+            <i class="el-icon-setting"></i>
+          </el-tooltip>
+        </template>
+        <el-menu-item index="4-1">
+          <el-slider :max=0.02 :step=0.002 :min=0.001  v-model="speed" @change="btnOperation(4)"></el-slider>
+        </el-menu-item>
+      </el-submenu> -->
+      <el-menu-item index="5">
+        <template slot="title">
+          <el-tooltip class="item" effect="dark" content="更改小球颜色" placement="bottom">
+            <el-color-picker v-model="ballColor" color-format='hex' @active-change='getBallColor'  size="mini"></el-color-picker>
+          </el-tooltip>
+        </template>
+      </el-menu-item>
+      <el-menu-item index="6"> 
+        <template slot="title">
+          <el-tooltip class="item" effect="dark" content="更改曲线颜色" placement="bottom">
+            <el-color-picker v-model="curveColor" color-format='hex' @active-change='getCurveColor' size="mini"></el-color-picker>
+          </el-tooltip>
+        </template>
+      </el-menu-item>
+      <el-submenu index="7">
+        <template slot="title">
+          <el-tooltip class="item" effect="dark" content="更改曲线粗细" placement="bottom">
+            <i class="el-icon-s-open"></i>
+          </el-tooltip>
+        </template>
+        <el-menu-item index="7-1">
+          <el-slider v-model="curveSize" :max="10" @change="btnOperation(7)"></el-slider>
+        </el-menu-item>
+      </el-submenu>
+      <el-menu-item index="14" @click="btnOperation(14)">
+        <template slot="title">
+          <el-select @change="getAnimationType" v-model="AnimationType" style="width:130px" size='mini' placeholder="更改移动图标">
+            <el-option
+              v-for="item in AnimationTypes"
+              :key="item.value"
+              :label="item.text"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
+      </el-menu-item>
+      <!-- <el-menu-item index="15-1">
+        <el-input v-model="animationNum" size='mini' style="width:140px" placeholder="设置移动图标个数"></el-input>
+      </el-menu-item> -->
+      <el-menu-item index="16" @click="btnOperation(16)">
+        <el-tooltip class="item" effect="dark" content="生成代码" placement="bottom">
+          <i class="el-icon-download"></i>
+        </el-tooltip>
+      </el-menu-item>
+      <el-menu-item index="19" @click="btnOperation(19)">
+        <el-tooltip class="item" effect="dark" content="上传代码" placement="bottom">
+          <i class="el-icon-upload2"></i>
+        </el-tooltip>
+      </el-menu-item>
+      <el-menu-item index="18">
+        <el-switch
+          v-model="selectTheme"
+          active-text="昏暗"
+          inactive-text="明亮"
+          active-color="#66FFFF"
+          inactive-color="#1240AB"
+          @change="changeTheme">
+        </el-switch>
       </el-menu-item>
     </el-menu>
   </div>
@@ -157,12 +141,6 @@
     <canvas v-show="canvasShow" class="canvas-image" :width=canvasWidth :height=canvasHeight></canvas>
     <bezier-cancas :imgIcon="imgIcon" :theme="theme"  ref="buttonList" :bezierStyle=bezierStyle :isVisible=isVisible style="position: absolute" @generateCode="generateCode"></bezier-cancas>
     <bezier-code :isCodeShow="isCodeShow" :code="code" @close="handleClose"></bezier-code>
-    <!-- <button>添加文件</button> -->
-    <!-- <div class="file-input">
-      <bezier-button :title="`选择图片`" @handleImport="handleImport"></bezier-button>
-      <bezier-button :title="`清除画图`" :type="`button`" @handleClick="handleClear"></bezier-button>
-      <bezier-button :title="`画一条线`" :type="`button`" @handleClick="drawBazierCurve"></bezier-button>
-    </div> -->
   </div>
   <el-dialog
     :visible="uploadImgIcon"
@@ -180,9 +158,25 @@
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       </el-upload>
-    <span slot="footer" class="dialog-footer">
+    <!-- <span slot="footer" class="dialog-footer">
       <el-button @click="closeDialog">取 消</el-button>
       <el-button type="primary" @click="closeDialog">确 定</el-button>
+    </span> -->
+  </el-dialog>
+    <el-dialog
+    :visible="uploadCode"
+    title="上传代码"
+    width="50%"
+    @close="cancelUploadCode">
+      <el-input
+        type="textarea"
+        :autosize="{ minRows: 2, maxRows: 10}"
+        placeholder="请输入代码"
+        v-model="codeText">
+      </el-input>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="cancelUploadCode">取 消</el-button>
+      <el-button type="primary" @click="uploadCodeText">确 定</el-button>
     </span>
   </el-dialog>
 </div>
@@ -223,14 +217,16 @@ export default {
         value: 'bb'
       }],
       uploadImgIcon: false,
-      animationNum: 1,
+      animationNum: '',
       isCodeShow: false,
       code: '',
       imgArrList: [],
       imgIcon: '',
       theme: 'dark',
       selectTheme: true,
-      imgSize: []
+      imgSize: [],
+      uploadCode: false,
+      codeText: ''
     }
   },
   components: {
@@ -268,13 +264,8 @@ export default {
           this.$refs.buttonList.beginMotionA();
           this.allAnimationState = !this.allAnimationState;
           break;
-        // case 3:    //停下
-        case 4:    //速度选择
+/*         case 4:    //速度选择
           this.$refs.buttonList.movingBallSpeed = this.speed;
-          break;
-/*         case 5:    //更改小球颜色
-          break;
-        case 6:     //更改曲线颜色
           break; */
         case 7:     //调整曲线粗细
           if(this.$refs.buttonList.gIndex > 0) {
@@ -283,9 +274,9 @@ export default {
             _changCurveStyle(this.$refs.buttonList.allBezierData, 'size', this.curveSize);
           }
           break;
-        case 8:     //重绘
+        /* case 8:     //重绘
           this.$refs.buttonList.redraw();
-          break;
+          break; */
         case 9:     //加入路径
           this.$refs.buttonList.joinPath();
           break;
@@ -304,14 +295,18 @@ export default {
         case 14:   //更换移动图标
           this.$refs.buttonList.movingBallType = this.AnimationType;
           break;
-        case 15:    //更改移动图标个数
+        /* case 15:    //更改移动图标个数
           this.$refs.buttonList.movingBallNum = this.animationNum;
-          break;
-        case 16:    //更改移动图标个数
+          break; */
+        case 16:    //生成代码
           this.$refs.buttonList.generateCode();
           break;
         case 17:    //删除路径
           delCurve(this.$refs.buttonList.allBezierData, this.$refs.buttonList.gIndex);
+          break;
+        case 19:
+          this.uploadCode = true;
+          break;
       }
     },
     getCurveColor(color) {
@@ -347,7 +342,7 @@ export default {
       this.uploadShow = false;
     },
     handleImport () {
-      ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)  
+      // ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
       var imgSrc = this.getObjectURL(this.file)
       this.getImage(imgSrc)
     },
@@ -375,12 +370,12 @@ export default {
         imageObj.setAttribute('crossOrigin', 'anonymous');
         imageObj.crossOrigin = '*';
         this.imgArrList.push(imageObj)
-        imageObj.onload = function() {
-          if(vm.imgSize.length == 0) {
-            const imageSize = vm.getImageSize(this.width, this.height)
-            vm.imgSize.push(imageSize.left, imageSize.top, imageSize.width, imageSize.height)
-          }
-          ctx.drawImage(vm.imgArrList[0], vm.imgSize[0], vm.imgSize[1], vm.imgSize[2], vm.imgSize[3])
+        this.imgArrList[0].onload = function() {
+          // if(vm.imgSize.length == 0) {
+            // vm.imgSize.push(imageSize.left, imageSize.top, imageSize.width, imageSize.height)
+          // }
+          const imageSize = vm.getImageSize(this.width, this.height)
+          ctx.drawImage(this, imageSize.left, imageSize.top, imageSize.width, imageSize.height)
         }
         if (vm.imgArrList.length > 1) {
           this.$refs.dialogUpload.clearFiles();
@@ -440,6 +435,15 @@ export default {
     changeTheme (val) {
       // false 明亮   true 黑暗
       this.theme = val ? 'dark' : 'light';
+    },
+    uploadCodeText () {
+      this.uploadCode = false;
+      this.codeText = '';
+      // 调用导入方法
+    },
+    cancelUploadCode () {
+      this.uploadCode = false;
+      this.codeText = '';
     }
   }
 }

@@ -103,8 +103,7 @@ export default {
     };
   },
   watch: {
-    isVisible(newVal, oldVal) {
-      console.log(oldVal, newVal);
+    isVisible(newVal) {
       if (newVal) {
         this.initData();
         this.initCanvas();
@@ -113,7 +112,7 @@ export default {
     theme(newVal) {
       this.setTheme(newVal, this.bezierCurve.points);
       this.initOperation();
-      this.bezierCurve.color = newVal == 'dark' ? '#80E800' : '#1240AB'
+      this.bezierCurve.color = newVal == 'dark' ? '#66FFFF' : '#1240AB'
 /*       改变整条曲线的颜色
       this.pointsArr.bezierCurve.forEach(item => {
         this.setTheme(newVal, item.points);
@@ -330,7 +329,6 @@ export default {
         c2: new BezierBall(optionC2),
         end: new BezierBall(optionEnd)
       };
-      // let color = this.theme == 'dark' ? '#80E800' : '#1240AB';
       this.bezierCurve = new BezierCurve({ points: points });
       this.pointsArr = new JointBezier({});
       this.initOperation()
