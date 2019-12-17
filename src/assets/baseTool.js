@@ -12,6 +12,9 @@
 //     }
 // }
 //判断是否达到终点
+import BezierBall from "./bezierBall";//贝塞尔小球对象
+import BezierCurve from "./bezierCurve";//贝塞尔曲线对象
+import JointBezier from "./jointBezier";//大贝塞尔曲线对象
 function _isLastPoint(t, loopIndex, length) {
   if (Math.floor(t) == 1 && loopIndex == length - 1) {
     return true;
@@ -138,11 +141,14 @@ function beze_length(t, xa, xb, xc, xd, ya, yb, yc, yd) {
 }
 function _beze_even(t, xa, xb, xc, xd, ya, yb, yc, yd) {
   let len = t; //如果按照匀速增长,此时对应的曲线长度
-  let t1 = t, t2;
+  let t1 = t, t2;  
   do {
-    t2 = t1 - (beze_length(t1, xa, xb, xc, xd, ya, yb, yc, yd) - len) / beze_speed(t1, xa, xb, xc, xd, ya, yb, yc, yd);
-    t1 = t2;
-  } while (Math.abs(t1 - t2) < 0.01);
+      t2 = t1 - (beze_length(t1, xa, xb, xc, xd, ya, yb, yc, yd) - len) / beze_speed(t1, xa, xb, xc, xd, ya, yb, yc, yd);
+      console.log(Math.abs(t1 - t2))
+      if(Math.abs(t1 - t2)<0.01) break;
+      t1 = t2;
+  // eslint-disable-next-line no-constant-condition
+  } while ( true );
   return t2;
 }
 function MathSpeed(xa, xb, xc, xd, ya, yb, yc, yd, W, H) {
@@ -167,6 +173,37 @@ function _getSpeed(bezierCurve, W, H) {
   );
   return _t
 }
+function _genJointBezier(options) {
+  if (options) {
+    let jointBezierObj = options.map(item => {
+      item.bezierCurve = genBezierCurve(item.bezierCurve)
+      return new JointBezier(item)
+    })
+    return jointBezierObj
+  }
+}
+function genBezierCurve (curves) {
+  if (curves) {
+    let curveObjs = curves.map(item => {
+      item.points = genBezierBall(item.points)
+      return new BezierCurve(item, this.scale)
+    })
+    return curveObjs
+  }
+}
+function genBezierBall (balls) {
+  if (balls) {
+    // for (let item in balls) {
+    //   new BezierBall(item)
+    // }
+    return {
+      'c1': new BezierBall(balls.c1, this.scale),
+      'c2': new BezierBall(balls.c2, this.scale),
+      'end': new BezierBall(balls.end, this.scale),
+      'start': new BezierBall(balls.start, this.scale),
+    }
+  }
+}
 export {
   // _isNextPoint,
   _isLastPoint,
@@ -175,5 +212,6 @@ export {
   _getRotateXY,
   _getSpeed,
   _beze_even,
-  _getDistance
+  _getDistance,
+  _genJointBezier
 } 

@@ -1,4 +1,7 @@
 import { _getMoveXY, _getRotateXY } from "./baseTool";
+/* 
+param(全贝塞尔数据,,canva对象,是否处于修改状态,父index,爷index)
+*/
 function _drawCurveALL(pointsArr, contextBuffer,editState,pIndex,gIndex) {
   if (pointsArr.length !== 0) {
     for (let item of pointsArr) {
@@ -18,6 +21,9 @@ function _drawCurveALL(pointsArr, contextBuffer,editState,pIndex,gIndex) {
     }
   }
 }
+/* 
+param(全贝塞尔数据,,canva对象,是否处于修改状态)
+*/
 function _drawPointsALL(pointsArr, contextBuffer, editState) {
   if (pointsArr.length !== 0) {
     //画开始点
@@ -35,7 +41,9 @@ function _drawPointsALL(pointsArr, contextBuffer, editState) {
   }
 }
 //画路径点的动画函数
-// function _drawAnimationALL(pointsArr, index, allBalls, contextBuffer, img) {
+/* 
+param(全贝塞尔数据，当前曲线index,所有的小球对象，canva对象，动画图片)
+*/
 function _drawAnimationALL(pointsArr, index, allBalls, contextBuffer,img) { 
   contextBuffer.beginPath();
   //计算下一帧小球的x,y坐标
@@ -63,7 +71,9 @@ function _drawAnimationALL(pointsArr, index, allBalls, contextBuffer,img) {
   });
   contextBuffer.fill();
 }
-
+/* 
+param(全贝塞尔数据，当前贝塞尔数据,canva对象,当前运动状态，全部运动状态，canva对象，是否处于修改状态)
+*/
 function _drawPoints(pointsArr, bezierCurve, contextBuffer, motionState, allMotionState,editState) {
   if (pointsArr.length !== 0) {
     //画开始点
@@ -81,6 +91,9 @@ function _drawPoints(pointsArr, bezierCurve, contextBuffer, motionState, allMoti
   }
 }
 //画曲线函数
+/* 
+param(全贝塞尔数据，当前贝塞尔数据,canva对象,当前运动状态，全部运动状态，canva对象，是否处于修改状态)
+*/
 function _drawCurve(pointsArr, bezierCurve, contextBuffer, motionState, allMotionState,editState) {
   if (pointsArr.length !== 0) {
     for (let item of pointsArr) {
@@ -119,6 +132,9 @@ function _drawCurve(pointsArr, bezierCurve, contextBuffer, motionState, allMotio
   }
 }
 //画路径点的动画函数
+/* 
+param(当前贝塞尔数据,所有的小球对象，canva对象，动画图片)
+*/
 function _drawAnimation(pointsArr, balls, contextBuffer,img) {
   contextBuffer.beginPath();
   //计算下一帧小球的x,y坐标

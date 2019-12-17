@@ -25,7 +25,7 @@
 </template>
 <script>
 // import basicObj from "../../assets/prop_ball";
-import { _getDistance } from "../../assets/baseTool";
+import { _getDistance,_genJointBezier} from "../../assets/baseTool";
 import {
   _drawCurveALL, //画已加入的长曲线函数
   _drawPointsALL,//画已加入的长曲线的小球函数
@@ -144,7 +144,6 @@ export default {
         return
       }
       let e = event || window.event || arguments.callee.caller.arguments[0];
-      // console.log(_self.pointsArr.bezierCurve.length) 
       if (e && e.keyCode == 81 && _self.pointsArr.bezierCurve.length == 0) {
         // 按 q
         _self.delKeyDown("start", _self.bezierCurve.points);
@@ -228,7 +227,6 @@ export default {
                     } else {//没有后一条曲线
                       _self.changingCurve.push(bezierCurve.bezierCurve[curve]);//加入修改数组
                     }
-                    // console.log(_self.changingCurve);
                     bezierCurve.bezierCurve[curve].isSelected = true;//当前曲线被选中的状态置为true
                   }
                 } else {//把其他的小球选中状态置空，置回原有的颜色
@@ -269,7 +267,6 @@ export default {
             _self.bezierCurve.points[type].x =  Math.round(_self.bezierCurve.points[type].x)
             _self.bezierCurve.points[type].y =  Math.round(_self.bezierCurve.points[type].y)
             _self.bezierCurve.points[type].isSelect = false;
-            // console.log( _self.bezierCurve.points[type].y, _self.bezierCurve.points[type].x)
           }
         }
       } else {
@@ -408,12 +405,13 @@ export default {
         this.pointsArr = cloneDeep(
           this.dataStack.data[this.dataStack.index - 1][1]
         );
-        this.bezierCurve.points.start.x = this.pointsArr.bezierCurve[
-          this.pointsArr.bezierCurve.length - 1
-        ].points.end.x;
-        this.bezierCurve.points.start.y = this.pointsArr.bezierCurve[
-          this.pointsArr.bezierCurve.length - 1
-        ].points.end.y;
+        this.clearTHisPoint();
+        // this.bezierCurve.points.start.x = this.pointsArr.bezierCurve[
+        //   this.pointsArr.bezierCurve.length - 1
+        // ].points.end.x;
+        // this.bezierCurve.points.start.y = this.pointsArr.bezierCurve[
+        //   this.pointsArr.bezierCurve.length - 1
+        // ].points.end.y;
       } else {
         alert("这是末尾了");
       }
@@ -470,12 +468,13 @@ export default {
         this.dataStack.index++;
         this.allBezierData = this.dataStack.data[this.dataStack.index - 1][0];
         this.pointsArr = this.dataStack.data[this.dataStack.index - 1][1];
-        this.bezierCurve.points.start.x = this.pointsArr.bezierCurve[
-          this.pointsArr.bezierCurve.length - 1
-        ].points.end.x;
-        this.bezierCurve.points.start.y = this.pointsArr.bezierCurve[
-          this.pointsArr.bezierCurve.length - 1
-        ].points.end.y;
+        this.clearTHisPoint();
+        // this.bezierCurve.points.start.x = this.pointsArr.bezierCurve[
+        //   this.pointsArr.bezierCurve.length - 1
+        // ].points.end.x;
+        // this.bezierCurve.points.start.y = this.pointsArr.bezierCurve[
+        //   this.pointsArr.bezierCurve.length - 1
+        // ].points.end.y;
       } else {
         alert("这已是最新修改");
       }
@@ -488,7 +487,6 @@ export default {
         this.gIndex = -1;
         this.pIndex = -1;
       }
-      // console.log(this.allBezierData);
       // _changCurveStyle(this.allBezierData, "color", "#F00", 1);
       this.allBezierData.forEach(bezierItem => {
         bezierItem.bezierCurve.forEach(curveItem => {
@@ -526,7 +524,6 @@ export default {
       this.bezierCurve.points.end.parentIndex = this.pointsArr.bezierCurve.length;
       this.bezierCurve.index = this.pointsArr.bezierCurve.length;
       this.bezierCurve.parentIndex = this.allBezierData.length;
-      // console.log(this.bezierCurve.index,this.bezierCurve.parentIndex)
       //当前曲线加入数组
       this.pointsArr.bezierCurve.push(cloneDeep(this.bezierCurve));
       // } else {
@@ -556,6 +553,9 @@ export default {
       // this.beginTextA = this.allMotionState ? "停下" : "开始全路径动画";
       // this.bezierCurve.points.start = Object.assign({}, this.pointsArr.bezierCurve[this.pointsArr.bezierCurve.length - 1].points.end);
       //
+      this.clearTHisPoint();
+    },
+    clearTHisPoint(){
       this.bezierCurve.points.start.x = -10000;
       this.bezierCurve.points.start.y = -10000
       this.bezierCurve.points.start.selectable = false;
@@ -654,7 +654,6 @@ export default {
       }
     },
     generateCode() {
-      // console.log(this.bezierStyle);
       // const code = JSON.parse(JSON.stringify(this.pointsArr))
       // const bezierCode = JSON.parse(JSON.stringify(this.allBezierData))
       const bezierOptions = {
@@ -665,13 +664,13 @@ export default {
       const bezierOptionsStr = JSON.stringify(bezierOptions)
       // debugger
       
-      // console.log(code)
-      // console.log(bezierCode)
-      // console.log(bezierStr)
       // this.$emit('generateCode', bezierCode)
       this.$emit('generateCode', bezierOptionsStr)
       
       // this
+    },
+    generateCodeImport(option) {
+      this.allBezierData = _genJointBezier(option)
     },
     draw() {
       contextBuffer.clearRect(0, 0, oCanvas.width, oCanvas.height);
@@ -704,7 +703,6 @@ export default {
       _drawCurve(this.pointsArr.bezierCurve, this.bezierCurve, contextBuffer,this.motionState,this.allMotionState,this.editState);
       //画路径中点的动画
       if (this.motionState && this.pointsArr.bezierCurve.length != 0) {
-        // console.log(this.balls)
         //运动状态为true,路径点数组长度不为0
         _drawAnimation(
           this.pointsArr.bezierCurve,
@@ -718,6 +716,10 @@ export default {
       ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
       ctx.drawImage(canvasBuffer, 0, 0);
       // ctx.fill();
+    },
+    //导入数据
+    importData(option){
+     this.allBezierData =  _genJointBezier(option);
     },
     //移动小球
     movePoint(usingPoint) {
